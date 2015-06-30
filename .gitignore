@@ -1,3 +1,5 @@
 Livefyre/obj
 Livefyre/bin
 *.suo
+obj
+*.dgml
