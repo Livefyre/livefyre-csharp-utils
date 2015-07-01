@@ -3,3 +3,4 @@ Livefyre/bin
 *.suo
 obj
 *.dgml
+*.TMP

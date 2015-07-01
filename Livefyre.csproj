@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{00000000-0000-0000-0000-000000000000}</ProjectGuid>
+    <ProjectGuid>{C8D0D682-EA11-4B25-8644-72B88B80A538}</ProjectGuid>
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>ClassLibrary</AssemblyName>
@@ -27,6 +27,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Livefyre</RootNamespace>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -35,6 +38,192 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include=".git\ms-persist.xml" />
+    <Content Include="Livefyre\bin\Debug\Livefyre.dll" />
+    <Content Include="Livefyre\bin\Debug\Livefyre.pdb" />
+    <Content Include="Livefyre\Livefyre.csproj" />
+    <Content Include="Livefyre\Livefyre.sln" />
+    <Content Include="Livefyre\obj\Debug\Livefyre.csproj.FileListAbsolute.txt" />
+    <Content Include="Livefyre\obj\Debug\Livefyre.dll" />
+    <Content Include="Livefyre\obj\Debug\Livefyre.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".git\COMMIT_EDITMSG" />
+    <None Include=".git\config" />
+    <None Include=".git\description" />
+    <None Include=".git\FETCH_HEAD" />
+    <None Include=".git\HEAD" />
+    <None Include=".git\hooks\applypatch-msg.sample" />
+    <None Include=".git\hooks\commit-msg.sample" />
+    <None Include=".git\hooks\post-update.sample" />
+    <None Include=".git\hooks\pre-applypatch.sample" />
+    <None Include=".git\hooks\pre-commit.sample" />
+    <None Include=".git\hooks\pre-push.sample" />
+    <None Include=".git\hooks\pre-rebase.sample" />
+    <None Include=".git\hooks\prepare-commit-msg.sample" />
+    <None Include=".git\hooks\update.sample" />
+    <None Include=".git\index" />
+    <None Include=".git\info\exclude" />
+    <None Include=".git\logs\HEAD" />
+    <None Include=".git\logs\refs\heads\develop" />
+    <None Include=".git\logs\refs\heads\master" />
+    <None Include=".git\logs\refs\remotes\origin\HEAD" />
+    <None Include=".git\objects\00\4d13afe834c03da66b97912e07cc644051e8af" />
+    <None Include=".git\objects\00\ee8dd775dcbdcddf48f834cffbc71056ceb16a" />
+    <None Include=".git\objects\01\1a5d60bc65614de7ab01b5d0dffece7a854512" />
+    <None Include=".git\objects\03\bddb6c5b3d0d93e483e68fccc654c6a3b827eb" />
+    <None Include=".git\objects\07\665e101d3420a8b1f4c215c99ecfed3ee7a142" />
+    <None Include=".git\objects\08\9b4494189af2af9892c6444cf8b3e10978a514" />
+    <None Include=".git\objects\0d\b427faedba1989d635c4d729dd59a63df23097" />
+    <None Include=".git\objects\0d\ef47abec711a48722c528648f073ddfdcc3ddb" />
+    <None Include=".git\objects\0e\d6dd870455ea116213450d2ea8e46031596ef7" />
+    <None Include=".git\objects\12\e8827e96a327be14bd14e3f292ede931f23d2f" />
+    <None Include=".git\objects\13\6a538b3d10136d0fcad2bd216692bc2b204a5b" />
+    <None Include=".git\objects\16\6221de535a9223006faa3f4460ddebe4287c8b" />
+    <None Include=".git\objects\1b\492b5324a1f3ada7f3b8a8b80d9f8fb69ebf6d" />
+    <None Include=".git\objects\1e\6d4306b46baed707823e3c85fe9f3348b7030b" />
+    <None Include=".git\objects\1f\b8af1af7b8af88d0629b007cfebe52f03c7b0a" />
+    <None Include=".git\objects\1f\f09c401544703236ae5406d227d8f421937c25" />
+    <None Include=".git\objects\20\b5930aabcc6b0430305dc7973acf6ea5d78661" />
+    <None Include=".git\objects\21\4ba1108a50247965f57d023ac76fb2db7b7bde" />
+    <None Include=".git\objects\22\4e40da7908c5ab65104b1647ae524dfe4ed221" />
+    <None Include=".git\objects\22\5f1d245fbdc55cb99da4ab28f9cb7d5c117eef" />
+    <None Include=".git\objects\22\9c319c134b0ef8a191a25020b29e9a7cbb3d6e" />
+    <None Include=".git\objects\2c\65c7b08b5ccec226c4511119545c115b5821ab" />
+    <None Include=".git\objects\2e\5c7bbb12f2fc94b66a9a6fa99f83aa9005a131" />
+    <None Include=".git\objects\31\6852c446fe9b4a6558275d79cea5464c8448fa" />
+    <None Include=".git\objects\32\f1b0b0b827804810c5e1fa17058aa15411e114" />
+    <None Include=".git\objects\34\e50b3292908edeca03f975c19ef7437fbfc19c" />
+    <None Include=".git\objects\36\2297ee42e538489930a91ad1697474b3649fe1" />
+    <None Include=".git\objects\37\89eae9d933709ad517c229cd1ba73a90faaed7" />
+    <None Include=".git\objects\3a\a75c51c4093fa24afa8e7f48dbc377f1480feb" />
+    <None Include=".git\objects\3e\1406aaf8909f534b1c26d3f05e52039aa77a35" />
+    <None Include=".git\objects\48\da9903b79300d518ba2f159c7c3c304be2c183" />
+    <None Include=".git\objects\49\3a79ec64e4bf9a06407fe68fae4297e9e4e8f2" />
+    <None Include=".git\objects\4a\ab786c5277e29d4c2831b25f8769119ae9408f" />
+    <None Include=".git\objects\4a\ea720d8f2e9b13870aa582cf0a2eb79926f51e" />
+    <None Include=".git\objects\50\54c52ca743050b70af2dfbcc9dec9e12be73c6" />
+    <None Include=".git\objects\54\c3b9dd99739e2a5d406a417da86ec431abe121" />
+    <None Include=".git\objects\5a\de51031083a0841083a754ee35de3bf8e0238b" />
+    <None Include=".git\objects\5f\23ba29fff2e8d93ecc0ef9d005f73a2c128ba1" />
+    <None Include=".git\objects\60\1ee2ad4115bc9675ddc733ee53516a1c3edc09" />
+    <None Include=".git\objects\62\9346175cc5c8f4b77393d1522da9dd99b1191b" />
+    <None Include=".git\objects\6a\e7699b30f13e0470ae2aa2b057693577fe709e" />
+    <None Include=".git\objects\6e\f177475c975a19748afedf33783ff4927a11a8" />
+    <None Include=".git\objects\6f\2e9fefd9091da356d627bd66ab715d5168ca18" />
+    <None Include=".git\objects\71\3f549b16b2902bf49f4a1eeac1f2e6e67f5acf" />
+    <None Include=".git\objects\78\58b3eca108df524727e6cf24836d48bd62c52b" />
+    <None Include=".git\objects\79\2e3da88e152136bdc4684bc49245859fa3c7ca" />
+    <None Include=".git\objects\80\bad4bf919b37c56f211651e3355c5bb8b672c4" />
+    <None Include=".git\objects\81\b424389694739d93f830f6b25f60ae8ddbb820" />
+    <None Include=".git\objects\82\17f65faf013cfec3999b4e43f060360b9c2bfd" />
+    <None Include=".git\objects\82\4fa6867f61c12769ae424c35056b6a3cfc593f" />
+    <None Include=".git\objects\83\3a414919e6e5dd0ebca776ba604c2e6ea6e591" />
+    <None Include=".git\objects\83\3dc9de268d7cf8471a62dabf9fd0c872ce759e" />
+    <None Include=".git\objects\85\2cb2d7284d9d6e7a92275a51ad0b149311cfc1" />
+    <None Include=".git\objects\89\e1564b2461a358c4926e4e0d79bf54e9ac3b11" />
+    <None Include=".git\objects\8a\c5e4c8b3c65bbf3d733096fb7c871284cdbdd3" />
+    <None Include=".git\objects\8b\29a10cc88dd445b8b3386e1422c1a3bad7bf4d" />
+    <None Include=".git\objects\8c\1bf5cf9ac1d375279994795672702a859bb2ab" />
+    <None Include=".git\objects\8d\68ea710663e667750d5db7ece214798c0cb928" />
+    <None Include=".git\objects\94\c3aa4c6443f61c6555780f677e1afe76787c03" />
+    <None Include=".git\objects\98\264d179d77422378afb38303340c82d097857e" />
+    <None Include=".git\objects\99\e8c9ba80d9e6bbcf2e22f175c695fac97d72f3" />
+    <None Include=".git\objects\9a\2c47b10055cab7c787f2148407fc165bb9c1e3" />
+    <None Include=".git\objects\9a\4a68de48ba9a24d29821b11a09979d653f6c9e" />
+    <None Include=".git\objects\9b\c2be1bed65c241ac2f496a0c75472895b574d7" />
+    <None Include=".git\objects\a0\e23541ee052e962f988e25c9c72e97c0ea7918" />
+    <None Include=".git\objects\a3\930d4e7e40f2970b80d123f8e95c654ede0ae4" />
+    <None Include=".git\objects\a3\c9e737bdd4d447b27940316ebbac5f39710363" />
+    <None Include=".git\objects\a6\578bf2b8d0267f9f94867d30154664dee966ce" />
+    <None Include=".git\objects\a9\b615b5726399d0e3266809c27fee30d4ec3ff3" />
+    <None Include=".git\objects\aa\03af6f09b0af9946da2aeafda3813dca51c023" />
+    <None Include=".git\objects\aa\85d1da66579e2fe6fc4dbcb77ab9d33f539686" />
+    <None Include=".git\objects\ab\36df24815e2d3bb953f8066bdea097fa4719e9" />
+    <None Include=".git\objects\ad\bff27b0ed631342a1a2a6330b54f6b412eb4d2" />
+    <None Include=".git\objects\af\7eff64b3312207c90e3eb9a7900ecc197c5b95" />
+    <None Include=".git\objects\b0\6068c711a3e66328f932f04ede4a35e7e34dd3" />
+    <None Include=".git\objects\b3\425fefe452f43ff17b0468c63dac6942528265" />
+    <None Include=".git\objects\ba\b92a53e7fd71237a6246835337be2dd06f5e00" />
+    <None Include=".git\objects\bc\66efd8f8f5f3173a42e2dcb0c72078df6a43aa" />
+    <None Include=".git\objects\bd\c19763e2d210af828c7f5e4891885015dfb606" />
+    <None Include=".git\objects\c7\cd94439c25267e5cd32d34c1d02be81cb64256" />
+    <None Include=".git\objects\c8\f43b592209655b8d2c57282cd69d08c44686cb" />
+    <None Include=".git\objects\c9\a17372ada2987bcba310b3d5042ec6bfef3554" />
+    <None Include=".git\objects\cc\f2904951badd836cdc6a77af43d70800885399" />
+    <None Include=".git\objects\cf\52be2ffa1875049a47ff06af058ec696851523" />
+    <None Include=".git\objects\cf\b6049b7a285318911e69322280d0d2041e9f80" />
+    <None Include=".git\objects\d0\bf296a8ae41dcb521bf4c56b4ca0797f759398" />
+    <None Include=".git\objects\d7\60611cbf3c2faf9ec4f3f0fdce0e5ec3c7ed5b" />
+    <None Include=".git\objects\d8\a945a1f055b1fab54508b09a5a7f0e96bfeb9f" />
+    <None Include=".git\objects\dd\5b9017ad2d2427b9c635603ecd60f1db62d82a" />
+    <None Include=".git\objects\e4\f161700798667bcd7c874dc68ed144f52a0229" />
+    <None Include=".git\objects\e6\ca2c3fb06ec4d0df2b1624afaa15c33e9a3279" />
+    <None Include=".git\objects\e8\4f566db30e6743a1a0b162c3a4474102b91f35" />
+    <None Include=".git\objects\ec\ebbd04e8acdda14062aae3ca315db5095ef711" />
+    <None Include=".git\objects\f1\419ffac6bd3a9000a93d0129d517fbfd097cef" />
+    <None Include=".git\objects\f2\c975702b7714642314e163f811164fda26bb3a" />
+    <None Include=".git\objects\f4\28cd68b1290af1b48ede14ad99d6bf418ae243" />
+    <None Include=".git\objects\f5\b3c50e2daf7ee0c6e49ae3eaac1e08c2c5b41c" />
+    <None Include=".git\objects\f6\e2b80195332fe2856b07b42b24d5963466e5bf" />
+    <None Include=".git\objects\f7\749ddd348f5143d8bbffc9ef04fcc32531bf09" />
+    <None Include=".git\objects\f9\53757e05e29d47e1997001946d5bce0a9fa407" />
+    <None Include=".git\objects\fa\b55b1921982afe4bfafc390ee22316282c32f0" />
+    <None Include=".git\objects\fc\d10fadbc74e362cafbafb31cdc3a454b73437d" />
+    <None Include=".git\objects\fd\d27b65b2009e545d8c3edc8da8d2e947d91c8f" />
+    <None Include=".git\objects\ff\027f24a2d31ccd290fd7ba028fef236e99194a" />
+    <None Include=".git\objects\pack\pack-36788124e15712556764fbbe6ada7abf3d2989e4.idx" />
+    <None Include=".git\objects\pack\pack-36788124e15712556764fbbe6ada7abf3d2989e4.pack" />
+    <None Include=".git\ORIG_HEAD" />
+    <None Include=".git\packed-refs" />
+    <None Include=".git\refs\heads\develop" />
+    <None Include=".git\refs\heads\master" />
+    <None Include=".git\refs\remotes\origin\HEAD" />
+    <None Include="Livefyre\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="Livefyre\obj\Debug\Livefyre.csprojResolveAssemblyReference.cache" />
+    <None Include="Livefyre\Packages.dgml" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Livefyre\Api\Domain.cs" />
+    <Compile Include="Livefyre\Api\Filter\LftokenAuthFilter.cs" />
+    <Compile Include="Livefyre\Api\PersonalizedStream.cs" />
+    <Compile Include="Livefyre\Core\Collection.cs" />
+    <Compile Include="Livefyre\Core\LfCore.cs" />
+    <Compile Include="Livefyre\Core\Network.cs" />
+    <Compile Include="Livefyre\Core\Site.cs" />
+    <Compile Include="Livefyre\Cursor\TimelineCursor.cs" />
+    <Compile Include="Livefyre\Dto\Subscription.cs" />
+    <Compile Include="Livefyre\Dto\Topic.cs" />
+    <Compile Include="Livefyre\Exceptions\ApiException.cs" />
+    <Compile Include="Livefyre\Exceptions\LivefyreException.cs" />
+    <Compile Include="Livefyre\Exceptions\TokenException.cs" />
+    <Compile Include="Livefyre\Factory\CursorFactory.cs" />
+    <Compile Include="Livefyre\Model\CollectionData.cs" />
+    <Compile Include="Livefyre\Model\CursorData.cs" />
+    <Compile Include="Livefyre\Model\NetworkData.cs" />
+    <Compile Include="Livefyre\Model\SiteData.cs" />
+    <Compile Include="Livefyre\Properties\AssemblyInfo.cs" />
+    <Compile Include="Livefyre\Type\CollectionType.cs" />
+    <Compile Include="Livefyre\Type\SubscriptionType.cs" />
+    <Compile Include="Livefyre\Utils\LivefyreJwtUtil.cs" />
+    <Compile Include="Livefyre\Utils\LivefyreUtil.cs" />
+    <Compile Include="Livefyre\Utils\Precondition.cs" />
+    <Compile Include="Livefyre\Validator\CollectionValidator.cs" />
+    <Compile Include="Livefyre\Validator\CursorValidator.cs" />
+    <Compile Include="Livefyre\Validator\NetworkValidator.cs" />
+    <Compile Include="Livefyre\Validator\ReflectiveValidator.cs" />
+    <Compile Include="Livefyre\Validator\SiteValidator.cs" />
+    <Compile Include="Livefyre\Validator\Validator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".git\objects\info\" />
+    <Folder Include=".git\refs\tags\" />
+    <Folder Include="Livefyre\bin\Release\" />
+    <Folder Include="Livefyre\obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

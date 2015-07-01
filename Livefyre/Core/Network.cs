@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Diagnostics.Contracts;
+
 using Livefyre.Model;
 using Livefyre.Utils;
 
@@ -69,7 +72,7 @@ namespace Livefyre.Core
             // Get the stream containing content returned by the server.
             dataStream = response.GetResponseStream();
             // Open the stream using a StreamReader for easy access.
-            StreamReader reader = new StreamReader (dataStream);
+            StreamReader reader = new StreamReader(dataStream);
             // Read the content.
             string responseFromServer = reader.ReadToEnd();
             // Display the content.
@@ -99,7 +102,7 @@ namespace Livefyre.Core
         //fix ref
         //make configurable/pull out mutable api v3_0 key
         string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
-
+        // pull bits out of try
         try 
 	    {	        
             // fix ref
@@ -141,9 +144,7 @@ namespace Livefyre.Core
 	    {
 		    throw e;
 	    }
-
  
-        return this;
     }
     
     /**
@@ -165,12 +166,18 @@ namespace Livefyre.Core
      * @return String
      */
     public String buildUserAuthToken(String userId, String displayName, Double expires) {
-        Pattern pattern = Pattern.compile(ALPHA_DASH_UNDER_DOT_REGEX);
-        checkArgument(pattern.matcher(CheckNotNull(userId)).find(),
-                "userId is not valid. be sure the userId matches the following pattern: %s", ALPHA_DASH_UNDER_DOT_REGEX);
-        CheckNotNull(displayName);
-        CheckNotNull(expires);
+        Regex pattern = new Regex(ALPHA_DASH_UNDER_DOT_REGEX);
+        // should we use ms code contracts?
+        // requires a runtime chekcing settings
+        Precondition.CheckNotNull(userId);
+        Precondition.CheckNotNull(displayName);
+        Precondition.CheckNotNull(expires);
 
+       // var/mem this error message
+        if (pattern.IsMatch(userId)) {
+        
+        /*
+        // change this MS type
         Map<String, Object> claims = ImmutableMap.<String, Object>of(
                 "domain", data.getName(),
                 "user_id", userId,
@@ -178,7 +185,15 @@ namespace Livefyre.Core
                 "expires", getExpiryInSeconds(expires)
             );
 
-        return LivefyreUtil.serializeAndSign(claims, data.getKey());
+        return SerializeAndSign(claims, data.getKey());
+        */
+
+
+        } else {
+            throw new Exception(String.Format("userId is not valid. be sure the userId matches the following pattern: {0}", 
+                    ALPHA_DASH_UNDER_DOT_REGEX));
+        }
+        
     }
 
     /**
@@ -244,5 +259,3 @@ namespace Livefyre.Core
     }
 }
 
-    }
-}
