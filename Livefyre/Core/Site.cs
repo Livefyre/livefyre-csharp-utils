@@ -5,16 +5,9 @@ using System.Text;
 
 namespace Livefyre.Core
 {
-    class Site
+    class Site : LfCore
     {
 
-        package com.livefyre.core;
-
-import com.livefyre.model.SiteData;
-import com.livefyre.type.CollectionType;
-import com.livefyre.validator.ReflectiveValidator;
-
-public class Site implements LfCore {
     private Network network;
     private SiteData data;
 
@@ -28,6 +21,8 @@ public class Site implements LfCore {
         return new Site(network, ReflectiveValidator.validate(data));
     }
 
+
+    // MOVE TO OWN CLASS
     /* Default collection type */
     public Collection buildBlogCollection(String title, String articleId, String url) {
         return buildCollection(CollectionType.BLOG, title, articleId, url);
@@ -98,7 +93,6 @@ public class Site implements LfCore {
     public void setData(SiteData data) {
         this.data = data;
     }
-}
 
 
         // MOVE TO SITE.cs

@@ -28,7 +28,7 @@ namespace Livefyre.Core
             // get/set?
             this.data = data;
         }
-
+        // MOVE THIS TO CONTRUCTOR?
         public static Network Init(String name, String key)
         {
             NetworkData data = new NetworkData(name, key);
@@ -56,7 +56,7 @@ namespace Livefyre.Core
                 // fix ref
                 String postData = String.Format("{0}", Domain.quill(this));
                 // fix ref
-                postData = String.Format(postData + "{0}", this.buildLivefyreToken());
+                postData = String.Format(postData + "{0}", BuildLivefyreToken());
                 //add Params
                 // make params vars/members
                 // actor_token
@@ -155,9 +155,9 @@ namespace Livefyre.Core
          * 
          * @return a default system token
          */
-        public string buildLivefyreToken()
+        public string BuildLivefyreToken()
         {
-            return buildUserAuthToken(DEFAULT_USER, DEFAULT_USER, DEFAULT_EXPIRES);
+            return BuildUserAuthToken(DEFAULT_USER, DEFAULT_USER, DEFAULT_EXPIRES);
         }
 
         /**
