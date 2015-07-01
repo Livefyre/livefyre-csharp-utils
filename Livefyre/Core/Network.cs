@@ -175,12 +175,13 @@ namespace Livefyre.Core
          */
         public String BuildUserAuthToken(String userId, String displayName, Double expires)
         {
-            Regex pattern = new Regex(ALPHA_DASH_UNDER_DOT_REGEX);
             // should we use ms code contracts?
             // requires a runtime checking setting
             Precondition.CheckNotNull(userId);
             Precondition.CheckNotNull(displayName);
             Precondition.CheckNotNull(expires);
+
+            Regex pattern = new Regex(ALPHA_DASH_UNDER_DOT_REGEX);
 
             // var/mem this error message
             if (pattern.IsMatch(userId))

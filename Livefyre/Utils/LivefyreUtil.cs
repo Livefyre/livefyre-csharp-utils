@@ -41,14 +41,18 @@ namespace Livefyre.Utils
 
         public static bool isValidFullUrl(String url) {
             try {
-                System.Uri(url);
-            } catch (MalformedURLException e) {
+                Uri uri = new Uri(url);
+
+            } catch (Exception e) {
                 return false;
             }
+
             return true;
         }
 
+        // change Map param type
         public static String serializeAndSign(Map<String, Object> claims, String key) {
+            // grab lib
             JsonWebSignature jws = new JsonWebSignature();
             jws.setPayload(new Gson().toJson(claims));
             jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.HMAC_SHA256);
