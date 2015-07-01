@@ -7,7 +7,7 @@ using Livefyre.Core;
 
 namespace Livefyre.Utils
 {
-    class LivefyreUtil
+    public static class LivefyreUtil
     {
         // grab that JSON func
 
@@ -33,12 +33,15 @@ namespace Livefyre.Utils
                 return ((Collection) core).getSite().getNetwork();
             }
             */
-            return new LFCore();
+
+            Network network = null;
+
+            return network;
         }
 
         public static bool isValidFullUrl(String url) {
             try {
-                System. Uri(url);
+                System.Uri(url);
             } catch (MalformedURLException e) {
                 return false;
             }

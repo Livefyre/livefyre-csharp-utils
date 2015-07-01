@@ -247,7 +247,7 @@ namespace Livefyre.Core
             return data.GetName().split("\\.")[0];
         }
 
-        public Boolean isSsl()
+        public Boolean IsSsl()
         {
             return ssl;
         }
