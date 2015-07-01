@@ -227,6 +227,43 @@ namespace Livefyre.Core
         }
 
 
+        public string GetUrn()
+        {
+            // ensure this structure in networkdata
+            return "urn:livefyre:" + data.GetName();
+        }
+
+        public String getUrnForUser(String user)
+        {
+            return GetUrn() + ":user=" + user;
+        }
+
+        public String getNetworkName()
+        {
+            // ensure this structure in networkdata
+            return data.GetName().split("\\.")[0];
+        }
+
+        public Boolean isSsl()
+        {
+            return ssl;
+        }
+
+        public void setSsl(Boolean ssl)
+        {
+            this.ssl = ssl;
+        }
+
+        public NetworkData getData()
+        {
+            return data;
+        }
+
+        public void setData(NetworkData data)
+        {
+            this.data = data;
+        }
+
 
         /* Protected/private methods */
         // move to Util
