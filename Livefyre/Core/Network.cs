@@ -45,49 +45,41 @@ namespace Livefyre.Core
      */
     public void setUserSyncUrl(String urlTemplate) {
         //toMethod?
-        // fix this conditional
-        if (urlTemplate != null && urlTemplate.Contains(ID)) {
+        Precondition.CheckNotNull(urlTemplate, String.Format("urlTemplate does not contain {0}", ID));
 
-            try 
-	        {	        
-                // fix ref
-                String postData = String.Format("{0}", Domain.quill(this));
-                // fix ref
-                postData = String.Format(postData + "{0}", this.buildLivefyreToken());
-                byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+        try 
+	    {	        
+            // fix ref
+            String postData = String.Format("{0}", Domain.quill(this));
+            // fix ref
+            postData = String.Format(postData + "{0}", this.buildLivefyreToken());
+            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
 
-                Uri uri = new Uri(urlTemplate);
-                WebRequest request = WebRequest.Create(uri);
-                request.ContentType = "application/x-www-form-urlencoded";
+            Uri uri = new Uri(urlTemplate);
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/x-www-form-urlencoded";
 
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(postBytes, 0, postBytes.Length);
-				WebResponse response = request.GetResponse ();
-                Console.WriteLine (((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader (dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                Console.WriteLine (responseFromServer);
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
-	        }
-	        catch (Exception e)
-	        {
-
-
-		        throw e;
-	        }
-
-
-        } else {
-            throw new Exception(String.Format("urlTemplate does not contain {0}", ID));
-        }
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(postBytes, 0, postBytes.Length);
+			WebResponse response = request.GetResponse();
+            Console.WriteLine (((HttpWebResponse)response).StatusDescription);
+            // Get the stream containing content returned by the server.
+            dataStream = response.GetResponseStream();
+            // Open the stream using a StreamReader for easy access.
+            StreamReader reader = new StreamReader (dataStream);
+            // Read the content.
+            string responseFromServer = reader.ReadToEnd();
+            // Display the content.
+            Console.WriteLine (responseFromServer);
+            // Clean up the streams.
+            reader.Close();
+            dataStream.Close();
+            response.Close();
+	    }
+	    catch (Exception e)
+	    {
+		    throw e;
+	    }
 
     }
 
