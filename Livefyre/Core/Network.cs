@@ -183,7 +183,7 @@ namespace Livefyre.Core
             {
 
                 /*
-                // change this MS type
+                // change this to MS type
                 Map<String, Object> claims = ImmutableMap.<String, Object>of(
                         "domain", data.getName(),
                         "user_id", userId,
@@ -249,6 +249,8 @@ namespace Livefyre.Core
             return ssl;
         }
 
+
+        // get/set
         public void setSsl(Boolean ssl)
         {
             this.ssl = ssl;
