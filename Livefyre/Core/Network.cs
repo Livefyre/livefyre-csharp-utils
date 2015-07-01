@@ -26,7 +26,7 @@ namespace Livefyre.Core
             this.data = data;
         }
 
-        public static Network init(String name, String key) {
+        public static Network Init(String name, String key) {
             NetworkData data = new NetworkData(name, key);
             return new Network(data/* David: not nec to use reflection here if desired */);
         }
@@ -43,9 +43,8 @@ namespace Livefyre.Core
      * 
      * @param urlTemplate the url template to set.
      */
-    public void setUserSyncUrl(String urlTemplate) {
-        //toMethod?
-        Precondition.CheckNotNull(urlTemplate, String.Format("urlTemplate does not contain {0}", ID));
+    public void SetUserSyncUrl(String url) {
+        Precondition.CheckNotNull(url, String.Format("urlTemplate does not contain {0}", ID));
 
         try 
 	    {	        
@@ -53,9 +52,13 @@ namespace Livefyre.Core
             String postData = String.Format("{0}", Domain.quill(this));
             // fix ref
             postData = String.Format(postData + "{0}", this.buildLivefyreToken());
+            //add Params
+            // make params vars/members
+            // actor_token
+            // pull_profile_url
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
 
-            Uri uri = new Uri(urlTemplate);
+            Uri uri = new Uri(url);
             WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/x-www-form-urlencoded";
 
@@ -90,17 +93,56 @@ namespace Livefyre.Core
      * @param userId the userId for the user to sync
      * @return true if the sync was successful.
      */
-    public Network syncUser(String userId) {
-        checkNotNull(userId);
+    public Network SyncUser(String userId) {
+        Precondition.CheckNotNull(userId);
         
-        String url = String.format("%s/api/v3_0/user/%s/refresh", Domain.quill(this), userId);
-        ClientResponse response = Client.create()
-                .resource(url)
-                .queryParam("lftoken", buildLivefyreToken())
-                .post(ClientResponse.class);
-        if (response.getStatus() >= 400) {
-            throw new ApiException(response.getStatus());
-        }
+        //fix ref
+        //make configurable/pull out mutable api v3_0 key
+        string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
+
+        try 
+	    {	        
+            // fix ref
+            String postData = String.Format("{0}", Domain.quill(this));
+            // fix ref
+            postData = String.Format(postData + "{0}", this.buildLivefyreToken());
+            //add Params
+            // make params vars/members
+            // lftoken
+            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+
+            Uri uri = new Uri(url);
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(postBytes, 0, postBytes.Length);
+			WebResponse response = request.GetResponse();
+            Console.WriteLine (((HttpWebResponse)response).StatusDescription);
+            // Get the stream containing content returned by the server.
+            dataStream = response.GetResponseStream();
+            // Open the stream using a StreamReader for easy access.
+            StreamReader reader = new StreamReader (dataStream);
+            // Read the content.
+            string responseFromServer = reader.ReadToEnd();
+            // Display the content.
+            Console.WriteLine (responseFromServer);
+            // Clean up the streams.
+            reader.Close();
+            dataStream.Close();
+            response.Close();
+
+
+            // capture/throw a server error code too
+
+            return this;
+	    }
+	    catch (Exception e)
+	    {
+		    throw e;
+	    }
+
+ 
         return this;
     }
     
@@ -124,10 +166,10 @@ namespace Livefyre.Core
      */
     public String buildUserAuthToken(String userId, String displayName, Double expires) {
         Pattern pattern = Pattern.compile(ALPHA_DASH_UNDER_DOT_REGEX);
-        checkArgument(pattern.matcher(checkNotNull(userId)).find(),
+        checkArgument(pattern.matcher(CheckNotNull(userId)).find(),
                 "userId is not valid. be sure the userId matches the following pattern: %s", ALPHA_DASH_UNDER_DOT_REGEX);
-        checkNotNull(displayName);
-        checkNotNull(expires);
+        CheckNotNull(displayName);
+        CheckNotNull(expires);
 
         Map<String, Object> claims = ImmutableMap.<String, Object>of(
                 "domain", data.getName(),
@@ -147,7 +189,7 @@ namespace Livefyre.Core
      * @return true if the token is still valid.
      */
     public boolean validateLivefyreToken(String lfToken) {
-        checkNotNull(lfToken);
+        CheckNotNull(lfToken);
 
         JsonObject json = LivefyreUtil.decodeJwt(lfToken, data.getKey());
         return json.get("domain").getAsString().compareTo(data.getName()) == 0
