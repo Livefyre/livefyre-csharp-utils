@@ -22,7 +22,7 @@ namespace Livefyre.Core
         private static string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
 
         private NetworkData data;
-        private bool ssl = true;
+        private bool SSL = true;
 
 
         public Network(NetworkData data)
@@ -113,7 +113,6 @@ namespace Livefyre.Core
             try
             {
 
-                //SWAP IN WEBCLIENT FOR WebRequest  - REDO
                 //REFACTOR REQUEST INTO UTIL METHOD?
 
                 String postData = String.Format("{0}", Domain.quill(this));
@@ -244,14 +243,14 @@ namespace Livefyre.Core
 
         public Boolean IsSsl()
         {
-            return ssl;
+            return SSL;
         }
 
 
         // get/set
-        public void setSsl(Boolean ssl)
+        public void setSsl(Boolean SSL)
         {
-            this.ssl = ssl;
+            this.SSL = SSL;
         }
 
         public NetworkData GetData()

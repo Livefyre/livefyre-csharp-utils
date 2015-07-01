@@ -24,7 +24,8 @@ namespace Livefyre.Utils
         */
         public static Network GetNetworkFromCore(LFCore core) {
             /*
-             
+             this.GetType().Name
+
             if (core.getClass().equals(Network.class)) {
                 return (Network) core;
             } else if (core.getClass().equals(Site.class)) {
