@@ -14,14 +14,14 @@ namespace Livefyre.Api
         {
             Network network = LivefyreUtil.GetNetworkFromCore(core);
             return network.IsSsl() ? String.Format("https://{0}.quill.fyre.co",
-                    network.getNetworkName()) : String.Format("http://quill.{0}.fyre.co", network.getNetworkName());
+                    network.GetNetworkName()) : String.Format("http://quill.{0}.fyre.co", network.GetNetworkName());
         }
 
         public static String bootstrap(LFCore core)
         {
             Network network = LivefyreUtil.GetNetworkFromCore(core);
             return network.IsSsl() ? String.Format("https://%s.bootstrap.fyre.co",
-                    network.getNetworkName()) : String.Format("http://bootstrap.%s.fyre.co", network.getNetworkName());
+                    network.GetNetworkName()) : String.Format("http://bootstrap.%s.fyre.co", network.GetNetworkName());
         }
     }
 }

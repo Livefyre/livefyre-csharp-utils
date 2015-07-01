@@ -7,12 +7,13 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Diagnostics.Contracts;
 
+using Livefyre.Api;
 using Livefyre.Model;
 using Livefyre.Utils;
 
 namespace Livefyre.Core
 {
-    public class Network
+    public class Network : LFCore
     {
         private static double DEFAULT_EXPIRES = 86000.0;
         private static string DEFAULT_USER = "system";
@@ -114,7 +115,7 @@ namespace Livefyre.Core
                 // fix ref
                 string postData = String.Format("{0}", Domain.quill(this));
                 // fix ref
-                postData = String.Format(postData + "{0}", this.buildLivefyreToken());
+                postData = String.Format(postData + "{0}", BuildLivefyreToken());
                 //add Params
                 // make params vars/members
                 // lftoken
@@ -236,12 +237,12 @@ namespace Livefyre.Core
             return "urn:livefyre:" + data.GetName();
         }
 
-        public String getUrnForUser(String user)
+        public String GetUrnForUser(String user)
         {
             return GetUrn() + ":user=" + user;
         }
 
-        public String getNetworkName()
+        public String GetNetworkName()
         {
             // ensure this structure in networkdata
             return data.GetName().split("\\.")[0];
@@ -259,12 +260,12 @@ namespace Livefyre.Core
             this.ssl = ssl;
         }
 
-        public NetworkData getData()
+        public NetworkData GetData()
         {
             return data;
         }
 
-        public void setData(NetworkData data)
+        public void SetData(NetworkData data)
         {
             this.data = data;
         }
