@@ -55,11 +55,12 @@ namespace Livefyre.Core
         {
             Precondition.CheckNotNull(url, String.Format("urlTemplate does not contain {0}", ID));
 
-
-            //request may be able to be refactored into util method
             try
             {
-                // fix ref
+
+                //SWAP IN WEBCLIENT FOR WebRequest  - REDO
+                //REFACTOR REQUEST INTO UTIL METHOD?
+
                 String postData = String.Format("{0}", Domain.quill(this));
                 // fix ref
                 postData = String.Format(postData + "{0}", BuildLivefyreToken());
@@ -67,28 +68,24 @@ namespace Livefyre.Core
                 // make params vars/members
                 // actor_token
                 // pull_profile_url
+
+                
                 byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+                // ascii or utf8?
+                // Apply ASCII Encoding to obtain the string as a byte array. 
+                // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
                 Uri uri = new Uri(url);
-                WebRequest request = WebRequest.Create(uri);
-                request.ContentType = "application/x-www-form-urlencoded";
+                // Create a new WebClient instance.
+                WebClient webClient = new WebClient();
+                webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
 
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(postBytes, 0, postBytes.Length);
-                WebResponse response = request.GetResponse();
-                Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                Console.WriteLine(responseFromServer);
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
+                Console.WriteLine("Uploading to {0} ...", uri.ToString());
+                Console.WriteLine(Encoding.UTF8.GetString(responseArray));
+                // check response for >= 400
+
+
             }
             catch (Exception e)
             {
@@ -112,42 +109,36 @@ namespace Livefyre.Core
             //make configurable/pull out mutable api v3_0 key
             string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
             // pull bits out of try
+
             try
             {
-                // fix ref
-                string postData = String.Format("{0}", Domain.quill(this));
-                // fix ref
-                postData = String.Format(postData + "{0}", BuildLivefyreToken());
-                //add Params
+
+                //SWAP IN WEBCLIENT FOR WebRequest  - REDO
+                //REFACTOR REQUEST INTO UTIL METHOD?
+
+                String postData = String.Format("{0}", Domain.quill(this));
                 // make params vars/members
                 // lftoken
+                postData = String.Format(postData + "{0}", BuildLivefyreToken());
                 byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+                // ascii or utf8?
+                // Apply ASCII Encoding to obtain the string as a byte array. 
+                // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
+                // try this?
                 Uri uri = new Uri(url);
-                WebRequest request = WebRequest.Create(uri);
-                request.ContentType = "application/x-www-form-urlencoded";
 
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(postBytes, 0, postBytes.Length);
-                WebResponse response = request.GetResponse();
-                Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-                // Get the stream containing content returned by the server.
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                StreamReader reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-                // Display the content.
-                Console.WriteLine(responseFromServer);
-                // Clean up the streams.
-                reader.Close();
-                dataStream.Close();
-                response.Close();
+                // Create a new WebClient instance.
+                WebClient webClient = new WebClient();
+                webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
 
-
-                // capture/throw a server error code too
+                Console.WriteLine("Uploading to {0} ...", uri.ToString());
+                Console.WriteLine(Encoding.UTF8.GetString(responseArray));
+                // check response for >= 400
 
                 return this;
+
             }
             catch (Exception e)
             {

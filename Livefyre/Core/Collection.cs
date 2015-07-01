@@ -39,10 +39,10 @@ namespace Livefyre.Core
             ClientResponse response = InvokeCollectionApi("create");
 
 
-
+            // make request, check status
             if (response.getStatus() == 200) {
-                data.setId(LivefyreUtil.stringToJson(response.getEntity(String.class))
-                        .getAsJsonObject("data").get("collectionId").getAsString());
+                data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class))
+                        .GetAsJsonObject("data").get("collectionId").GetAsString());
                 return this;
 
 
@@ -50,7 +50,7 @@ namespace Livefyre.Core
                 response = InvokeCollectionApi("update");
                 if (response.getStatus() == 200) {
                     data.setId(LivefyreUtil.stringToJson(response.getEntity(String.class))
-                            .getAsJsonObject("data").get("collectionId").getAsString());
+                            .GetAsJsonObject("data").get("collectionId").GetAsString());
                     return this;
                 }
             }
