@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Livefyre.Core
 {
-    public interface Core
+    public interface LFCore
     {
         public String GetUrn();
     }

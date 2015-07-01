@@ -16,6 +16,7 @@ namespace Livefyre.Core
     {
         private static double DEFAULT_EXPIRES = 86000.0;
         private static string DEFAULT_USER = "system";
+        //check this
         private static string ID = "{id}";
         private static string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
 
@@ -29,10 +30,12 @@ namespace Livefyre.Core
             this.data = data;
         }
         // MOVE THIS TO CONTRUCTOR?
+
+        //creating second object on init
         public static Network Init(String name, String key)
         {
             NetworkData data = new NetworkData(name, key);
-            return new Network(data/* David: not nec to use reflection here if desired */);
+            return new Network(data/* David: not nec to use reflection for Validation here */);
         }
 
         /**

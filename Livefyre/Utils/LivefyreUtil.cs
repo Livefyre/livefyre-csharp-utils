@@ -22,7 +22,9 @@ namespace Livefyre.Utils
             return gson.toJson(map);
         }
         */
-        public static Network GetNetworkFromCore(Core core) {
+        public static Network GetNetworkFromCore(LFCore core) {
+            /*
+             
             if (core.getClass().equals(Network.class)) {
                 return (Network) core;
             } else if (core.getClass().equals(Site.class)) {
@@ -30,11 +32,13 @@ namespace Livefyre.Utils
             } else {
                 return ((Collection) core).getSite().getNetwork();
             }
+            */
+            return new LFCore();
         }
 
-        public static boolean isValidFullUrl(String url) {
+        public static bool isValidFullUrl(String url) {
             try {
-                new URL(url);
+                System. Uri(url);
             } catch (MalformedURLException e) {
                 return false;
             }

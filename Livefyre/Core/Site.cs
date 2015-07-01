@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Livefyre.Core
 {
-    class Site : Core
+    class Site : LFCore
     {
 
     private Network network;
