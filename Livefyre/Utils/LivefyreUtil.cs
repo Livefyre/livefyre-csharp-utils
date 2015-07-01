@@ -10,6 +10,8 @@ namespace Livefyre.Utils
     class LivefyreUtil
     {
         // grab that JSON func
+
+        /*
         public static JsonObject stringToJson(String json) {
             Gson gson = new Gson();
             return gson.fromJson(json, JsonObject.class);
@@ -19,7 +21,7 @@ namespace Livefyre.Utils
             Gson gson = new Gson();
             return gson.toJson(map);
         }
-
+        */
         public static Network GetNetworkFromCore(Core core) {
             if (core.getClass().equals(Network.class)) {
                 return (Network) core;
@@ -64,5 +66,8 @@ namespace Livefyre.Utils
                 throw new TokenException(e);
             }
         }
+
+
+
     }
 }
