@@ -55,6 +55,8 @@ namespace Livefyre.Core
         {
             Precondition.CheckNotNull(url, String.Format("urlTemplate does not contain {0}", ID));
 
+
+            //request may be able to be refactored into util method
             try
             {
                 // fix ref

@@ -8,7 +8,7 @@ namespace Livefyre.Type
  
    // may not need extension methods
 
-    public static class CollectionType {
+    public enum CollectionType {
         COUNTING = "counting",
         BLOG = "liveblog",
         CHAT = "livechat",
