@@ -31,36 +31,42 @@ namespace Livefyre.Model
             this.url = url;
         }
 
-        public Map<String, Object> asMap() {
+        // make C# type
+        public Map<String, Object> AsMap() {
+
             Map<String, Object> attr = Maps.newTreeMap();
             attr.put("articleId", articleId);
             attr.put("title", title);
-            attr.put("type", type.toString());
+
+
+            // work out the enum lang conversion puzzle
+            attr.put("type", (string)type);
             attr.put("url", url);
         
-            if (StringUtils.isNotBlank(tags)) {
+            if (String.IsNullOrEmpty(tags)) {
                 attr.put("tags", tags);
             }
-            if (topics != null && topics.size() > 0) {
+            if (topics != null && topics.length > 0) {
                 attr.put("topics", topics);
             }
-            if (StringUtils.isNotBlank(extensions)) {
+            if (String.IsNullOrEmpty(extensions))
+            {
                 attr.put("extensions", extensions);
             }
             return attr;
         }
 
         // make set/get?
-        public CollectionType getType() {
+        public CollectionType GetType() {
             return type;
         }
     
-        public CollectionData setType(CollectionType type) {
+        public CollectionData SetType(CollectionType type) {
             this.type = type;
             return this;
         }
     
-        public String getId() {
+        public String GetId() {
             if (id == null) {
                 // make msg var/mem
                 throw new LivefyreException("Id not set. Call createOrUpdate() on the collection to set the id, or manually set it by calling setId(id) on this object.");
@@ -68,61 +74,61 @@ namespace Livefyre.Model
             return id;
         }
     
-        public CollectionData setId(String id) {
+        public CollectionData SetId(String id) {
             this.id = id;
             return this;
         }
 
-        public String getArticleId() {
+        public String GetArticleId() {
             return articleId;
         }
 
-        public CollectionData setArticleId(String articleId) {
+        public CollectionData SetArticleId(String articleId) {
             this.articleId = articleId;
             return this;
         }
 
-        public String getTitle() {
+        public String GetTitle() {
             return title;
         }
 
-        public CollectionData setTitle(String title) {
+        public CollectionData SetTitle(String title) {
             this.title = title;
             return this;
         }
 
-        public String getUrl() {
+        public String GetUrl() {
             return url;
         }
 
-        public CollectionData setUrl(String url) {
+        public CollectionData SetUrl(String url) {
             this.url = url;
             return this;
         }
 
-        public String getTags() {
+        public String GetTags() {
             return tags;
         }
 
-        public CollectionData setTags(String tags) {
+        public CollectionData SetTags(String tags) {
             this.tags = tags;
             return this;
         }
 
-        public List<Topic> getTopics() {
+        public List<Topic> GetTopics() {
             return topics;
         }
 
-        public CollectionData setTopics(List<Topic> topics) {
+        public CollectionData SetTopics(List<Topic> topics) {
             this.topics = topics;
             return this;
         }
 
-        public String getExtensions() {
+        public String GetExtensions() {
             return extensions;
         }
 
-        public CollectionData setExtensions(String extensions) {
+        public CollectionData SetExtensions(String extensions) {
             this.extensions = extensions;
             return this;
         }
