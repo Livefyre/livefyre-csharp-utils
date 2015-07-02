@@ -5,7 +5,7 @@ using System.Text;
 
 
 using Livefyre.Type;
-
+using Livefyre.Dto;
 
 
 namespace Livefyre.Model

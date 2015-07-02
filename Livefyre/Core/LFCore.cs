@@ -7,6 +7,6 @@ namespace Livefyre.Core
 {
     public interface LFCore
     {
-        public String GetUrn();
+        public string GetUrn();
     }
 }
