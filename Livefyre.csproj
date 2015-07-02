@@ -36,6 +36,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -192,7 +193,7 @@
     <Compile Include="Livefyre\Api\Filter\LftokenAuthFilter.cs" />
     <Compile Include="Livefyre\Api\PersonalizedStream.cs" />
     <Compile Include="Livefyre\Core\Collection.cs" />
-    <Compile Include="Livefyre\Core\LfCore.cs" />
+    <Compile Include="Livefyre\Core\LFCore.cs" />
     <Compile Include="Livefyre\Core\Network.cs" />
     <Compile Include="Livefyre\Core\Site.cs" />
     <Compile Include="Livefyre\Cursor\TimelineCursor.cs" />

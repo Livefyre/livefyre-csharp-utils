@@ -35,12 +35,11 @@ namespace Livefyre.Core
 
             //request may be able to be refactored into util method
 
-            // WEBCLIENT HERE
-            ClientResponse response = InvokeCollectionApi("create");
+            string response = InvokeCollectionApi("create");
 
 
             // make request, check status
-            // make status parse method
+            // make status parse method in utils
             if (response.getStatus() == 200) {
                 data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class))
                         .GetAsJsonObject("data").get("collectionId").GetAsString());
@@ -212,10 +211,31 @@ namespace Livefyre.Core
 
         //MAKE WEBCLIENT CALL
         private ClientResponse InvokeCollectionApi(String method) {
-            String uri = String.format("%s/api/v3.0/site/%s/collection/%s/", Domain.quill(this), site.getData().getId(), method);
-            ClientResponse response = Client.create().resource(uri).queryParam("sync", "1")
-                    .accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, getPayload());
+             Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
+
+            // add func: PARSE return code on returned value
+            
+            //REFACTOR REQUEST INTO UTIL METHOD?
+
+            string postData = "sync=1";
+            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+            // ascii or utf8?
+            // Apply ASCII Encoding to obtain the string as a byte array. 
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+
+
+            // Create a new WebClient instance.
+            WebClient webClient = new WebClient();
+            // check these - going to blow up it feels
+            webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            webClient.Headers.Add("Accept", "application/json");
+            //  another header here?  webClient.Headers.Add("Accept", "application/json");
+            byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
+
+            Console.WriteLine("Uploading to {0} ...", uri.ToString());
+
+            // make object with GetResponse method
+            string response = Encoding.UTF8.GetString(responseArray);
             return response;
         }
     

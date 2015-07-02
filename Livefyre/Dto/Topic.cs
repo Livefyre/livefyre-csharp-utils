@@ -33,8 +33,9 @@ namespace Livefyre.Dto
 
 
         // necessary for general type?
-        public Topic() { }
+        public Topic() {}
     
+            //why int?  from the unix millis?
         public Topic(string ID, string Label, int CreatedAt, int ModifiedAt) {
             this.ID  = ID ;
             this.Label = Label;
@@ -44,8 +45,11 @@ namespace Livefyre.Dto
         
         // why not pull this into constructor?
         /* Use this method to generate Topic objects. Otherwise ID 's (urns) will not be formed properly. */
-        public static Topic create(LFCore core, string ID, string Label) {
-            return new Topic(GenerateUrn(core, ID), Label, null, null);
+        public static Topic create(LFCore core, string ID, string label) {
+            string urn = GenerateUrn(core, ID);
+            //defaults necessary for times?
+            Topic t = new Topic(urn, label, 0, 0);
+            return t;
         }
     
         public static string GenerateUrn(LFCore core, string ID) {
@@ -100,19 +104,19 @@ namespace Livefyre.Dto
             this.Label = Label;
         }
 
-        public int getCreatedAt() {
+        public int GetCreatedAt() {
             return CreatedAt;
         }
 
-        public void  setCreatedAt(int CreatedAt) {
+        public void  SetCreatedAt(int CreatedAt) {
             this.CreatedAt = CreatedAt;
         }
 
-        public int getModifiedAt() {
+        public int GetModifiedAt() {
             return ModifiedAt;
         }
 
-        public void setModifiedAt(int ModifiedAt) {
+        public void GetModifiedAt(int ModifiedAt) {
             this.ModifiedAt = ModifiedAt;
         }
 

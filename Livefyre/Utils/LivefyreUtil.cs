@@ -1,15 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Text;
 
 using Livefyre.Core;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace Livefyre.Utils
 {
     public static class LivefyreUtil
     {
         // grab that JSON func
+
+        // generic serializer here
+        // unit test this, like real hard
+        // in this context, more like, jsonString to marshalled Type
+        public static T StringToJson<T>(string jsonData) {
+            MemoryStream stream = new MemoryStream();
+            DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(T));
+
+            seri.WriteObject(stream, jsonData);
+            
+            T json = (T)seri.ReadObject(stream);
+
+            return json;
+        }
 
         /*
         public static JsonObject stringToJson(String json) {

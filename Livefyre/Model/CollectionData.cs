@@ -46,7 +46,7 @@ namespace Livefyre.Model
             if (String.IsNullOrEmpty(tags)) {
                 attr.put("tags", tags);
             }
-            if (topics != null && topics.length > 0) {
+            if (topics != null && topics.Length > 0) {
                 attr.put("topics", topics);
             }
             if (String.IsNullOrEmpty(extensions))

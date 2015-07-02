@@ -112,7 +112,6 @@ namespace Livefyre.Core
 
             try
             {
-
                 //REFACTOR REQUEST INTO UTIL METHOD?
 
                 String postData = String.Format("{0}", Domain.quill(this));
