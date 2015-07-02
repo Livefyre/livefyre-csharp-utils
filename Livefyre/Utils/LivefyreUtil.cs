@@ -17,13 +17,31 @@ namespace Livefyre.Utils
         // generic serializer here
         // unit test this, like real hard
         // in this context, more like, jsonString to marshalled Type
-        public static T StringToJson<T>(string jsonData) {
+        // StringToJson
+        public static T JsonToType<T>(string jsonData) {
             MemoryStream stream = new MemoryStream();
             DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(T));
 
             seri.WriteObject(stream, jsonData);
             
-            T json = (T)seri.ReadObject(stream);
+            T marshalledType = (T)seri.ReadObject(stream);
+
+            return marshalledType;
+        }
+
+        public static string TypeToJson<T>(System.Type type) {
+            string json;
+
+            try {
+                DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(T));
+                MemoryStream stream = new MemoryStream();
+                seri.WriteObject(stream, type);
+                StreamReader reader = new StreamReader(stream);
+                json = reader.ReadToEnd();
+            } 
+            catch (Exception e) {
+                throw e;
+            }
 
             return json;
         }
