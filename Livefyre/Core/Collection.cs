@@ -40,6 +40,7 @@ namespace Livefyre.Core
 
 
             // make request, check status
+            // make status parse method
             if (response.getStatus() == 200) {
                 data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class))
                         .GetAsJsonObject("data").get("collectionId").GetAsString());
@@ -64,6 +65,7 @@ namespace Livefyre.Core
          * @return String.
          */
         public String BuildCollectionMetaToken() {
+            //convert to Dict
             Map<String, Object> claims = data.asMap();
             boolean isNetworkIssued = isNetworkIssued();
             claims.put("iss", isNetworkIssued ? site.getNetwork().getUrn() : site.getUrn());
@@ -78,6 +80,7 @@ namespace Livefyre.Core
          */
         public String BuildChecksum() {
             try {
+                // more dictionary-ing
                 Map<String, Object> attr = data.asMap();
                 byte[] digest = MessageDigest.getInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).getBytes());
                 return printHexBinary(digest);
@@ -206,6 +209,8 @@ namespace Livefyre.Core
 
 
         // PRIVATE
+
+        //MAKE WEBCLIENT CALL
         private ClientResponse InvokeCollectionApi(String method) {
             String uri = String.format("%s/api/v3.0/site/%s/collection/%s/", Domain.quill(this), site.getData().getId(), method);
             ClientResponse response = Client.create().resource(uri).queryParam("sync", "1")
@@ -215,6 +220,8 @@ namespace Livefyre.Core
         }
     
         private String GetPayload() {
+
+            // Dictionary!
             Map<String, Object> payload = ImmutableMap.<String, Object>of(
                 "articleId", data.getArticleId(),
                 "checksum", buildChecksum(),
