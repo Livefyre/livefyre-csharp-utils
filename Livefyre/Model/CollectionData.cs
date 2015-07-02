@@ -31,7 +31,7 @@ namespace Livefyre.Model
             this.url = url;
         }
 
-        // make C# type
+        // make C# Dictionary
         public Map<String, Object> AsMap() {
 
             Map<String, Object> attr = Maps.newTreeMap();
@@ -56,7 +56,7 @@ namespace Livefyre.Model
             return attr;
         }
 
-        // make set/get?
+        // make C# set/get?
         public CollectionType GetType() {
             return type;
         }

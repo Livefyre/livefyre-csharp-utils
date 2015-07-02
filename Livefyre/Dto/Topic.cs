@@ -52,6 +52,8 @@ namespace Livefyre.Dto
             return core.GetUrn() + TOPIC_IDENTIFIER + ID ;
         }
 
+        // TRY/CATCH SERI?
+
         //REFACTOR INTO GENERAL SERIALIZER?
         public static Topic serializeFromJson(string json) {
             MemoryStream stream = new MemoryStream();

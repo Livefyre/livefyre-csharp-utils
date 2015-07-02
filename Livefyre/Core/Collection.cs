@@ -35,7 +35,7 @@ namespace Livefyre.Core
 
             //request may be able to be refactored into util method
 
-
+            // WEBCLIENT HERE
             ClientResponse response = InvokeCollectionApi("create");
 
 
@@ -82,6 +82,7 @@ namespace Livefyre.Core
                 byte[] digest = MessageDigest.getInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).getBytes());
                 return printHexBinary(digest);
             } catch (NoSuchAlgorithmException e) {
+            // pull out these error strings. /make configurable some day?
                 throw new LivefyreException("MD5 message digest missing. This shouldn't ever happen." + e);
             }
         }
