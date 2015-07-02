@@ -28,11 +28,11 @@ namespace Livefyre.Core
             return network.GetUrn() + ":site=" + data.GetId();
         }
     
-        public Network getNetwork() {
+        public Network GetNetwork() {
             return network;
         }
 
-        public void setNetwork(Network network) {
+        public void SetNetwork(Network network) {
             this.network = network;
         }
 

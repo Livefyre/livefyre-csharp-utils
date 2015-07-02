@@ -29,6 +29,7 @@ namespace Livefyre.Utils
             return marshalledType;
         }
 
+        //mapToJsonString
         public static string TypeToJson<T>(System.Type type) {
             string json;
 
@@ -46,19 +47,23 @@ namespace Livefyre.Utils
             return json;
         }
 
-        /*
-        public static JsonObject stringToJson(String json) {
-            Gson gson = new Gson();
-            return gson.fromJson(json, JsonObject.class);
-        }
-    
-        public static string mapToJsonString(Map<String, Object> map) {
-            Gson gson = new Gson();
-            return gson.toJson(map);
-        }
-        */
         public static Network GetNetworkFromCore(LFCore core) {
-            /*
+
+            //class name
+            string coreType = core.GetType().ToString();
+            
+            if (coreType == typeof(Network).ToString()) {
+                return (Network)core;
+
+            } else if (coreType == typeof(Site).ToString()) {
+                return ((Site)core).GetNetwork();
+
+            } else {
+                return ((Collection)core).GetSite().GetNetwork();
+
+            }
+            
+                /*
              this.GetType().Name
 
             if (core.getClass().equals(Network.class)) {

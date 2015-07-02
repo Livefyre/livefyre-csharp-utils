@@ -5,6 +5,8 @@ using System.Text;
 
 using Livefyre.Model;
 using Livefyre.Type;
+using Livefyre.Utils;
+
 
 namespace Livefyre.Core
 {
@@ -22,7 +24,9 @@ namespace Livefyre.Core
     
         public static Collection Init(Site site, CollectionType type, String title, String articleId, String url) {
             CollectionData data = new CollectionData(type, title, articleId, url);
-            return new Collection(site, ReflectiveValidator.validate(data));
+            // validate data
+            // return new Collection(site, ReflectiveValidator.validate(data));
+            return new Collection(site, data);
         }
     
         /**
@@ -209,12 +213,10 @@ namespace Livefyre.Core
 
         // PRIVATE
 
-        //MAKE WEBCLIENT CALL
-        private ClientResponse InvokeCollectionApi(String method) {
+        private string InvokeCollectionApi(String method) {
              Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
             // add func: PARSE return code on returned value
-            
             //REFACTOR REQUEST INTO UTIL METHOD?
 
             string postData = "sync=1";
@@ -223,8 +225,6 @@ namespace Livefyre.Core
             // Apply ASCII Encoding to obtain the string as a byte array. 
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
-
-            // Create a new WebClient instance.
             WebClient webClient = new WebClient();
             // check these - going to blow up it feels
             webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -240,15 +240,14 @@ namespace Livefyre.Core
         }
     
         private String GetPayload() {
-
-            // Dictionary!
-            Map<String, Object> payload = ImmutableMap.<String, Object>of(
-                "articleId", data.getArticleId(),
-                "checksum", buildChecksum(),
-                "collectionMeta", BuildCollectionMetaToken());
-            return LivefyreUtil.mapToJsonString(payload);
+            Dictionary<string, string> payload = new Dictionary<string, string>();
+            
+            payload.Add("articleId", data.GetArticleId());
+            payload.Add("checksum", BuildChecksum);
+            payload.Add("articleId", data.BuildCollectionMetaToken);
+            
+            return TypeToJson(payload);
         }
-
 
         private String PrintHexBinary(byte[] data) {
             StringBuilder r = new StringBuilder(data.length * 2);
