@@ -61,24 +61,21 @@ namespace Livefyre.Core
                 //REFACTOR REQUEST INTO UTIL METHOD?
 
                 String postData = String.Format("{0}", Domain.quill(this));
-                // fix ref
                 postData = String.Format(postData + "{0}", BuildLivefyreToken());
                 //add Params
                 // make params vars/members
                 // actor_token
                 // pull_profile_url
-
                 
                 byte[] postBytes = Encoding.UTF8.GetBytes(postData);
                 // ascii or utf8?
-                // Apply ASCII Encoding to obtain the string as a byte array. 
                 // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
                 Uri uri = new Uri(url);
                 // Create a new WebClient instance.
                 WebClient webClient = new WebClient();
                 // this needs to be json
-                webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                webClient.Headers.Add("Content-Type", "application/json");
                 byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
 
                 Console.WriteLine("Uploading to {0} ...", uri.ToString());
@@ -116,24 +113,40 @@ namespace Livefyre.Core
 
                 String postData = String.Format("{0}", Domain.quill(this));
                 // make params vars/members
-                // lftoken
-                postData = String.Format(postData + "{0}", BuildLivefyreToken());
+                postData = String.Format(postData + "&lftoken={0}", BuildLivefyreToken());
                 byte[] postBytes = Encoding.UTF8.GetBytes(postData);
                 // ascii or utf8?
-                // Apply ASCII Encoding to obtain the string as a byte array. 
                 // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
                 // try this?
                 Uri uri = new Uri(url);
+               
+                WebRequest request = WebRequest.Create(uri);
+                request.ContentType = "application/json";
+                request.ContentLength = postBytes.Length;
+                request.Method = "POST";
 
-                // Create a new WebClient instance.
-                WebClient webClient = new WebClient();
-                webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
+                // USER AGENT MAY BE NECESSARY!
+                //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
-                Console.WriteLine("Uploading to {0} ...", uri.ToString());
-                Console.WriteLine(Encoding.UTF8.GetString(responseArray));
-                // check response for >= 400
+                // inject Post Data
+                Stream requestStream = request.GetRequestStream();
+                requestStream.Write(postBytes, 0, postBytes.Length);
+
+                requestStream.Close();
+
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                response.Close();
+
+                if ((int)response.StatusCode >= 400)
+                {
+
+                    // make this custom exception
+                    // throw new ApiException(response.getStatus());
+                    throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
+
+                } 
 
                 return this;
 

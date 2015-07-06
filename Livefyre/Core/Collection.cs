@@ -178,8 +178,6 @@ namespace Livefyre.Core
 
         // PRIVATE
             
-
-
         private HttpWebResponse InvokeCollectionApi(string method) {
              Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
@@ -197,7 +195,7 @@ namespace Livefyre.Core
             request.ContentLength = postBytes.Length;
             request.Method = "POST";
 
-            // USER AGENT HEADER MAY BE NECESSARY!
+            // USER AGENT MAY BE NECESSARY!
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
                 
             // inject Post Data
