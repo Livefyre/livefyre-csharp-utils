@@ -63,22 +63,11 @@ namespace Livefyre.Utils
 
             }
             
-                /*
-             this.GetType().Name
-
-            if (core.getClass().equals(Network.class)) {
-                return (Network) core;
-            } else if (core.getClass().equals(Site.class)) {
-                return ((Site) core).getNetwork();
-            } else {
-                return ((Collection) core).getSite().getNetwork();
-            }
-            */
-
             Network network = null;
 
             return network;
         }
+
 
         public static bool isValidFullUrl(String url) {
             try {

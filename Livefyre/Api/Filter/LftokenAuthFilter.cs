@@ -12,22 +12,25 @@ namespace Livefyre.Api.Filter
 {
  
     public class LftokenAuthFilter  {
-    private sealed LFCore core;
-    private sealed string userToken;
-    
-    public LftokenAuthFilter(LFCore core, String userToken) {
-        this.core = core;
-        this.userToken = userToken;
-    }
-    
-    public WebClient handle(WebClient wc) {
-        // check these methods for throw sig
-        string lftoken = (userToken == null ? LivefyreUtil.GetNetworkFromCore(core).BuildLivefyreToken() : userToken);
 
-        wc.Headers.Add("Authorization", lftoken);
+        private sealed LFCore core;
+        private sealed string userToken;
+    
 
-        return wc;
-    }
+        public LftokenAuthFilter(LFCore core, String userToken) {
+            this.core = core;
+            this.userToken = userToken;
+        }
+    
+
+        public WebClient handle(WebClient wc) {
+            // check these methods for throw sig
+            string lftoken = (userToken == null ? LivefyreUtil.GetNetworkFromCore(core).BuildLivefyreToken() : userToken);
+
+            wc.Headers.Add("Authorization", lftoken);
+
+            return wc;
+        }
 }
 
 

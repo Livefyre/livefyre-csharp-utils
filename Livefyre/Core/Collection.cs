@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Web;
 
+using Livefyre.Api;
+using Livefyre.Core;
 using Livefyre.Model;
 using Livefyre.Type;
 using Livefyre.Utils;
@@ -35,17 +40,22 @@ namespace Livefyre.Core
          * 
          * @return Collection
          */
-        public Collection CreateOrUpdate() {
+        //public Collection CreateOrUpdate() {
+        public string CreateOrUpdate() {
 
             //request may be able to be refactored into util method
-
+            // create RESPONSEOBJECT WITH METHODS
             string response = InvokeCollectionApi("create");
 
-
+            return response;
             // make request, check status
             // make status parse method in utils
+
+            /*
             if (response.getStatus() == 200) {
-                data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class))
+                data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class
+
+
                         .GetAsJsonObject("data").get("collectionId").GetAsString());
                 return this;
 
@@ -60,6 +70,7 @@ namespace Livefyre.Core
             }
 
             throw new ApiException(response.getStatus());
+             */
         }
 
         /**
@@ -67,6 +78,7 @@ namespace Livefyre.Core
          * 
          * @return String.
          */
+            /*
         public String BuildCollectionMetaToken() {
             //convert to Dict
             Map<String, Object> claims = data.asMap();
@@ -75,12 +87,13 @@ namespace Livefyre.Core
             return LivefyreUtil.serializeAndSign(claims, isNetworkIssued ?
                     site.getNetwork().getData().getKey() : site.getData().getKey());
         }
-
+        */
         /**
          * Generates a MD5-encrypted checksum based on this collection's attributes.
          * 
          * @return String.
          */
+        /*
         public String BuildChecksum() {
             try {
                 // more dictionary-ing
@@ -92,12 +105,13 @@ namespace Livefyre.Core
                 throw new LivefyreException("MD5 message digest missing. This shouldn't ever happen." + e);
             }
         }
-
+        */
         /**
          * Retrieves this collection's information from Livefyre. Makes an external API call.
          * 
          * @return JSONObject.
          */
+        /*
         public JsonObject GetCollectionContent() {
             String b64articleId = Base64Url.encode(data.getArticleId().getBytes());
             if (b64articleId.length() % 4 != 0) {
@@ -113,7 +127,9 @@ namespace Livefyre.Core
             Gson gson = new Gson();
             return gson.fromJson(response.getEntity(String.class), JsonObject.class);
         }
+        */
 
+        /*
         public String GetUrn() {
             return String.format("%s:collection=%s", site.getUrn(), data.getId());
         }
@@ -150,95 +166,48 @@ namespace Livefyre.Core
             this.data = data;
         }
 
-
-        // PULLED FROM SITE.cs
-        // turn into CollectionBuilder?
-        /* Default collection type */
-        public Collection BuildBlogCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.BLOG, title, articleId, url);
-        }
-
-        public Collection buildChatCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.CHAT, title, articleId, url);
-        }
-
-        public Collection buildCommentsCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.COMMENTS, title, articleId, url);
-        }
-
-        public Collection BuildCountingCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.COUNTING, title, articleId, url);
-        }
-
-        public Collection BuildRatingsCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.RATINGS, title, articleId, url);
-        }
-
-        public Collection BuildReviewsCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.REVIEWS, title, articleId, url);
-        }
-
-        public Collection buildSidenotesCollection(String title, String articleId, String url)
-        {
-            return BuildCollection(CollectionType.SIDENOTES, title, articleId, url);
-        }
-
-        /**
-         * Creates and returns a Collection object. Be sure to call createOrUpdate() on it to inform Livefyre to
-         * complete creation and any updates.
-         * 
-         * Options accepts a map of key/value pairs for your Collection. Some examples are 'tags',
-         * 'type', 'extensions', 'tags', etc. Please refer to
-         * http://answers.livefyre.com/developers/getting-started/tokens/collectionmeta/ for more info.
-         *
-         * @param type the type of the collection.
-         * @param articleId the articleId for the collection.
-         * @param title title for the collection.
-         * @param url url for the collection.
-         * 
-         * @return Collection
-         */
-        public Collection BuildCollection(CollectionType type, String title, String articleId, String url)
-        {
-            return Collection.init(this, type, title, articleId, url);
-        }
-
-
+        */
 
         // PRIVATE
+            
 
-        private string InvokeCollectionApi(String method) {
+
+        // no access above when private?!  (CreateOrUpdate)
+        public HttpWebResponse InvokeCollectionApi(string method) {
              Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
-            // add func: PARSE return code on returned value
-            //REFACTOR REQUEST INTO UTIL METHOD?
+            // REFACTOR REQUEST INTO UTIL METHOD?
+            // WebClient doesn't allow coercion to response object!?
+            // using WebRequest instead
 
             string postData = "sync=1";
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
             // ascii or utf8?
-            // Apply ASCII Encoding to obtain the string as a byte array. 
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
-            WebClient webClient = new WebClient();
-            // check these - going to blow up it feels
-            webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            webClient.Headers.Add("Accept", "application/json");
-            //  another header here?  webClient.Headers.Add("Accept", "application/json");
-            byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/json";
+            request.ContentLength = postBytes.Length;
+            request.Method = "POST";
 
-            Console.WriteLine("Uploading to {0} ...", uri.ToString());
+            // USER AGENT HEADER MAY BE NECESSARY!
+            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+                
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
 
-            // make object with GetResponse method
-            string response = Encoding.UTF8.GetString(responseArray);
+            requestStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            response.Close();
+
             return response;
+
         }
-    
+
+    /*
         private String GetPayload() {
             Dictionary<string, string> payload = new Dictionary<string, string>();
             
@@ -248,7 +217,9 @@ namespace Livefyre.Core
             
             return TypeToJson(payload);
         }
-
+        */
+        // check this
+        /*
         private String PrintHexBinary(byte[] data) {
             StringBuilder r = new StringBuilder(data.length * 2);
             for (byte b : data) {
@@ -257,7 +228,7 @@ namespace Livefyre.Core
             }
             return r.toString();
         }
-
+        */
 
 
 
