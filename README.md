@@ -30,3 +30,11 @@ Note: any feature update on any of Livefyre's libraries will need to be reflecte
 ## License
 
 MIT
+
+
+
+NOTES (WIP):
+
+
+
+ 

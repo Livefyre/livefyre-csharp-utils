@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Diagnostics.Contracts;
 
 using Livefyre.Api;
 using Livefyre.Model;
@@ -78,6 +77,7 @@ namespace Livefyre.Core
                 Uri uri = new Uri(url);
                 // Create a new WebClient instance.
                 WebClient webClient = new WebClient();
+                // this needs to be json
                 webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
 
