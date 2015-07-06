@@ -40,37 +40,45 @@ namespace Livefyre.Core
          * 
          * @return Collection
          */
-        //public Collection CreateOrUpdate() {
-        public string CreateOrUpdate() {
+        public Collection CreateOrUpdate() {
+            HttpWebResponse response = InvokeCollectionApi("create");
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
 
-            //request may be able to be refactored into util method
-            // create RESPONSEOBJECT WITH METHODS
-            string response = InvokeCollectionApi("create");
-
-            return response;
-            // make request, check status
-            // make status parse method in utils
-
-            /*
-            if (response.getStatus() == 200) {
-                data.SetId(LivefyreUtil.stringToJson(response.getEntity(String.class
+            string responseString = responseReader.ReadToEnd(); 
+                
+            responseReader.Close();
+            responseStream.Close();
 
 
-                        .GetAsJsonObject("data").get("collectionId").GetAsString());
+            if ((int)response.StatusCode == 200) {
+            
+                // Dump the Data Contract Serializer for JWT.net
+               // var jsonData = LivefyreUtil.TypeToJson(responseString);
+
+                 //       .GetAsJsonObject("data").get("collectionId").GetAsString();
+                // data.SetId();
+
                 return this;
 
 
-            } else if (response.getStatus() == 409) {
+            } else if ((int)response.StatusCode == 409) {
                 response = InvokeCollectionApi("update");
-                if (response.getStatus() == 200) {
-                    data.setId(LivefyreUtil.stringToJson(response.getEntity(String.class))
-                            .GetAsJsonObject("data").get("collectionId").GetAsString());
+
+                if ((int)response.StatusCode == 200) {
+
+                    // Dump the Data Contract Serializer for JWT.net
+                    //data.setId(LivefyreUtil.stringToJson(response.getEntity(String.class))
+                      //      .GetAsJsonObject("data").get("collectionId").GetAsString());
+                    
                     return this;
                 }
             }
 
-            throw new ApiException(response.getStatus());
-             */
+            // fill in from Custom Exceptions
+            //throw new ApiException((int)response.StatusCode);
+            throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
+            
         }
 
         /**
@@ -172,8 +180,7 @@ namespace Livefyre.Core
             
 
 
-        // no access above when private?!  (CreateOrUpdate)
-        public HttpWebResponse InvokeCollectionApi(string method) {
+        private HttpWebResponse InvokeCollectionApi(string method) {
              Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
             // REFACTOR REQUEST INTO UTIL METHOD?
