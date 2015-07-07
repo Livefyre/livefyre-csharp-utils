@@ -26,10 +26,9 @@ namespace Livefyre.Dto
         private int ModifiedAt;
 
 
-        // necessary for general type?
+        // necessary for general object?
         public Topic() {}
     
-            //why int?  from the unix millis?
         public Topic(string ID, string Label, int CreatedAt, int ModifiedAt) {
             this.ID  = ID ;
             this.Label = Label;
@@ -37,13 +36,14 @@ namespace Livefyre.Dto
             this.ModifiedAt = ModifiedAt;
         }
         
-        // why not pull this into constructor?
         /* Use this method to generate Topic objects. Otherwise ID 's (urns) will not be formed properly. */
-        public static Topic create(LFCore core, string ID, string label) {
+        // Pull into constructor?
+        public static Topic create(LFCore core, string ID, string label)
+        {
             string urn = GenerateUrn(core, ID);
             Int32 unixTS = LivefyreUtil.UnixNow();
-
             Topic topic = new Topic(urn, label, unixTS, unixTS);
+
             return topic;
         }
     

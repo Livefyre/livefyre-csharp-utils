@@ -50,43 +50,44 @@ namespace Livefyre.Core
          * 
          * @param urlTemplate the url template to set.
          */
-        public void SetUserSyncUrl(String url)
+        public void SetUserSyncUrl(String urlTemplate)
         {
-            Precondition.CheckNotNull(url, String.Format("urlTemplate does not contain {0}", ID));
+            Precondition.CheckNotNull(urlTemplate, String.Format("urlTemplate does not contain {0}", ID));
 
-            try
-            {
-
-                //SWAP IN WEBCLIENT FOR WebRequest  - REDO
-                //REFACTOR REQUEST INTO UTIL METHOD?
-
-                String postData = String.Format("{0}", Domain.quill(this));
-                postData = String.Format(postData + "{0}", BuildLivefyreToken());
-                //add Params
-                // make params vars/members
-                // actor_token
-                // pull_profile_url
+            //REFACTOR REQUEST INTO UTIL METHOD?
+            // make params vars/members?
+            // better way to add params?
+            string postData = String.Format("{0}", Domain.quill(this));
+            postData = String.Format(postData + "&actor_token={0}", BuildLivefyreToken());
+            postData = String.Format(postData + "&pull_profile_url={0}", urlTemplate);
                 
-                byte[] postBytes = Encoding.UTF8.GetBytes(postData);
-                // ascii or utf8?
-                // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
 
-                Uri uri = new Uri(url);
-                // Create a new WebClient instance.
-                WebClient webClient = new WebClient();
-                // this needs to be json
-                webClient.Headers.Add("Content-Type", "application/json");
-                byte[] responseArray = webClient.UploadData(uri, "POST", postBytes);
+            Uri uri = new Uri(urlTemplate);
 
-                Console.WriteLine("Uploading to {0} ...", uri.ToString());
-                Console.WriteLine(Encoding.UTF8.GetString(responseArray));
-                // check response for >= 400
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/json";
+            request.ContentLength = postBytes.Length;
+            request.Method = "POST";
 
+            // USER AGENT MAY BE NECESSARY!
+            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
-            }
-            catch (Exception e)
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            response.Close();
+
+            if ((int)response.StatusCode >= 400)
             {
-                throw e;
+                // Pull from API Exception
+                throw new Exception(String.Format("An error has occurred: {0}", response.StatusCode));
             }
 
         }
@@ -146,7 +147,7 @@ namespace Livefyre.Core
                     // throw new ApiException(response.getStatus());
                     throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
 
-                } 
+                }
 
                 return this;
 
