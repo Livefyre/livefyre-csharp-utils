@@ -122,12 +122,23 @@ namespace Livefyre.Core
          */
         
         
-        public JsonObject GetCollectionContent() {
-            // has to be in bytes or string OK?
-            String b64articleId = Convert.ToBase64String(Convert.ToByte(data.GetArticleId());
+        public JObject GetCollectionContent() {
+            string articleID = this.data.GetArticleId();
+            byte[] bytesID = Encoding.ASCII.GetBytes(articleID);
+
+            string b64articleId = Convert.ToBase64String(bytesID);
+
+            string.Concat("", Enumerable.Repeat('a', 2));
+
             if (b64articleId.Length % 4 != 0) {
-                b64articleId = b64articleId + StringUtils.repeat("=", 4 - (b64articleId.Length % 4));
+                int lengthMod = (b64articleId.Length % 4);
+                int diff = (4 - lengthMod);
+                string something = (string)Enumerable.Repeat('=', diff);
+                string suffix = string.Concat("", something);
+
+                b64articleId = b64articleId + suffix;
             }
+
             String url = String.format("%s/bs3/%s.fyre.co/%s/%s/init", Domain.bootstrap(this), site.getNetwork().getNetworkName(), site.getData().getId(), b64articleId);
 
             ClientResponse response = Client.create().resource(url).accept(MediaType.APPLICATION_JSON)
