@@ -29,13 +29,13 @@ namespace Livefyre.Core
 
         public Network(NetworkData data)
         {
-            // get/set?
+            // Get/Set?
             this.data = data;
         }
         // MOVE THIS TO CONTRUCTOR?
 
         //creating second object on init
-        public static Network Init(String name, String key)
+        public static Network Init(string name, string key)
         {
             NetworkData data = new NetworkData(name, key);
             return new Network(data/* David: not nec to use reflection for Validation here */);
@@ -45,24 +45,28 @@ namespace Livefyre.Core
            * Updates the user sync url. Makes an external API call. 
            * http://answers.livefyre.com/developers/user-auth/remote-profiles/#ping-for-pull.
            * 
-           * @param urlTemplate the url template to set.
+           * @param urlTemplate the url template to Set.
         */
         /**
          * Updates the user sync url. Makes an external API call. 
          * http://answers.livefyre.com/developers/user-auth/remote-profiles/#ping-for-pull.
          * 
-         * @param urlTemplate the url template to set.
+         * @param urlTemplate the url template to Set.
          */
-        public void SetUserSyncUrl(String urlTemplate)
+        public void SetUserSyncUrl(string urlTemplate)
         {
-            Precondition.CheckNotNull(urlTemplate, String.Format("urlTemplate does not contain {0}", ID));
+            if (urlTemplate.IndexOf(ID) == -1)
+            {
+                // make LF Exception
+                throw new Exception(string.Format("urlTemplate does not contain {0}", ID));
+            }
 
             //REFACTOR REQUEST INTO UTIL METHOD?
             // make params vars/members?
             // better way to add params?
-            string postData = String.Format("{0}", Domain.quill(this));
-            postData = String.Format(postData + "&actor_token={0}", BuildLivefyreToken());
-            postData = String.Format(postData + "&pull_profile_url={0}", urlTemplate);
+            string postData = string.Format("{0}", Domain.quill(this));
+            postData = string.Format(postData + "&actor_token={0}", BuildLivefyreToken());
+            postData = string.Format(postData + "&pull_profile_url={0}", urlTemplate);
                 
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
@@ -90,7 +94,7 @@ namespace Livefyre.Core
             if ((int)response.StatusCode >= 400)
             {
                 // Pull from API Exception
-                throw new Exception(String.Format("An error has occurred: {0}", response.StatusCode));
+                throw new Exception(string.Format("An error has occurred: {0}", response.StatusCode));
             }
 
         }
@@ -102,18 +106,18 @@ namespace Livefyre.Core
          * @param userId the userId for the user to sync
          * @return true if the sync was successful.
          */
-        public Network SyncUser(String userId)
+        public Network SyncUser(string userId)
         {
             Precondition.CheckNotNull(userId);
 
             //make configurable/pull out mutable api v3_0 key
-            string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
+            string url = string.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
 
             //REFACTOR REQUEST INTO UTIL METHOD?
 
-            String postData = String.Format("{0}", Domain.quill(this));
+            string postData = string.Format("{0}", Domain.quill(this));
             // make params vars/members
-            postData = String.Format(postData + "&lftoken={0}", BuildLivefyreToken());
+            postData = string.Format(postData + "&lftoken={0}", BuildLivefyreToken());
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
@@ -143,8 +147,8 @@ namespace Livefyre.Core
             {
 
                 // make this custom exception
-                // throw new ApiException(response.getStatus());
-                throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
+                // throw new ApiException(response.GetStatus());
+                throw new Exception(string.Format("An Error has occurred: {0}", (int)response.StatusCode));
 
             }
 
@@ -165,17 +169,17 @@ namespace Livefyre.Core
 
         /**
          * Generates a user auth token passed on the params passed in. This method serializes the params
-         * and signs the String with the Network key.
+         * and signs the string with the Network key.
          * 
          * @param userId the user id for this token.
          * @param displayName the display name for this token.
          * @param expires when the token should expire from the time of its creation in seconds.
-         * @return String
+         * @return string
          */
-        public String BuildUserAuthToken(String userId, String displayName, Double expires)
+        public string BuildUserAuthToken(string userId, string displayName, Double expires)
         {
             // should we use ms code contracts?
-            // requires a runtime checking setting
+            // requires a runtime checking Setting
             Precondition.CheckNotNull(userId);
             Precondition.CheckNotNull(displayName);
             Precondition.CheckNotNull(expires);
@@ -188,21 +192,21 @@ namespace Livefyre.Core
 
                 /*
                 // change this to MS type
-                Map<String, Object> claims = ImmutableMap.<String, Object>of(
-                        "domain", data.getName(),
+                Map<string, Object> claims = ImmutableMap.<string, Object>of(
+                        "domain", data.GetName(),
                         "user_id", userId,
                         "display_name", displayName,
-                        "expires", getExpiryInSeconds(expires)
+                        "expires", GetExpiryInSeconds(expires)
                     );
 
-                return SerializeAndSign(claims, data.getKey());
+                return SerializeAndSign(claims, data.GetKey());
                 */
                 return "";
 
             }
             else
             {
-                throw new Exception(String.Format("userId is not valid. be sure the userId matches the following pattern: {0}",
+                throw new Exception(string.Format("userId is not valid. be sure the userId matches the following pattern: {0}",
                         ALPHA_DASH_UNDER_DOT_REGEX));
             }
 
@@ -215,17 +219,17 @@ namespace Livefyre.Core
          * 
          * @return true if the token is still valid.
          */
-        public bool ValidateLivefyreToken(String lfToken)
+        public bool ValidateLivefyreToken(string lfToken)
         {
             Precondition.CheckNotNull(lfToken);
 
             // JSON.Net http://www.newtonsoft.com/json lib or MS JSON Serializer?
 
             /*
-            JsonObject json = LivefyreUtil.decodeJwt(lfToken, data.getKey());
-            return json.get("domain").getAsString().compareTo(data.getName()) == 0
-                && json.get("user_id").getAsString().compareTo("system") == 0
-                && json.get("expires").getAsLong() >= Calendar.getInstance().getTimeInMillis()/1000L;
+            JsonObject json = LivefyreUtil.decodeJwt(lfToken, data.GetKey());
+            return json.Get("domain").GetAsstring().compareTo(data.GetName()) == 0
+                && json.Get("user_id").GetAsstring().compareTo("system") == 0
+                && json.Get("expires").GetAsLong() >= Calendar.GetInstance().GetTimeInMillis()/1000L;
              */
             return false;
         }
@@ -234,28 +238,30 @@ namespace Livefyre.Core
         public string GetUrn()
         {
             // ensure this structure in networkdata
-            return "urn:livefyre:" + data.GetName();
+            return "urn:livefyre:" + this.data.GetName();
         }
 
-        public String GetUrnForUser(String user)
+        public string GetUrnForUser(string user)
         {
             return GetUrn() + ":user=" + user;
         }
 
-        public String GetNetworkName()
+        public string GetNetworkName()
         {
-            // ensure this structure in networkdata
-            return data.GetName().split("\\.")[0];
+            string netName = this.data.GetName();
+            string[] splitString = new string[] { "\\." };
+
+            return netName.Split(splitString, 1, StringSplitOptions.None)[0];
         }
 
-        public Boolean IsSsl()
+        public bool IsSsl()
         {
             return SSL;
         }
 
 
-        // get/set
-        public void setSsl(Boolean SSL)
+        // Get/Set
+        public void SetSsl(bool SSL)
         {
             this.SSL = SSL;
         }
@@ -273,13 +279,13 @@ namespace Livefyre.Core
 
         /* Protected/private methods */
         // move to Util
-        private long getExpiryInSeconds(double secTillExpire)
+        private long GetExpiryInSeconds(double secTillExpire)
         {
             //MS Time
             /*
-            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            Calendar cal = Calendar.GetInstance(TimeZone.GetTimeZone("UTC"));
             cal.add(Calendar.SECOND, (int) secTillExpire);
-            return cal.getTimeInMillis() / 1000L;
+            return cal.GetTimeInMillis() / 1000L;
             */
             return 199430;
         }

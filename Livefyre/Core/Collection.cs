@@ -143,6 +143,8 @@ namespace Livefyre.Core
                 Domain.bootstrap(this), this.site.GetNetwork().GetNetworkName(), 
                     this.site.GetData().GetId(), b64articleId);
 
+
+
             ClientResponse response = Client.create().resource(url).accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
             if (response.getStatus() >= 400) {
