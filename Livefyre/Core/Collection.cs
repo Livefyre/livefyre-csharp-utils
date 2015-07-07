@@ -238,6 +238,7 @@ namespace Livefyre.Core
         // PRIVATE
             
         private HttpWebResponse InvokeCollectionApi(string method) {
+            // string frag - pull to config object
              Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
             // REFACTOR REQUEST INTO UTIL METHOD?
