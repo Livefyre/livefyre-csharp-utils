@@ -281,13 +281,9 @@ namespace Livefyre.Core
         // move to Util
         private long GetExpiryInSeconds(double secTillExpire)
         {
-            //MS Time
-            /*
-            Calendar cal = Calendar.GetInstance(TimeZone.GetTimeZone("UTC"));
-            cal.add(Calendar.SECOND, (int) secTillExpire);
-            return cal.GetTimeInMillis() / 1000L;
-            */
-            return 199430;
+            DateTime expiration = DateTime.UtcNow.AddSeconds(secTillExpire);
+            
+            return (Int32)(expiration.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }
