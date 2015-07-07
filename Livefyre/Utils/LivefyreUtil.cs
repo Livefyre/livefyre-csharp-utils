@@ -42,10 +42,7 @@ namespace Livefyre.Utils
                 return ((Collection)core).GetSite().GetNetwork();
 
             }
-            
-            Network network = null;
 
-            return network;
         }
 
 

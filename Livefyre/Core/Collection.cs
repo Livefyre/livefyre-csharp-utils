@@ -139,6 +139,7 @@ namespace Livefyre.Core
                 b64articleId = b64articleId + suffix;
             }
 
+            // make configgleable
             String url = String.Format("{0}/bs3/{1}.fyre.co/{2}/{3}/init", 
                 Domain.bootstrap(this), this.site.GetNetwork().GetNetworkName(), 
                     this.site.GetData().GetId(), b64articleId);
@@ -156,6 +157,9 @@ namespace Livefyre.Core
             response.Close();
 
             // responseCode check - make Utils method
+            // 300s wont work here either
+            // should be 200 or ERROR?
+            // if ((int)response.StatusCode !== 200) {
             if ((int)response.StatusCode >= 400) {
                 // make LF Exception
                 //throw new ApiException(response.getStatus());
@@ -163,10 +167,17 @@ namespace Livefyre.Core
 
             }
 
-            // fill me in 
-            return new JObject();
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
             // is String.class helping to create the actual Java type?
-            // return gson.fromJson(response.getEntity(String.class), JsonObject.class);
+            return new JObject(responseString);
         }
         
 

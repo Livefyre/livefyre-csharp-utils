@@ -35,6 +35,8 @@ MIT
 
 ### NOTES/THOUGHTS (WIP):
 
+TODO: DRY ME!
+
 Should we:
 	Use Code Contracts?
 		requires a runtime checking Setting
