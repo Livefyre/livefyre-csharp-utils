@@ -25,7 +25,7 @@ namespace Livefyre.Core
 
         /* Getters/Setters */
         public String GetUrn() {
-            return network.GetUrn() + ":site=" + data.GetId();
+            return network.GetUrn() + ":site=" + this.data.GetId();
         }
     
         public Network GetNetwork() {

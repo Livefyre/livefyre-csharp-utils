@@ -139,7 +139,9 @@ namespace Livefyre.Core
                 b64articleId = b64articleId + suffix;
             }
 
-            String url = String.format("%s/bs3/%s.fyre.co/%s/%s/init", Domain.bootstrap(this), site.getNetwork().getNetworkName(), site.getData().getId(), b64articleId);
+            String url = String.Format("%s/bs3/%s.fyre.co/%s/%s/init", 
+                Domain.bootstrap(this), this.site.GetNetwork().GetNetworkName(), 
+                    this.site.GetData().GetId(), b64articleId);
 
             ClientResponse response = Client.create().resource(url).accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
