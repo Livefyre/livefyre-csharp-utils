@@ -5,9 +5,20 @@ using System.Text;
 
 namespace Livefyre.Type
 {
- 
-   // may not need extension methods
 
+    public static class CollectionType
+    {
+
+        public static readonly string COUNTING = "counting";
+        BLOG = "liveblog",
+        CHAT = "livechat",
+        COMMENTS = "livecomments",
+        RATINGS = "ratings",
+        REVIEWS = "reviews",
+        SIDENOTES = "sidenotes"
+
+    }
+    /*
     public enum CollectionType {
         COUNTING = "counting",
         BLOG = "liveblog",
@@ -17,5 +28,5 @@ namespace Livefyre.Type
         REVIEWS = "reviews",
         SIDENOTES = "sidenotes"
     }
-    
+    */
 }
