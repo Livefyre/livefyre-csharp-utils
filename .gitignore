@@ -1,6 +1,7 @@
-Livefyre/obj
 Livefyre/bin
+Livefyre/obj
 *.suo
 obj
 *.dgml
+/packages
 *.TMP

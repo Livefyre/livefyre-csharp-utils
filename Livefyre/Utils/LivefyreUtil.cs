@@ -4,48 +4,28 @@ using System.Linq;
 using System.IO;
 using System.Text;
 
+using Newtonsoft.Json;
 using Livefyre.Core;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+
+
 
 namespace Livefyre.Utils
 {
     public static class LivefyreUtil
     {
-        // grab that JSON func
 
-        // generic serializer here
-        // unit test this, like real hard
-        // in this context, more like, jsonString to marshalled Type
-        // StringToJson
-        public static T JsonToType<T>(string jsonData) {
-            MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(T));
-
-            seri.WriteObject(stream, jsonData);
-            
-            T marshalledType = (T)seri.ReadObject(stream);
-
-            return marshalledType;
+        public static T StringToJson<T>(string jsonData) {
+            T typed = JsonConvert.DeserializeObject<T>(jsonData);
+            return typed;
+        }
+        
+        // mapToJsonString
+        public static string TypeToJsonString (Object o) {
+            string s = JsonConvert.SerializeObject(o);
+            return s;
         }
 
-        //mapToJsonString
-        public static string TypeToJson<T>(System.Type type) {
-            string json;
 
-            try {
-                DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(T));
-                MemoryStream stream = new MemoryStream();
-                seri.WriteObject(stream, type);
-                StreamReader reader = new StreamReader(stream);
-                json = reader.ReadToEnd();
-            } 
-            catch (Exception e) {
-                throw e;
-            }
-
-            return json;
-        }
 
         public static Network GetNetworkFromCore(LFCore core) {
 
@@ -73,13 +53,14 @@ namespace Livefyre.Utils
             try {
                 Uri uri = new Uri(url);
 
-            } catch (Exception e) {
+            } catch (Exception) {
                 return false;
             }
 
             return true;
         }
 
+        /*
         // change Map param type
         public static String serializeAndSign(Map<String, Object> claims, String key) {
             // grab lib
@@ -95,7 +76,9 @@ namespace Livefyre.Utils
                 throw new TokenException(e);
             }
         }
-    
+         * 
+         */
+    /*
         public static JsonObject decodeJwt(String jwt, String key) {
             JwtConsumer jwtConsumer;
             try {
@@ -107,7 +90,7 @@ namespace Livefyre.Utils
                 throw new TokenException(e);
             }
         }
-
+    */
 
 
     }
