@@ -88,6 +88,7 @@ namespace Livefyre.Core
 
             response.Close();
 
+            // ripe for DRY-ing
             if ((int)response.StatusCode >= 400)
             {
                 // Pull from API Exception

@@ -22,8 +22,8 @@ namespace Livefyre.Api
         public static String bootstrap(LFCore core)
         {
             Network network = LivefyreUtil.GetNetworkFromCore(core);
-            return network.IsSsl() ? String.Format("https://%s.bootstrap.fyre.co",
-                    network.GetNetworkName()) : String.Format("http://bootstrap.%s.fyre.co", network.GetNetworkName());
+            return network.IsSsl() ? String.Format("https://{0}.bootstrap.fyre.co",
+                    network.GetNetworkName()) : String.Format("http://bootstrap.{0}.fyre.co", network.GetNetworkName());
         }
     }
 }

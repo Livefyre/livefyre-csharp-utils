@@ -10,7 +10,6 @@ namespace Livefyre.Core
 {
     public class Site : LFCore
     {
-
         private Network network;
         private SiteData data;
 
