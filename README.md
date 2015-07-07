@@ -35,6 +35,11 @@ MIT
 
 ### NOTES/THOUGHTS (WIP):
 
+A translation from our Java library that hopes to become idiomatic C#, with help:
+https://github.com/Livefyre/livefyre-java-utils
+
+
+
 TODO: DRY ME!
 
 Should we:

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Livefyre.Type;
+
+using Newtonsoft.Json;
+
 namespace Livefyre.Dto
 {
 
@@ -26,65 +30,56 @@ namespace Livefyre.Dto
         // haz json type?
         public static Subscription SerializeFromJson(string json)
         {
-            SubscriptionType type;
-            try
-            {
-                type = SubscriptionType.valueOf(json.get("type").getAsString());
-            }
-            catch (IllegalArgumentException e)
-            {
-                type = SubscriptionType.fromNum(json.get("type").getAsInt());
-            }
+            // try/catch this?
+            Subscription s = JsonConvert.DeserializeObject<Subscription>(json);
 
-            return new Subscription(
-                json.get("to").getAsString(),
-                json.get("by").getAsString(),
-                type,
-                json.get("createdAt").getAsInt());
+            return s;    
         }
 
-        public Date createdAtDate()
+
+        public DateTime createdAtDate()
         {
-            return new Date(createdAt.longValue() * 1000);
+            //suspect!
+            return new DateTime(createdAt * 1000);
         }
         
         /* Getters/Setters */
-        public String getTo()
+        public string getTo()
         {
             return to;
         }
 
-        public void setTo(String to)
+        public void setTo(string to)
         {
             this.to = to;
         }
 
-        public String getBy()
+        public string getBy()
         {
             return by;
         }
 
-        public void setBy(String by)
+        public void setBy(string by)
         {
             this.by = by;
         }
 
-        public String getType()
+        public string getType()
         {
             return type;
         }
 
-        public void setType(String type)
+        public void setType(string type)
         {
             this.type = type;
         }
 
-        public Integer getCreatedAt()
+        public int getCreatedAt()
         {
             return createdAt;
         }
 
-        public void setCreatedAt(Integer createdAt)
+        public void setCreatedAt(int createdAt)
         {
             this.createdAt = createdAt;
         }
