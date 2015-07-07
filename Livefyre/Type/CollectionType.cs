@@ -6,6 +6,8 @@ using System.Text;
 namespace Livefyre.Type
 {
 
+    // THIS MAY BE A MESS OR MAY WORK...
+
     public class CollectionType
     {
 

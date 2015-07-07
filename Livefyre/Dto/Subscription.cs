@@ -47,7 +47,7 @@ namespace Livefyre.Dto
         {
             return new Date(createdAt.longValue() * 1000);
         }
-
+        
         /* Getters/Setters */
         public String getTo()
         {

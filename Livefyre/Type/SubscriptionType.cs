@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Livefyre.Type
 {
+
+    // THIS MAY BE A MESS OR MAY WORK...
+
    public class SubscriptionType
     {
         //public static readonly int PersonalStream = 1;
@@ -36,26 +39,22 @@ namespace Livefyre.Type
             return this.GetType().ToString();
         }
     
-        public static SubscriptionType fromNum(int num) {
 
-
-
-
-            // does the .values() call reveal any Constants from the Java side?
-            /*
-            for (SubscriptionType e : SubscriptionType.values()) {
-                if (num == e.val) {
-                    return e;
+        public static string fromNum(int num) {
+        //WATCH THIS TYPE!
+        //public static SubscriptionType fromNum(int num) {
+            foreach (var name in Enum.GetNames(typeof(Values)))
+            {
+                if ((int)Enum.Parse(typeof(Values), name) == num)
+                {
+                    return name;
                 }
             }
-             */
-            foreach (int val in Enum.GetValues(Values))
-            {
-            }
-
 
             throw new ArgumentOutOfRangeException("num", String.Format("No constant with value {0} found!", num));
         }
+
+
     }
 
 }
