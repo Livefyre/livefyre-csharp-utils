@@ -37,6 +37,7 @@ MIT
 
 Should we:
 	Use Code Contracts?
+		requires a runtime checking Setting
 	Reduce Deps?
 	Pull Init/Create behavior into Constructors?
 	Refactor the WebRequests into a general method?

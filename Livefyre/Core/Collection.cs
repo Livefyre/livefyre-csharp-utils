@@ -139,20 +139,34 @@ namespace Livefyre.Core
                 b64articleId = b64articleId + suffix;
             }
 
-            String url = String.Format("%s/bs3/%s.fyre.co/%s/%s/init", 
+            String url = String.Format("{0}/bs3/{1}.fyre.co/{2}/{3}/init", 
                 Domain.bootstrap(this), this.site.GetNetwork().GetNetworkName(), 
                     this.site.GetData().GetId(), b64articleId);
 
+            
+            WebRequest request = WebRequest.Create(url);
+            request.ContentType = "application/json";
 
+            // USER AGENT MAY BE NECESSARY!
+            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+                
 
-            ClientResponse response = Client.create().resource(url).accept(MediaType.APPLICATION_JSON)
-                    .get(ClientResponse.class);
-            if (response.getStatus() >= 400) {
-                throw new ApiException(response.getStatus());
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            response.Close();
+
+            // responseCode check - make Utils method
+            if ((int)response.StatusCode >= 400) {
+                // make LF Exception
+                //throw new ApiException(response.getStatus());
+                throw new Exception(String.Format("An error has occured: {0}", response.StatusCode));
+
             }
-            Gson gson = new Gson();
+
+            // fill me in 
+            return new JObject();
             // is String.class helping to create the actual Java type?
-            return gson.fromJson(response.getEntity(String.class), JsonObject.class);
+            // return gson.fromJson(response.getEntity(String.class), JsonObject.class);
         }
         
 

@@ -179,7 +179,6 @@ namespace Livefyre.Core
         public string BuildUserAuthToken(string userId, string displayName, Double expires)
         {
             // should we use ms code contracts?
-            // requires a runtime checking Setting
             Precondition.CheckNotNull(userId);
             Precondition.CheckNotNull(displayName);
             Precondition.CheckNotNull(expires);
