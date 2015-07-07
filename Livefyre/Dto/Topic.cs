@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 
 using Livefyre.Core;
+using Livefyre.Utils;
 
 using Newtonsoft.Json;
 
@@ -40,9 +41,10 @@ namespace Livefyre.Dto
         /* Use this method to generate Topic objects. Otherwise ID 's (urns) will not be formed properly. */
         public static Topic create(LFCore core, string ID, string label) {
             string urn = GenerateUrn(core, ID);
-            //defaults necessary for times?
-            Topic t = new Topic(urn, label, 0, 0);
-            return t;
+            Int32 unixTS = LivefyreUtil.UnixNow();
+
+            Topic topic = new Topic(urn, label, unixTS, unixTS);
+            return topic;
         }
     
         public static string GenerateUrn(LFCore core, string ID) {

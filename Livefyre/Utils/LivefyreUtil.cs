@@ -92,6 +92,11 @@ namespace Livefyre.Utils
         }
     */
 
+        public static Int32 UnixNow()
+        {
+            Int32 unixTS = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return unixTS;
+        }
 
     }
 }
