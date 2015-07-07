@@ -52,7 +52,7 @@ namespace Livefyre.Dto
         }
 
 
-        public static Topic serializeFromJson(string json) {
+        public static Topic SerializeFromJson(string json) {
             Topic topic = JsonConvert.DeserializeObject<Topic>(json);
             return topic;
         }

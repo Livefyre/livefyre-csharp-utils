@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Livefyre.Core;
+using Livefyre.Dto;
+
 namespace Livefyre.Api
 {
     public class PersonalizedStream {
@@ -18,19 +21,31 @@ namespace Livefyre.Api
     
         private static readonly string PATCH_METHOD = "PATCH";
     
+
+
         /* Topic API */
 
-        public static Topic getTopic(LfCore core, String topicId) {
+        public static Topic GetTopic(LFCore core, String topicId) {
+
+
+
+            /*
             ClientResponse response = builder(core)
                     .path(String.format(TOPIC_PATH, Topic.generateUrn(core, topicId)))
                     .accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
             JsonObject content = evaluateResponse(response);
-
-            return Topic.serializeFromJson(
+            */
+            /*
+            return Topic.SerializeFromJson(
                     content.getAsJsonObject("data").getAsJsonObject("topic"));
+            */
+
+            // fill me in 
+            return new Topic();
+            
         }
-    
+    /*
         public static Topic createOrUpdateTopic(LfCore core, String topicId, String label) {
             return createOrUpdateTopics(core, ImmutableMap.of(topicId, label)).get(0);
         }
@@ -38,8 +53,9 @@ namespace Livefyre.Api
         public static boolean deleteTopic(LfCore core, Topic topic) {
             return deleteTopics(core, Lists.newArrayList(topic)) == 1;
         }
-    
+    */
         /* Multiple Topic API */
+    /*
         public static List<Topic> getTopics(LfCore core, Integer limit, Integer offset) {
             ClientResponse response = builder(core)
                     .path(String.format(MULTIPLE_TOPIC_PATH, core.getUrn()))
@@ -97,8 +113,9 @@ namespace Livefyre.Api
         
             return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
         }
-    
+  */  
         /* Collection Topic API */
+/*
         public static List<String> getCollectionTopics(Collection collection) {
             ClientResponse response = builder(collection)
                     .path(String.format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
@@ -161,8 +178,9 @@ namespace Livefyre.Api
 
             return data.has("removed") ? data.get("removed").getAsInt() : 0;
         }
-    
+    */
         /* Subscription API */
+/*
         public static List<Subscription> getSubscriptions(Network network, String userId) {
             ClientResponse response = builder(network)
                     .path(String.format(USER_SUBSCRIPTION_PATH, network.getUrnForUser(userId)))
@@ -250,8 +268,9 @@ namespace Livefyre.Api
             }
             return subscriptions;
         }
-    
+    */
         /* This call is used specifically by the TimelineCursor class. */
+/*
         public static JsonObject getTimelineStream(TimelineCursor cursor, boolean isNext) {
             WebResource r = streamBuilder(cursor.getCore())
                     .path(TIMELINE_PATH)
@@ -267,8 +286,10 @@ namespace Livefyre.Api
             ClientResponse response = r.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
             return evaluateResponse(response);
         }
-    
+  */  
         /* Helper methods */
+/*
+
         private static WebResource builder(LfCore core) {
             return builder(core, null);
         }
@@ -317,6 +338,9 @@ namespace Livefyre.Api
             JsonObject json = LivefyreUtil.decodeJwt(userToken, network.getData().getKey());
             return json.get("user_id").getAsString();
         }
+*/
+
+
     }
 
 }
