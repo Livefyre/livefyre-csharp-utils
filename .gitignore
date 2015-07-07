@@ -5,3 +5,4 @@ obj
 *.dgml
 /packages
 *.TMP
+bin

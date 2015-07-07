@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 namespace Livefyre.Dto
 {
 
-    class Topic
+    public class Topic
     {
 
         private static string TOPIC_IDENTIFIER = ":topic=";

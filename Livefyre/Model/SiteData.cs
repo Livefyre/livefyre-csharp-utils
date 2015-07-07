@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Livefyre.Model
 {
-    class SiteData
+    public class SiteData
     {
         private string id;
         private string key;

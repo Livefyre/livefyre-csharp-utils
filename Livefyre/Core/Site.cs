@@ -8,7 +8,7 @@ using Livefyre.Type;
 
 namespace Livefyre.Core
 {
-    class Site : LFCore
+    public class Site : LFCore
     {
 
         private Network network;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Livefyre.Model
 {
-    class NetworkData
+    public class NetworkData
     {
         private string name = null;
         private string key = null;
