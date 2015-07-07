@@ -15,21 +15,18 @@ namespace Livefyre.Core
     public class Network : LFCore
     {
         private static double DEFAULT_EXPIRES = 86000.0;
+
         private static string DEFAULT_USER = "system";
-
-
-
-        //CHECK THIS!!
         private static string ID = "{id}";
         private static string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
 
         private NetworkData data;
+
         private bool SSL = true;
 
 
         public Network(NetworkData data)
         {
-            // Get/Set?
             this.data = data;
         }
         // MOVE THIS TO CONTRUCTOR?
