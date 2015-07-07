@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 
 using Livefyre.Api;
 using Livefyre.Core;
+using Livefyre.Dto;
 using Livefyre.Model;
 using Livefyre.Type;
 using Livefyre.Utils;
@@ -88,13 +89,13 @@ namespace Livefyre.Core
          * @return String.
          */
             /*
-        public String BuildCollectionMetaToken() {
+        public string BuildCollectionMetaToken() {
             //convert to Dict
             Map<String, Object> claims = data.asMap();
             boolean isNetworkIssued = isNetworkIssued();
-            claims.put("iss", isNetworkIssued ? site.getNetwork().getUrn() : site.getUrn());
+            claims.put("iss", isNetworkIssued ? site.GetNetwork().GetUrn() : site.GetUrn());
             return LivefyreUtil.serializeAndSign(claims, isNetworkIssued ?
-                    site.getNetwork().getData().getKey() : site.getData().getKey());
+                    site.GetNetwork().GetData().GetKey() : site.GetData().GetKey());
         }
         */
         /**
@@ -103,11 +104,11 @@ namespace Livefyre.Core
          * @return String.
          */
         /*
-        public String BuildChecksum() {
+        public string BuildChecksum() {
             try {
                 // more dictionary-ing
                 Map<String, Object> attr = data.asMap();
-                byte[] digest = MessageDigest.getInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).getBytes());
+                byte[] digest = MessageDigest.GetInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).GetBytes());
                 return printHexBinary(digest);
             } catch (NoSuchAlgorithmException e) {
             // pull out these error strings. /make configurable some day?
@@ -128,19 +129,17 @@ namespace Livefyre.Core
 
             string b64articleId = Convert.ToBase64String(bytesID);
 
-            string.Concat("", Enumerable.Repeat('a', 2));
-
             if (b64articleId.Length % 4 != 0) {
                 int lengthMod = (b64articleId.Length % 4);
                 int diff = (4 - lengthMod);
-                string something = (string)Enumerable.Repeat('=', diff);
-                string suffix = string.Concat("", something);
+                string padding = (string)Enumerable.Repeat('=', diff);
+                string suffix = string.Concat("", padding);
 
                 b64articleId = b64articleId + suffix;
             }
 
             // make configgleable
-            String url = String.Format("{0}/bs3/{1}.fyre.co/{2}/{3}/init", 
+            string url = String.Format("{0}/bs3/{1}.fyre.co/{2}/{3}/init", 
                 Domain.bootstrap(this), this.site.GetNetwork().GetNetworkName(), 
                     this.site.GetData().GetId(), b64articleId);
 
@@ -162,7 +161,7 @@ namespace Livefyre.Core
             // if ((int)response.StatusCode !== 200) {
             if ((int)response.StatusCode >= 400) {
                 // make LF Exception
-                //throw new ApiException(response.getStatus());
+                //throw new ApiException(response.GetStatus());
                 throw new Exception(String.Format("An error has occured: {0}", response.StatusCode));
 
             }
@@ -185,26 +184,41 @@ namespace Livefyre.Core
         public string GetUrn() {
             return String.Format("{0}:collection={1}", this.site.GetUrn(), this.data.GetId());
         }
-    
-        /*
-        public boolean IsNetworkIssued() {
-            List<Topic> topics = data.getTopics();
-            if (topics == null || topics.isEmpty()) {
+
+
+        public bool IsNetworkIssued() {
+            List<Topic> topics = data.GetTopics();
+
+            int l = topics.Count;
+
+            if (topics == null || l == 0) {
                 return false;
             }
 
-            String networkUrn = site.getNetwork().getUrn();
-            for (Topic topic : topics) {
-                String topicId = topic.getId();
-                if (topicId.startsWith(networkUrn) && !topicId.replace(networkUrn, "").startsWith(":site=")) {
+            string netURN = this.site.GetNetwork().GetUrn();
+            int i = 0;
+
+            Topic t;
+
+            for (; i < l; i += 1)
+            {
+                t = topics[i];
+                string ID = t.GetId();
+
+                // STRING FRAG - pull out to config!
+                //SAFE!? -- if one responds, return true
+                if (ID.StartsWith(netURN) && !(ID.Replace(netURN, "").StartsWith(":site=")))
+                {
                     return true;
                 }
             }
+
             return false;
         }
-        */
+
+
         public Site GetSite() {
-            return site;
+            return this.site;
         }
 
         public void SetSite(Site site) {
@@ -212,7 +226,7 @@ namespace Livefyre.Core
         }
 
         public CollectionData GetData() {
-            return data;
+            return this.data;
         }
     
         public void SetData(CollectionData data) {
@@ -258,7 +272,7 @@ namespace Livefyre.Core
         }
 
     /*
-        private String GetPayload() {
+        private string GetPayload() {
             Dictionary<string, string> payload = new Dictionary<string, string>();
             
             payload.Add("articleId", data.GetArticleId());
@@ -270,7 +284,7 @@ namespace Livefyre.Core
         */
         // check this
         /*
-        private String PrintHexBinary(byte[] data) {
+        private string PrintHexBinary(byte[] data) {
             StringBuilder r = new StringBuilder(data.length * 2);
             for (byte b : data) {
                 r.append(hexCode[(b >> 4) & 0xF]);
