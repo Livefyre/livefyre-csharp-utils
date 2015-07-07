@@ -13,8 +13,8 @@ namespace Livefyre.Api.Filter
  
     public class LftokenAuthFilter  {
 
-        private sealed LFCore core;
-        private sealed string userToken;
+        private LFCore core;
+        private string userToken;
     
 
         public LftokenAuthFilter(LFCore core, String userToken) {
@@ -22,7 +22,7 @@ namespace Livefyre.Api.Filter
             this.userToken = userToken;
         }
     
-
+        // not nec here?  overriding behavior in Java lib
         public WebClient handle(WebClient wc) {
             // check these methods for throw sig
             string lftoken = (userToken == null ? LivefyreUtil.GetNetworkFromCore(core).BuildLivefyreToken() : userToken);

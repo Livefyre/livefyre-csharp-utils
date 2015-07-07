@@ -17,6 +17,7 @@ namespace Livefyre.Dto
         private string type;
         private int createdAt;
 
+        // suspect!
         public Subscription() { }
 
         public Subscription(string to, string by, SubscriptionType type, int createdAt)
