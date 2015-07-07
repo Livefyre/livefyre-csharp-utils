@@ -18,13 +18,14 @@ namespace Livefyre.Core
             this.data = data;
         }
             // BAKE INIT into Constructor?
-        public static Site Init(Network network, String siteId, String siteKey) {
+        public static Site Init(Network network, string siteId, string siteKey) {
             SiteData data = new SiteData(siteId, siteKey);
-            return new Site(network, ReflectiveValidator.validate(data));
+            //return new Site(network, ReflectiveValidator.validate(data));
+            return new Site(network, data);
         }
 
         /* Getters/Setters */
-        public String GetUrn() {
+        public string GetUrn() {
             return network.GetUrn() + ":site=" + this.data.GetId();
         }
     
@@ -45,46 +46,46 @@ namespace Livefyre.Core
         }
 
         // USE CONSTRUCTOR instead?
-        public Site GetSite(String siteId, String siteKey) {
-            return Site.Init(this, siteId, siteKey);
+        public Site GetSite(string siteId, string siteKey) {
+            return Site.Init(this.network, siteId, siteKey);
         }
 
-
-        public Collection BuildBlogCollection(String title, String articleId, String url)
+        /*
+        public Collection BuildBlogCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.BLOG, title, articleId, url);
         }
 
-        public Collection buildChatCollection(String title, String articleId, String url)
+        public Collection buildChatCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.CHAT, title, articleId, url);
         }
 
-        public Collection buildCommentsCollection(String title, String articleId, String url)
+        public Collection buildCommentsCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.COMMENTS, title, articleId, url);
         }
 
-        public Collection BuildCountingCollection(String title, String articleId, String url)
+        public Collection BuildCountingCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.COUNTING, title, articleId, url);
         }
 
-        public Collection BuildRatingsCollection(String title, String articleId, String url)
+        public Collection BuildRatingsCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.RATINGS, title, articleId, url);
         }
 
-        public Collection BuildReviewsCollection(String title, String articleId, String url)
+        public Collection BuildReviewsCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.REVIEWS, title, articleId, url);
         }
 
-        public Collection buildSidenotesCollection(String title, String articleId, String url)
+        public Collection buildSidenotesCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.SIDENOTES, title, articleId, url);
         }
-
+        */
         /**
          * Creates and returns a Collection object. Be sure to call createOrUpdate() on it to inform Livefyre to
          * complete creation and any updates.
@@ -100,11 +101,13 @@ namespace Livefyre.Core
          * 
          * @return Collection
          */
-        public Collection BuildCollection(CollectionType type, String title, String articleId, String url)
+
+        /*
+        public Collection BuildCollection(CollectionType type, string title, string articleId, string url)
         {
             return Collection.Init(this, type, title, articleId, url);
         }
-
+        */
 
 
     }
