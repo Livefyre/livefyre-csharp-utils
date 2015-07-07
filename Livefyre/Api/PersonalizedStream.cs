@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 using Livefyre.Core;
 using Livefyre.Dto;
 
+using Newtonsoft.Json;
+
 namespace Livefyre.Api
 {
     public class PersonalizedStream {
 
+        // check format index positioning
         private static readonly string BASE_URL = "{0}/api/v4";
         private static readonly string STREAM_BASE_URL = "{0}/api/v4";
     
@@ -27,7 +32,42 @@ namespace Livefyre.Api
 
         public static Topic GetTopic(LFCore core, String topicId) {
 
+      
 
+            WebRequest request = WebRequest.Create(url);
+            request.ContentType = "application/json";
+
+            // USER AGENT MAY BE NECESSARY!
+            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            response.Close();
+
+            // responseCode check - make Utils method
+            // 300s wont work here either
+            // should be 200 or ERROR?
+            // if ((int)response.StatusCode !== 200) {
+            if ((int)response.StatusCode >= 400)
+            {
+                // make LF Exception
+                //throw new ApiException(response.GetStatus());
+                throw new Exception(String.Format("An error has occured: {0}", response.StatusCode));
+
+            }
+
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // is String.class helping to create the actual Java type?
+            return new JObject(responseString);
 
             /*
             ClientResponse response = builder(core)
@@ -287,9 +327,16 @@ namespace Livefyre.Api
             return evaluateResponse(response);
         }
   */  
-        /* Helper methods */
-/*
 
+
+
+
+
+
+
+        /* Helper methods */
+
+        // complete overhaul it seems here!
         private static WebResource builder(LfCore core) {
             return builder(core, null);
         }
@@ -338,7 +385,15 @@ namespace Livefyre.Api
             JsonObject json = LivefyreUtil.decodeJwt(userToken, network.getData().getKey());
             return json.get("user_id").getAsString();
         }
-*/
+
+
+
+
+
+
+
+
+
 
 
     }
