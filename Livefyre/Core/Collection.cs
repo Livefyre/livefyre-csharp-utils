@@ -123,9 +123,10 @@ namespace Livefyre.Core
         
         
         public JsonObject GetCollectionContent() {
-            String b64articleId = Convert.ToBase64String(data.GetArticleId().GetBytes());
-            if (b64articleId.length() % 4 != 0) {
-                b64articleId = b64articleId + StringUtils.repeat("=", 4 - (b64articleId.length() % 4));
+            // has to be in bytes or string OK?
+            String b64articleId = Convert.ToBase64String(Convert.ToByte(data.GetArticleId());
+            if (b64articleId.Length % 4 != 0) {
+                b64articleId = b64articleId + StringUtils.repeat("=", 4 - (b64articleId.Length % 4));
             }
             String url = String.format("%s/bs3/%s.fyre.co/%s/%s/init", Domain.bootstrap(this), site.getNetwork().getNetworkName(), site.getData().getId(), b64articleId);
 

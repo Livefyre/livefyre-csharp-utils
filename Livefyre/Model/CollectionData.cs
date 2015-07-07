@@ -14,17 +14,17 @@ namespace Livefyre.Model
     {
         
         private CollectionType type;
-        private String id;
-        private String articleId;
-        private String title;
-        private String url;
+        private string id;
+        private string articleId;
+        private string title;
+        private string url;
     
         //optional params
-        private String tags;
+        private string tags;
         private List<Topic> topics;
-        private String extensions;
+        private string extensions;
     
-        public CollectionData(CollectionType type, String title, String articleId, String url) {
+        public CollectionData(CollectionType type, string title, string articleId, string url) {
             this.type = type;
             this.articleId = articleId;
             this.title = title;
@@ -32,9 +32,9 @@ namespace Livefyre.Model
         }
 
         // make C# Dictionary
-        public Map<String, Object> AsMap() {
+        public Map<string, Object> AsMap() {
 
-            Map<String, Object> attr = Maps.newTreeMap();
+            Map<string, Object> attr = Maps.newTreeMap();
             attr.put("articleId", articleId);
             attr.put("title", title);
 
@@ -43,13 +43,13 @@ namespace Livefyre.Model
             attr.put("type", (string)type);
             attr.put("url", url);
         
-            if (String.IsNullOrEmpty(tags)) {
+            if (string.IsNullOrEmpty(tags)) {
                 attr.put("tags", tags);
             }
             if (topics != null && topics.Length > 0) {
                 attr.put("topics", topics);
             }
-            if (String.IsNullOrEmpty(extensions))
+            if (string.IsNullOrEmpty(extensions))
             {
                 attr.put("extensions", extensions);
             }
@@ -66,51 +66,52 @@ namespace Livefyre.Model
             return this;
         }
     
-        public String GetId() {
+        public string GetId() {
             if (id == null) {
                 // make msg var/mem
-                throw new LivefyreException("Id not set. Call createOrUpdate() on the collection to set the id, or manually set it by calling setId(id) on this object.");
+                throw new Exception("Id not set. Call createOrUpdate() on the collection to set the id, or manually set it by calling setId(id) on this object.");
+                // throw new LivefyreException("Id not set. Call createOrUpdate() on the collection to set the id, or manually set it by calling setId(id) on this object.");
             }
             return id;
         }
     
-        public CollectionData SetId(String id) {
+        public CollectionData SetId(string id) {
             this.id = id;
             return this;
         }
 
-        public String GetArticleId() {
+        public string GetArticleId() {
             return articleId;
         }
 
-        public CollectionData SetArticleId(String articleId) {
+        public CollectionData SetArticleId(string articleId) {
             this.articleId = articleId;
             return this;
         }
 
-        public String GetTitle() {
+        public string GetTitle() {
             return title;
         }
 
-        public CollectionData SetTitle(String title) {
+        public CollectionData SetTitle(string title) {
             this.title = title;
             return this;
         }
 
-        public String GetUrl() {
+        public string GetUrl() {
             return url;
         }
 
-        public CollectionData SetUrl(String url) {
+        public CollectionData SetUrl(string url) {
             this.url = url;
             return this;
         }
 
-        public String GetTags() {
+        public string GetTags() {
             return tags;
         }
 
-        public CollectionData SetTags(String tags) {
+        public CollectionData SetTags(string tags) {
             this.tags = tags;
             return this;
         }
@@ -124,11 +125,11 @@ namespace Livefyre.Model
             return this;
         }
 
-        public String GetExtensions() {
+        public string GetExtensions() {
             return extensions;
         }
 
-        public CollectionData SetExtensions(String extensions) {
+        public CollectionData SetExtensions(string extensions) {
             this.extensions = extensions;
             return this;
         }
