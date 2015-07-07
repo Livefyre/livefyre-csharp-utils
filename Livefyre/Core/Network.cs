@@ -16,7 +16,10 @@ namespace Livefyre.Core
     {
         private static double DEFAULT_EXPIRES = 86000.0;
         private static string DEFAULT_USER = "system";
-        //check this
+
+
+
+        //CHECK THIS!!
         private static string ID = "{id}";
         private static string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
 
@@ -105,56 +108,48 @@ namespace Livefyre.Core
 
             //make configurable/pull out mutable api v3_0 key
             string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
-            // pull bits out of try
 
-            try
-            {
-                //REFACTOR REQUEST INTO UTIL METHOD?
+            //REFACTOR REQUEST INTO UTIL METHOD?
 
-                String postData = String.Format("{0}", Domain.quill(this));
-                // make params vars/members
-                postData = String.Format(postData + "&lftoken={0}", BuildLivefyreToken());
-                byte[] postBytes = Encoding.UTF8.GetBytes(postData);
-                // ascii or utf8?
-                // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            String postData = String.Format("{0}", Domain.quill(this));
+            // make params vars/members
+            postData = String.Format(postData + "&lftoken={0}", BuildLivefyreToken());
+            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
-                // try this?
-                Uri uri = new Uri(url);
+            // try this?
+            Uri uri = new Uri(url);
                
-                WebRequest request = WebRequest.Create(uri);
-                request.ContentType = "application/json";
-                request.ContentLength = postBytes.Length;
-                request.Method = "POST";
+            WebRequest request = WebRequest.Create(uri);
+            request.ContentType = "application/json";
+            request.ContentLength = postBytes.Length;
+            request.Method = "POST";
 
-                // USER AGENT MAY BE NECESSARY!
-                //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+            // USER AGENT MAY BE NECESSARY!
+            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
-                // inject Post Data
-                Stream requestStream = request.GetRequestStream();
-                requestStream.Write(postBytes, 0, postBytes.Length);
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
 
-                requestStream.Close();
+            requestStream.Close();
 
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                response.Close();
+            response.Close();
 
-                if ((int)response.StatusCode >= 400)
-                {
-
-                    // make this custom exception
-                    // throw new ApiException(response.getStatus());
-                    throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
-
-                }
-
-                return this;
-
-            }
-            catch (Exception e)
+            if ((int)response.StatusCode >= 400)
             {
-                throw e;
+
+                // make this custom exception
+                // throw new ApiException(response.getStatus());
+                throw new Exception(String.Format("An Error has occurred: {0}", (int)response.StatusCode));
+
             }
+
+            return this;
+
 
         }
 

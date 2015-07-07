@@ -120,9 +120,10 @@ namespace Livefyre.Core
          * 
          * @return JSONObject.
          */
-        /*
+        
+        
         public JsonObject GetCollectionContent() {
-            String b64articleId = Base64Url.encode(data.getArticleId().getBytes());
+            String b64articleId = Convert.ToBase64String(data.GetArticleId().GetBytes());
             if (b64articleId.length() % 4 != 0) {
                 b64articleId = b64articleId + StringUtils.repeat("=", 4 - (b64articleId.length() % 4));
             }
@@ -134,12 +135,13 @@ namespace Livefyre.Core
                 throw new ApiException(response.getStatus());
             }
             Gson gson = new Gson();
+            // is String.class helping to create the actual Java type?
             return gson.fromJson(response.getEntity(String.class), JsonObject.class);
         }
-        */
+        
 
         
-        public String GetUrn() {
+        public string GetUrn() {
             return String.Format("{0}:collection={1}", this.site.GetUrn(), this.data.GetId());
         }
     
