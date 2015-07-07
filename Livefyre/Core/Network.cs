@@ -103,7 +103,6 @@ namespace Livefyre.Core
         {
             Precondition.CheckNotNull(userId);
 
-            //fix ref
             //make configurable/pull out mutable api v3_0 key
             string url = String.Format("{0}/api/v3_0/user/{1}/refresh", Domain.quill(this), userId);
             // pull bits out of try

@@ -6,6 +6,9 @@ using System.Net;
 using System.Text;
 using System.Web;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using Livefyre.Api;
 using Livefyre.Core;
 using Livefyre.Model;
@@ -17,7 +20,6 @@ namespace Livefyre.Core
 {
     public class Collection : LFCore
     {
-
         private Site site;
         private CollectionData data;
         private static char[] hexCode = "0123456789abcdef".ToCharArray();
@@ -27,7 +29,7 @@ namespace Livefyre.Core
             this.data = data;
         }
     
-        public static Collection Init(Site site, CollectionType type, String title, String articleId, String url) {
+        public static Collection Init(Site site, CollectionType type, string title, string articleId, string url) {
             CollectionData data = new CollectionData(type, title, articleId, url);
             // validate data
             // return new Collection(site, ReflectiveValidator.validate(data));
@@ -52,12 +54,10 @@ namespace Livefyre.Core
 
 
             if ((int)response.StatusCode == 200) {
-            
-                // Dump the Data Contract Serializer for JWT.net
-               // var jsonData = LivefyreUtil.TypeToJson(responseString);
 
-                 //       .GetAsJsonObject("data").get("collectionId").GetAsString();
-                // data.SetId();
+                JObject json = JObject.Parse(responseString);
+
+                this.data.SetId((string)json["collectionId"]);
 
                 return this;
 
@@ -67,11 +67,12 @@ namespace Livefyre.Core
 
                 if ((int)response.StatusCode == 200) {
 
-                    // Dump the Data Contract Serializer for JWT.net
-                    //data.setId(LivefyreUtil.stringToJson(response.getEntity(String.class))
-                      //      .GetAsJsonObject("data").get("collectionId").GetAsString());
-                    
+                    JObject json = JObject.Parse(responseString);
+
+                    this.data.SetId((string)json["collectionId"]);
+
                     return this;
+
                 }
             }
 
@@ -137,11 +138,12 @@ namespace Livefyre.Core
         }
         */
 
-        /*
+        
         public String GetUrn() {
-            return String.format("%s:collection=%s", site.getUrn(), data.getId());
+            return String.Format("{0}:collection={1}", this.site.GetUrn(), this.data.GetId());
         }
     
+        /*
         public boolean IsNetworkIssued() {
             List<Topic> topics = data.getTopics();
             if (topics == null || topics.isEmpty()) {
@@ -157,7 +159,7 @@ namespace Livefyre.Core
             }
             return false;
         }
-
+        */
         public Site GetSite() {
             return site;
         }
@@ -174,7 +176,7 @@ namespace Livefyre.Core
             this.data = data;
         }
 
-        */
+        
 
         // PRIVATE
             
