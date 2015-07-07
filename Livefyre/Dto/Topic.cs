@@ -1,34 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-
 
 using Livefyre.Core;
-using System.IO;
 
+using Newtonsoft.Json;
 
 namespace Livefyre.Dto
 {
 
-    [DataContract]
     class Topic
     {
 
         private static string TOPIC_IDENTIFIER = ":topic=";
 
-        [DataMember(Name = "id", IsRequired = true)]
         private string ID;
 
-        [DataMember(Name = "label", IsRequired = true)]
         private string Label;
 
-        [DataMember(Name = "createdAt")]
         private int CreatedAt;
 
-        [DataMember(Name = "modifiedAt")]
         private int ModifiedAt;
 
 
@@ -56,16 +49,9 @@ namespace Livefyre.Dto
             return core.GetUrn() + TOPIC_IDENTIFIER + ID ;
         }
 
-        // TRY/CATCH SERI?
 
-        //REFACTOR INTO GENERAL SERIALIZER?
         public static Topic serializeFromJson(string json) {
-            MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer seri = new DataContractJsonSerializer(typeof(Topic));
-
-            seri.WriteObject(stream, json);
-
-            Topic topic = (Topic)seri.ReadObject(stream);
+            Topic topic = JsonConvert.DeserializeObject<Topic>(json);
             return topic;
         }
     

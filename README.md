@@ -33,7 +33,16 @@ MIT
 
 
 
-NOTES (WIP):
+### NOTES/THOUGHTS (WIP):
+
+Should we:
+	Use Code Contracts?
+	Reduce Deps?
+	Pull Init/Create behavior into Constructors?
+	Refactor the WebRequests into a general method?
+
+
+
 
 
 
