@@ -6,27 +6,27 @@ using System.Text;
 namespace Livefyre.Type
 {
 
-    public static class CollectionType
+    public class CollectionType
     {
 
         public static readonly string COUNTING = "counting";
-        BLOG = "liveblog",
-        CHAT = "livechat",
-        COMMENTS = "livecomments",
-        RATINGS = "ratings",
-        REVIEWS = "reviews",
-        SIDENOTES = "sidenotes"
+        public static readonly string BLOG = "blog";
+        public static readonly string CHAT = "chat";
+        public static readonly string COMMENTS = "comments";
+        public static readonly string RATINGS = "ratings";
+        public static readonly string SIDENOTES = "sidenotes";
+
+
+        //make sense of this from the JAVA Enum side of things
+        private String type;
+    
+        private CollectionType(String type) {
+            this.type = type;
+        }
+    
+        public string toString() {
+            return type;
+        }
 
     }
-    /*
-    public enum CollectionType {
-        COUNTING = "counting",
-        BLOG = "liveblog",
-        CHAT = "livechat",
-        COMMENTS = "livecomments",
-        RATINGS = "ratings",
-        REVIEWS = "reviews",
-        SIDENOTES = "sidenotes"
-    }
-    */
 }
