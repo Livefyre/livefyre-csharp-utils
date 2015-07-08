@@ -57,6 +57,8 @@ namespace Livefyre.Model
         }
         */
         // make C# set/get?
+        // OVERRIDING ORIGINAL OBJECT BEHAVIOR
+        // REMOVE WITH PROPS
         public CollectionType GetType() {
             return type;
         }

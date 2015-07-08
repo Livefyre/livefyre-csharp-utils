@@ -35,14 +35,16 @@ namespace Livefyre.Api
     
 
 
+        // REPETITION ON REQUESTS - DRYYYYYYY THIS
+
+
         /* Topic API */
 
         public static Topic GetTopic(LFCore core, string topicId) {
-            Uri uri = new Uri(String.Format(TOPIC_PATH, Topic.GenerateUrn(core, topicId)));
+            Uri baseURI = BuildURL(core);
+            Uri completeURI = new Uri(baseURI, String.Format(TOPIC_PATH, Topic.GenerateUrn(core, topicId)));
             
-            Uri completeURI = BuildURL(uri, core);
-            WebRequest request = WebRequest.Create(uri);
-
+            WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -60,6 +62,7 @@ namespace Livefyre.Api
             // is this satisfied?
             //return Topic.SerializeFromJson(
               //      content.getAsJsonObject("data").getAsJsonObject("topic"));
+            // possibly convert to JObject first and pluck out data attr into New Topic
             return JsonConvert.DeserializeObject<Topic>(responseString);
 
         }
@@ -86,15 +89,17 @@ namespace Livefyre.Api
 
         /* Multiple Topic API */
         public static List<Topic> GetTopics(LFCore core, int limit, int offset) {
-            Uri uri = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
-            uri = BuildURL(uri, core);
+            Uri baseURI = BuildURL(core);
+            Uri wholeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
 
             // add params to uri
             // should check the right edge of the AbsoluteUri
-            Uri limitParam = new Uri(uri, String.Format("?limit={0}", limit.ToString() == null ? "100" : limit.ToString()));
-            Uri completeURL = new Uri(uri, String.Format("&offset={0}", offset.ToString() == null ? "0" : offset.ToString()));
+            Uri limitParamURI = new Uri(wholeURI, String.Format("?limit={0}", limit.ToString() == null ? "100" : limit.ToString()));
 
-            WebRequest request = WebRequest.Create(completeURL);
+            Uri completeURI = new Uri(limitParamURI, 
+                String.Format("&offset={0}", offset.ToString() == null ? "0" : offset.ToString()));
+
+            WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
             request.Method = "GET";
 
@@ -120,8 +125,8 @@ namespace Livefyre.Api
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
 
-            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
-            Uri completeURL = BuildURL(baseURL, core);
+            Uri baseURL  = BuildURL(core);
+            Uri completeURL = new Uri(baseURL, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
 
             WebRequest request = WebRequest.Create(completeURL);
             request = PrepareRequest(request, core, null);
@@ -162,14 +167,14 @@ namespace Livefyre.Api
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
 
-            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
+            Uri baseURI = BuildURL(core);
+            Uri wholeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
             // Insert Patch Method
             // STRING!  config me!
-            Uri patchMethodURL = new Uri(baseURL, String.Format("&_method={0}", PATCH_METHOD));
-            Uri completeURL = BuildURL(patchMethodURL, core);
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+            
 
-
-            WebRequest request = WebRequest.Create(completeURL);
+            WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
             request.Method = "POST";
 
@@ -204,33 +209,46 @@ namespace Livefyre.Api
 
             JObject jsonResponse = JObject.Parse(responseString);
 
-            int deleted = 0;
-
+            
+            // this may not work
+            
             // Configurable String!
             // CHECK ME FOR CORRECT JSON PROP TREE
-            deleted = (int)jsonResponse.SelectToken("data.deleted");
-
+            int deleted = (int)jsonResponse.SelectToken("data.deleted");
             return deleted;
         }
     
         /* Collection Topic API */
-/*
-        public static List<String> getCollectionTopics(Collection collection) {
-            ClientResponse response = builder(collection)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ClientResponse.class);
-            JsonObject content = evaluateResponse(response);
-            JsonArray topicData = content.getAsJsonObject("data").getAsJsonArray("topicIds");
-        
-            List<String> topicIds = Lists.newArrayList();
-            if (topicData != null) {
-                for (int i = 0; i < topicData.size(); i++) {
-                    topicIds.add(topicData.get(i).getAsString());
-                }
-            }
-            return topicIds;
+        public static List<String> GetCollectionTopics(Collection collection) {
+            Uri uri = BuildURL(collection);
+            Uri completeURI = new Uri(uri, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+
+
+            WebRequest request = WebRequest.Create(uri);
+            request = PrepareRequest(request, collection, null);
+            request.Method = "GET";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            JArray idArray = (JArray)jsonResponse["data"]["topicIds"];
+            List<string> topicIDs = idArray.Select(id => (string)id).ToList();
+
+            return topicIDs;
+
         }
+/*
     
         public static int addCollectionTopics(Collection collection, List<Topic> topics) {
             string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
@@ -392,20 +410,20 @@ namespace Livefyre.Api
         // builder becomes BuildURL
         // string should be Uri Type?
         // these two builders append uri information onto the current url
-        private static Uri BuildURL(Uri url, LFCore core)
+        private static Uri BuildURL(LFCore core)
         {
             //url should be checked for query? 
               //  didnt Lookup like any params, but CHECK!
             // can also be:
-            return new Uri(url, String.Format(BASE_URL, Domain.quill(core)));
+            return new Uri(String.Format(BASE_URL, Domain.quill(core)));
             // awful, temporary
             // return url += String.Format(BASE_URL, Domain.quill(core));
 
         }
 
-        private static Uri BuildStreamURL(Uri url, LFCore core)
+        private static Uri BuildStreamURL(LFCore core)
         {
-            return new Uri(url, String.Format(BASE_URL, Domain.quill(core)));
+            return new Uri(String.Format(BASE_URL, Domain.bootstrap(core)));
             // awful, temporary
             // return url += String.Format(STREAM_BASE_URL, Domain.bootstrap(core));
         }
