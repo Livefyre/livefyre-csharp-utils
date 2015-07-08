@@ -34,23 +34,20 @@ namespace Livefyre.Api
         /* Topic API */
 
         public static Topic GetTopic(LFCore core, string topicId) {
-
             Uri uri = new Uri(String.Format(TOPIC_PATH, Topic.GenerateUrn(core, topicId)));
-
-            WebRequest request = WebRequest.Create(uri);
             
-            request = builder(request, core);
+            Uri completeURI = BuildURL(uri, core);
+            WebRequest request = WebRequest.Create(uri);
+
+            request = PrepareRequest(request, core, null);
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
             response.Close();
-
             // throws on >= 400
             evaluateResponse(response);
 
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
-
             string responseString = responseReader.ReadToEnd();
 
             responseReader.Close();
@@ -60,7 +57,10 @@ namespace Livefyre.Api
             //return Topic.SerializeFromJson(
               //      content.getAsJsonObject("data").getAsJsonObject("topic"));
             return JsonConvert.DeserializeObject<Topic>(responseString);
+
         }
+
+
     /*
         public static Topic createOrUpdateTopic(LFCore core, string topicId, string label) {
             return createOrUpdateTopics(core, ImmutableMap.of(topicId, label)).get(0);
@@ -306,35 +306,39 @@ namespace Livefyre.Api
 
 
         /* Helper methods */
+        // builder becomes BuildURL
+        // string should be Uri Type?
+        // these two builders append uri information onto the current url
+        private static Uri BuildURL(Uri url, LFCore core)
+        {
+            //url should be checked for query? 
+              //  didnt Lookup like any params, but CHECK!
+            // can also be:
+            return new Uri(url, String.Format(BASE_URL, Domain.quill(core));
+            // awful, temporary
+            // return url += String.Format(BASE_URL, Domain.quill(core));
 
-        private static WebRequest builder(WebRequest request, LFCore core) {
-            return builder(request, core, null);
-        }
-    
-        // these two builders append uri information onto the current url path
-        private static WebRequest builder(WebRequest request, LFCore core, string userToken) {
-            // client(core, userToken)
-            //    .resource(String.Format(BASE_URL, Domain.quill(core)));
-
-            // return WebRequest with appended Path info
-            return request;
-        }
-    
-        private static WebRequest streamBuilder(WebRequest request, LFCore core) {
-         //       client(core, null).resource(String.Format(STREAM_BASE_URL, Domain.bootstrap(core)));
-            return request;
         }
 
-        private static WebRequest client(WebRequest request, LFCore core, string userToken) {
+        private static Uri BuildStreamURL(Uri url, LFCore core)
+        {
+            return new Uri(url, String.Format(BASE_URL, Domain.quill(core)));
+            // awful, temporary
+            // return url += String.Format(STREAM_BASE_URL, Domain.bootstrap(core));
+        }
+
+        private static WebRequest PrepareRequest(WebRequest request, LFCore core, string userToken)
+        {
             request.ContentType = "application/json";
             request.Method = PATCH_METHOD;
-            // is this connect, read or both in Java Jersey client terms?
+            // is this connect, read or both in Java Jersey Client terms?
             // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
             // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
 
             // this timeout should be confliggle-able?
             // request.Timeout = something reasonable/tested
             request.Timeout = 10000;
+
             // USER AGENT MAY BE NECESSARY! 
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
@@ -344,6 +348,39 @@ namespace Livefyre.Api
 
             return request;
         }
+
+
+
+        /*
+        private static WebRequest builder(WebRequest request, LFCore core) {
+            return builder(request, core, null);
+        }
+    
+        // these two builders append uri information onto the current url path
+        private static WebRequest builder(WebRequest request, LFCore core, string userToken) {
+            request = PrepareRequest(request, core, userToken);
+
+
+            // PrepareRequest(core, userToken)
+            //    .resource(String.Format(BASE_URL, Domain.quill(core)));
+
+            // return WebRequest with appended Path info
+            return request;
+        }
+    
+        private static WebRequest streamBuilder(WebRequest request, LFCore core) {
+         //       PrepareRequest(core, null).resource(String.Format(STREAM_BASE_URL, Domain.bootstrap(core)));
+            return request;
+        }
+
+        private static WebRequest AppendPath(WebRequest request, string path) {
+
+            Uri uri = request.RequestUri;
+
+            return request;
+        }
+        */
+
     
         // evaluates && casts - separate?
         // dropping the cast
