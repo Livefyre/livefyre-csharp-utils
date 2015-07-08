@@ -395,15 +395,19 @@ namespace Livefyre.Api
 
         }
     
-        /*
-        private static List<String> getTopicIds(List<Topic> topics) {
-            List<String> ids = Lists.newArrayList();
-            for (Topic topic : topics) {
-                ids.add(topic.getId());
-            }
+        
+        private static List<String> GetTopicIds(List<Topic> topics) {
+            List<String> ids = new List<string>();
+
+            topics.ForEach(delegate(Topic t) {
+                ids.Add(t.GetId());
+            });
+
             return ids;
         }
+
     
+        /*
         private static List<Subscription> buildSubscriptions(List<Topic> topics, string userUrn) {
             List<Subscription> subscriptions = Lists.newArrayList();
             for (Topic topic : topics) {
