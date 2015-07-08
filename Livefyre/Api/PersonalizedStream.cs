@@ -8,11 +8,14 @@ using System.Text;
 using Livefyre.Api.Filter;
 using Livefyre.Core;
 using Livefyre.Dto;
+using Livefyre.Type;
 using Livefyre.Utils;
 using Livefyre.Validator;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+
 
 namespace Livefyre.Api
 {
@@ -359,13 +362,15 @@ namespace Livefyre.Api
 
         private static WebRequest PrepareRequest(WebRequest request, LFCore core, string userToken)
         {
+            // more configurable/member-able dataz
             request.ContentType = "application/json";
+            // BEWARE of this SETTING for all requests
+            request.Headers.Set("Accept", "application/json");
             // PATCH is added as _method PARAM in individual calls!
             // request.Method = PATCH_METHOD;
             // is request.Timeout connect, read or both in Java Jersey Client terms?
             // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
             // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
-
             // this timeout should be confliggle-able?
             // request.Timeout = something reasonable/tested
             request.Timeout = 10000;
@@ -407,14 +412,18 @@ namespace Livefyre.Api
         }
 
     
-        /*
-        private static List<Subscription> buildSubscriptions(List<Topic> topics, string userUrn) {
-            List<Subscription> subscriptions = Lists.newArrayList();
-            for (Topic topic : topics) {
-                subscriptions.add(new Subscription(topic.getId(), userUrn, SubscriptionType.personalStream, null));
-            }
+        private static List<Subscription> BuildSubscriptions(List<Topic> topics, string userUrn) {
+            List<Subscription> subscriptions = new List<Subscription>();
+
+            topics.ForEach(delegate(Topic t){
+                subscriptions.Add(new Subscription(t.GetId(), userUrn, SubscriptionType.personalStream, null));
+            });
+
             return subscriptions;
         }
+
+
+        /*
 
         private static string getUserFromToken(Network network, string userToken) {
             JsonObject json = LivefyreUtil.decodeJwt(userToken, network.getData().getKey());
