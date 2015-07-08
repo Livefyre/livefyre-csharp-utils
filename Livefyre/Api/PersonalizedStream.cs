@@ -64,11 +64,17 @@ namespace Livefyre.Api
 
         }
 
-        /*
-        public static Topic createOrUpdateTopic(LFCore core, string topicId, string label) {
-            return createOrUpdateTopics(core, ImmutableMap.of(topicId, label)).get(0);
+        
+        public static Topic CreateOrUpdateTopic(LFCore core, string topicId, string label) {
+            Topic t = Topic.Create(core, topicId, label);
+
+            List<Topic> topics = new List<Topic>();
+            topics.Add(t);
+
+            return CreateOrUpdateTopics(core, topics).ElementAt(0);
         }
     
+        /*
         public static boolean deleteTopic(LFCore core, Topic topic) {
             return deleteTopics(core, Lists.newArrayList(topic)) == 1;
         }
@@ -106,7 +112,7 @@ namespace Livefyre.Api
         }
 
     
-        public static List<Topic> createOrUpdateTopics(LFCore core, List<Topic> topics) {
+        public static List<Topic> CreateOrUpdateTopics(LFCore core, List<Topic> topics) {
             topics.ForEach(delegate(Topic t) {
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
