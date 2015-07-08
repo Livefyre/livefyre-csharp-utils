@@ -108,7 +108,7 @@ namespace Livefyre.Api
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
 
-            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn());
+            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
             Uri completeURL = BuildURL(baseURL, core);
 
             WebRequest request = WebRequest.Create(completeURL);
