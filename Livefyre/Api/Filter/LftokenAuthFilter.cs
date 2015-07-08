@@ -23,13 +23,12 @@ namespace Livefyre.Api.Filter
         }
     
         // not nec here?  overriding behavior in Java lib
-        public WebClient handle(WebClient wc) {
+        public WebRequest AddAuthHeader(WebRequest wr) {
             // check these methods for throw sig
             string lftoken = (userToken == null ? LivefyreUtil.GetNetworkFromCore(core).BuildLivefyreToken() : userToken);
+            wr.Headers.Set("Authorization", lftoken);
 
-            wc.Headers.Add("Authorization", lftoken);
-
-            return wc;
+            return wr;
         }
 }
 

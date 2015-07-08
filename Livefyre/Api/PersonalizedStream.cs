@@ -5,10 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
+using Livefyre.Api.Filter;
 using Livefyre.Core;
 using Livefyre.Dto;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Livefyre.Api
 {
@@ -32,11 +34,42 @@ namespace Livefyre.Api
 
         public static Topic GetTopic(LFCore core, String topicId) {
 
-      
+            Uri uri = new Uri(String.Format(TOPIC_PATH, Topic.GenerateUrn(core, topicId)));
 
-            WebRequest request = WebRequest.Create(url);
+            WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/json";
+            request.Method = PATCH_METHOD;
+            // is this connect, read or both in Java Jersey client terms?
+            // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
+            // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
+            // test a bit?
+            // request.Timeout = 
 
+
+            //YOU ARE HERE
+
+
+            LftokenAuthFilter tokenFilter = new LftokenAuthFilter(core, );
+
+
+
+
+
+
+
+
+
+
+            // generate 
+            request.Headers.Set("Authorization","");
+
+
+            /*                
+            c.getProperties().put(URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND, true);
+            c.getProperties().put();
+            c.getProperties().put();
+            c.addFilter(new LftokenAuthFilter(core, userToken));
+            */
             // USER AGENT MAY BE NECESSARY!
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
@@ -66,7 +99,7 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
-            // is String.class helping to create the actual Java type?
+            // dump to Topic Type
             return new JObject(responseString);
 
             /*
