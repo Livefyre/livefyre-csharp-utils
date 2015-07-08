@@ -313,7 +313,7 @@ namespace Livefyre.Api
         }
      
     
-        public static Dictionary<String, Int32> ReplaceCollectionTopics(Collection collection, List<Topic> topics) {
+        public static Dictionary<string, int> ReplaceCollectionTopics(Collection collection, List<Topic> topics) {
             // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
 
             List<string> topicIDs = new List<string>();
@@ -361,22 +361,22 @@ namespace Livefyre.Api
             responseStream.Close();
 
 
-            /*
-            ClientResponse response = builder(collection)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
-        */
-        /*
-            Map<String, Integer> results = Maps.newHashMap();
-            results.put("added", data.has("added") ? data.get("added").getAsInt() : 0);
-            results.put("removed", data.has("removed") ? data.get("removed").getAsInt() : 0);
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
+            JValue jvAdded = new JValue(jsonResponse["data"]["added"]);
+            JValue jvRemoved = new JValue(jsonResponse["data"]["removed"]);
+
+            // EITHER USE lower type OR PROPER TYPE  CHOOSE ONE
+            Dictionary<string, int> results = new Dictionary<string, int>();
+
+            // more String cofigs
+            results.Add("added", (int)jvAdded);
+            results.Add("removed", (int)jvRemoved);
+
+
             return results;
-         */
-            return null;
         }
 
 
