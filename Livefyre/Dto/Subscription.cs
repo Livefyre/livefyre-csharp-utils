@@ -24,7 +24,7 @@ namespace Livefyre.Dto
         {
             this.to = to;
             this.by = by;
-            this.type = type.toString();
+            this.type = ((int)type).ToString();
             this.createdAt = createdAt;
         }
 

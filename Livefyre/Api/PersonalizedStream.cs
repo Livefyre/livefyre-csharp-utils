@@ -416,7 +416,8 @@ namespace Livefyre.Api
             List<Subscription> subscriptions = new List<Subscription>();
 
             topics.ForEach(delegate(Topic t){
-                subscriptions.Add(new Subscription(t.GetId(), userUrn, SubscriptionType.personalStream, null));
+                // pass 0 here so that the server can create the timestamp or gen UnixNow?
+                subscriptions.Add(new Subscription(t.GetId(), userUrn, SubscriptionType.PersonalStream, 0));
             });
 
             return subscriptions;

@@ -6,8 +6,16 @@ using System.Text;
 namespace Livefyre.Type
 {
 
-    // THIS MAY BE A MESS OR MAY WORK...
 
+    public enum SubscriptionType
+    {
+        PersonalStream
+    }
+
+    // THIS MAY BE A MESS OR MAY WORK...
+    // I DONT KNOW THAT THIS IS NECESSARY FOR C#
+
+    /*
    public class SubscriptionType
     {
         //public static readonly int PersonalStream = 1;
@@ -17,7 +25,6 @@ namespace Livefyre.Type
             PersonalStream = 1
         }
 
-       /*
         public static IEnumerable<int> Values
         {
             get
@@ -25,7 +32,6 @@ namespace Livefyre.Type
                 yield return PersonalStream;
             }
         }
-       */
 
 
         private int val;
@@ -56,5 +62,5 @@ namespace Livefyre.Type
 
 
     }
-
+    */
 }
