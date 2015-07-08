@@ -48,7 +48,6 @@ namespace Livefyre.Api
             // throws on >= 400
             evaluateResponse(response);
 
-
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
 
@@ -314,7 +313,7 @@ namespace Livefyre.Api
     
         // these two builders append uri information onto the current url path
         private static WebRequest builder(WebRequest request, LFCore core, string userToken) {
-            // builder(core, userToken)
+            // client(core, userToken)
             //    .resource(String.Format(BASE_URL, Domain.quill(core)));
 
             // return WebRequest with appended Path info
@@ -322,28 +321,26 @@ namespace Livefyre.Api
         }
     
         private static WebRequest streamBuilder(WebRequest request, LFCore core) {
-         //       builder(core, null).resource(String.Format(STREAM_BASE_URL, Domain.bootstrap(core)));
+         //       client(core, null).resource(String.Format(STREAM_BASE_URL, Domain.bootstrap(core)));
             return request;
         }
 
         private static WebRequest client(WebRequest request, LFCore core, string userToken) {
-
-            //WebRequest request = WebRequest.Create(); 
-            //= WebRequest.Create(uri);
             request.ContentType = "application/json";
             request.Method = PATCH_METHOD;
             // is this connect, read or both in Java Jersey client terms?
             // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
             // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
+
+            // this timeout should be confliggle-able?
             // request.Timeout = something reasonable/tested
-
-            //LftokenAuthFilter tokenFilter = new LftokenAuthFilter(core, );
-
-            // generate 
-            request.Headers.Set("Authorization","");
-
-            // USER AGENT MAY BE NECESSARY!
+            request.Timeout = 10000;
+            // USER AGENT MAY BE NECESSARY! 
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+
+            LftokenAuthFilter tokenFilter = new LftokenAuthFilter(core, userToken);
+
+            tokenFilter.AddAuthHeader(request);
 
             return request;
         }
@@ -357,7 +354,6 @@ namespace Livefyre.Api
             // if ((int)response.StatusCode !== 200) {
             if ((int)response.StatusCode >= 400)
             {
-                // make LF Exception
                 //throw new ApiException(response.GetStatus());
                 throw new Exception(String.Format("An error has occured: {0}", response.StatusCode));
             }
