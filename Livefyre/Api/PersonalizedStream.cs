@@ -9,6 +9,7 @@ using Livefyre.Api.Filter;
 using Livefyre.Core;
 using Livefyre.Dto;
 using Livefyre.Utils;
+using Livefyre.Validator;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -77,6 +78,7 @@ namespace Livefyre.Api
             uri = BuildURL(uri, core);
 
             // add params to uri
+            // should check the right edge of the AbsoluteUri
             Uri limitParam = new Uri(uri, String.Format("?limit={0}", limit == null ? "100" : limit.ToString()));
             Uri offsetParam = new Uri(uri, String.Format("&offset={0}", offset == null ? "0" : offset.ToString()));
 
@@ -101,16 +103,16 @@ namespace Livefyre.Api
         }
 
     
-        public static List<Topic> createOrUpdateTopics(LFCore core, Map<String, String> topicMap) {
+        public static List<Topic> createOrUpdateTopics(LFCore core, List<Topic> topics) {
 
+
+            // iterate over topics here
+            TopicValidator.ValidateTopicKey();
+           
             /*
             List<Topic> topics = Lists.newArrayList();
             for (String k : topicMap.keySet()) {
-                string label = topicMap.get(k);
-            
-                if (StringUtils.isEmpty(label) || label.length() > 128) {
-                    throw new IllegalArgumentException("Topic label is of incorrect length or empty.");
-                }
+                
             
                 topics.add(Topic.create(core, k, label));
             }
@@ -348,8 +350,9 @@ namespace Livefyre.Api
         private static WebRequest PrepareRequest(WebRequest request, LFCore core, string userToken)
         {
             request.ContentType = "application/json";
-            request.Method = PATCH_METHOD;
-            // is this connect, read or both in Java Jersey Client terms?
+            // PATCH is added as _method PARAM in individual calls!
+            // request.Method = PATCH_METHOD;
+            // is request.Timeout connect, read or both in Java Jersey Client terms?
             // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
             // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
 

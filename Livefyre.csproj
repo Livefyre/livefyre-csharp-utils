@@ -234,6 +234,7 @@
     <Compile Include="Livefyre\Validator\NetworkValidator.cs" />
     <Compile Include="Livefyre\Validator\ReflectiveValidator.cs" />
     <Compile Include="Livefyre\Validator\SiteValidator.cs" />
+    <Compile Include="Livefyre\Validator\TopicValidator.cs" />
     <Compile Include="Livefyre\Validator\Validator.cs" />
   </ItemGroup>
   <ItemGroup>

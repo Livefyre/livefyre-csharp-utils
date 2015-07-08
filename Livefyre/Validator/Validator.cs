@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Livefyre.Validator
 {
-    class Validator
+    interface Validator
     {
+        string Validate<T>(T type);
     }
 }
