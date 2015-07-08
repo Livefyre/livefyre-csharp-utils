@@ -79,10 +79,10 @@ namespace Livefyre.Api
 
             // add params to uri
             // should check the right edge of the AbsoluteUri
-            Uri limitParam = new Uri(uri, String.Format("?limit={0}", limit == null ? "100" : limit.ToString()));
-            Uri offsetParam = new Uri(uri, String.Format("&offset={0}", offset == null ? "0" : offset.ToString()));
+            Uri limitParam = new Uri(uri, String.Format("?limit={0}", limit.ToString() == null ? "100" : limit.ToString()));
+            Uri completeURL = new Uri(uri, String.Format("&offset={0}", offset.ToString() == null ? "0" : offset.ToString()));
 
-            WebRequest request = WebRequest.Create(uri);
+            WebRequest request = WebRequest.Create(completeURL);
             request = PrepareRequest(request, core, null);
             request.Method = "GET";
 
@@ -104,35 +104,45 @@ namespace Livefyre.Api
 
     
         public static List<Topic> createOrUpdateTopics(LFCore core, List<Topic> topics) {
+            topics.ForEach(delegate(Topic t) {
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+            });
+
+            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn());
+            Uri completeURL = BuildURL(baseURL, core);
+
+            WebRequest request = WebRequest.Create(completeURL);
+            request = PrepareRequest(request, core, null);
+            request.Method = "POST";
+
+            string jsonPostData = JsonConvert.SerializeObject(topics);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+    
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
 
 
-            // iterate over topics here
-            TopicValidator.ValidateTopicKey();
-           
-            /*
-            List<Topic> topics = Lists.newArrayList();
-            for (String k : topicMap.keySet()) {
-                
-            
-                topics.add(Topic.create(core, k, label));
-            }
-
-            // JsonConvert this
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topics", topics));
-        
-            ClientResponse response = builder(core)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, core.getUrn()))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
             evaluateResponse(response);
-        
-            // Doesn't matter what the response details are here as long as it's a 200.
-            return topics;
-             * */
 
-            return null;
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // returning response instead of pre-request/updated/created Topics
+            return JsonConvert.DeserializeObject<List<Topic>>(responseString);
         }
+
     /*
     
         public static int deleteTopics(LFCore core, List<Topic> topics) {
@@ -334,7 +344,7 @@ namespace Livefyre.Api
             //url should be checked for query? 
               //  didnt Lookup like any params, but CHECK!
             // can also be:
-            return new Uri(url, String.Format(BASE_URL, Domain.quill(core));
+            return new Uri(url, String.Format(BASE_URL, Domain.quill(core)));
             // awful, temporary
             // return url += String.Format(BASE_URL, Domain.quill(core));
 

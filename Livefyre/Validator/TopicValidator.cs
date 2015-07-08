@@ -8,35 +8,34 @@ using Livefyre.Dto;
 
 namespace Livefyre.Validator
 {
-    class TopicValidator : Validator
+    public class TopicValidator : Validator
     {
-        public string Validate(Topic t)
-        {
-            
 
-            // checking topic key length
-            // make part of validation
-            /*
-            string label = topicMap.get(k);
-            if (StringUtils.isEmpty(label) || label.length() > 128)
-            {
-                throw new IllegalArgumentException("Topic label is of incorrect length or empty.");
-            }
-             */
-            // fill me in
+        public string Validate(System.Type t)
+        {
             return null;
         }
 
-        public static void ValidateTopicKey(string key)
+        public static void ValidateTopicLabel(string label)
         {
-            if (key == null || key.Length == 0 )
+            // checking topic key length
+            // make part of validation
+            /*
+                string label = topicMap.get(k);
+                if (StringUtils.isEmpty(label) || label.length() > 128)
+                {
+                    throw new IllegalArgumentException("Topic label is of incorrect length or empty.");
+                }
+             */
+
+            if (label == null || label.Length == 0 )
             {
-                throw new ArgumentOutOfRangeException("key", "The Topic Key appears to be empty");
+                throw new ArgumentOutOfRangeException("label", "The Topic Key appears to be empty");
 
             }
-            else if (key.Length > 128)
+            else if (label.Length > 128)
             {
-                throw new ArgumentOutOfRangeException("key", "The Topic Key appears to be greater than 128 chars");
+                throw new ArgumentOutOfRangeException("label", "The Topic Key appears to be greater than 128 chars");
 
             }
         }
