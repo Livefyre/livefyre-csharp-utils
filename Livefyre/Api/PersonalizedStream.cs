@@ -146,23 +146,64 @@ namespace Livefyre.Api
             return JsonConvert.DeserializeObject<List<Topic>>(responseString);
         }
 
-    /*
     
-        public static int deleteTopics(LFCore core, List<Topic> topics) {
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("delete", getTopicIds(topics)));
-        
-            ClientResponse response = builder(core)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, core.getUrn()))
-                    .queryParam("_method", PATCH_METHOD)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
-        
-            return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
+    
+        public static int DeleteTopics(LFCore core, List<Topic> topics) {
+            topics.ForEach(delegate(Topic t) {
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+            });
+
+            Uri baseURL = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
+            // Insert Patch Method
+            // STRING!  config me!
+            Uri patchMethodURL = new Uri(baseURL, String.Format("&_method={0}", PATCH_METHOD));
+            Uri completeURL = BuildURL(patchMethodURL, core);
+
+
+            WebRequest request = WebRequest.Create(completeURL);
+            request = PrepareRequest(request, core, null);
+            request.Method = "POST";
+
+            string jsonPostData = JsonConvert.SerializeObject(topics);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+    
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
+            
+            // JSON nested underneath data prop! - CHECK THIS EVERYWHERE
+                // AND DRY UP THIS STUFF!
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            int deleted = 0;
+
+            // Configurable String!
+            // CHECK ME FOR CORRECT JSON PROP TREE
+            deleted = (int)jsonResponse.SelectToken("data.deleted");
+
+            return deleted;
         }
-  */  
+    
         /* Collection Topic API */
 /*
         public static List<String> getCollectionTopics(Collection collection) {
