@@ -74,12 +74,15 @@ namespace Livefyre.Api
             return CreateOrUpdateTopics(core, topics).ElementAt(0);
         }
     
-        /*
-        public static boolean deleteTopic(LFCore core, Topic topic) {
-            return deleteTopics(core, Lists.newArrayList(topic)) == 1;
+
+        public static bool deleteTopic(LFCore core, Topic topic) {
+            List<Topic> topics = new List<Topic>();
+
+            topics.Add(topic);
+
+            return DeleteTopics(core, topics) == 1;
         }
-         * 
-         */
+
 
         /* Multiple Topic API */
         public static List<Topic> GetTopics(LFCore core, int limit, int offset) {
@@ -472,19 +475,13 @@ namespace Livefyre.Api
 
 
         /*
-
+         * JWT HERE
         private static string getUserFromToken(Network network, string userToken) {
             JsonObject json = LivefyreUtil.decodeJwt(userToken, network.getData().getKey());
             return json.get("user_id").getAsString();
         }
 
-
-
         */
-
-
-
-
 
 
 
