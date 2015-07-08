@@ -38,7 +38,7 @@ namespace Livefyre.Dto
         
         /* Use this method to generate Topic objects. Otherwise ID 's (urns) will not be formed properly. */
         // Pull into constructor?
-        public static Topic create(LFCore core, string ID, string label)
+        public static Topic Create(LFCore core, string ID, string label)
         {
             string urn = GenerateUrn(core, ID);
             Int32 unixTS = LivefyreUtil.UnixNow();

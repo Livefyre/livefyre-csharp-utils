@@ -82,6 +82,7 @@ namespace Livefyre.Api
 
             WebRequest request = WebRequest.Create(uri);
             request = PrepareRequest(request, core, null);
+            request.Method = "GET";
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             response.Close();
@@ -99,9 +100,10 @@ namespace Livefyre.Api
 
         }
 
-    /*
     
         public static List<Topic> createOrUpdateTopics(LFCore core, Map<String, String> topicMap) {
+
+            /*
             List<Topic> topics = Lists.newArrayList();
             for (String k : topicMap.keySet()) {
                 string label = topicMap.get(k);
@@ -112,6 +114,8 @@ namespace Livefyre.Api
             
                 topics.add(Topic.create(core, k, label));
             }
+
+            // JsonConvert this
             string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topics", topics));
         
             ClientResponse response = builder(core)
@@ -123,7 +127,11 @@ namespace Livefyre.Api
         
             // Doesn't matter what the response details are here as long as it's a 200.
             return topics;
+             * */
+
+            return null;
         }
+    /*
     
         public static int deleteTopics(LFCore core, List<Topic> topics) {
             string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("delete", getTopicIds(topics)));
