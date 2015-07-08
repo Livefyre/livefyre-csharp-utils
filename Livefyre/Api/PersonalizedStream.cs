@@ -168,7 +168,6 @@ namespace Livefyre.Api
         }
 
     
-    
         public static int DeleteTopics(LFCore core, List<Topic> topics) {
             topics.ForEach(delegate(Topic t) {
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
@@ -223,6 +222,7 @@ namespace Livefyre.Api
             return deleted;
         }
     
+
         /* Collection Topic API */
         public static List<String> GetCollectionTopics(Collection collection) {
             Uri URI = BuildURL(collection);
@@ -253,6 +253,7 @@ namespace Livefyre.Api
 
         }
 
+
         public static int AddCollectionTopics(Collection collection, List<Topic> topics) {
             List<string> topicIDs = new List<string>();
 
@@ -278,7 +279,7 @@ namespace Livefyre.Api
             request.Method = "POST";
 
 
-            string jsonPostData = JsonConvert.SerializeObject(topicIDs);
+            string jsonPostData = JsonConvert.SerializeObject(idMap);
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
             byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
@@ -311,11 +312,56 @@ namespace Livefyre.Api
             return (int)jvAdded > 0 ? (int)jvAdded : 0;
         }
      
-/*
     
-        public static Map<String, Integer> replaceCollectionTopics(Collection collection, List<Topic> topics) {
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
+        public static Dictionary<String, Int32> ReplaceCollectionTopics(Collection collection, List<Topic> topics) {
+            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
 
+            List<string> topicIDs = new List<string>();
+
+            topics.ForEach(delegate(Topic t)
+            {
+                //throws
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+                topicIDs.Add(t.GetId());
+            });
+
+            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
+
+            idMap.Add("topicIds", topicIDs);
+
+            Uri baseURI = BuildURL(collection);
+            Uri completeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, collection, null);
+            request.Method = "PUT";
+
+            string jsonPostData = JsonConvert.SerializeObject(idMap);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+    
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+
+            /*
             ClientResponse response = builder(collection)
                     .path(String.Format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
                     .accept(MediaType.APPLICATION_JSON)
@@ -323,13 +369,18 @@ namespace Livefyre.Api
                     .put(ClientResponse.class, form);
             JsonObject content = evaluateResponse(response);
             JsonObject data = content.getAsJsonObject("data");
-        
+        */
+        /*
             Map<String, Integer> results = Maps.newHashMap();
             results.put("added", data.has("added") ? data.get("added").getAsInt() : 0);
             results.put("removed", data.has("removed") ? data.get("removed").getAsInt() : 0);
             return results;
+         */
+            return null;
         }
-    
+
+
+    /*
         public static int removeCollectionTopics(Collection collection, List<Topic> topics) {
             string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("delete", getTopicIds(topics)));
         
