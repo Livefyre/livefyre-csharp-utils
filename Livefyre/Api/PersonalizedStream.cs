@@ -37,6 +37,13 @@ namespace Livefyre.Api
 
         // REPETITION ON REQUESTS - DRYYYYYYY THIS
 
+        // THE REQUEST METHODS BELOW CAN BE BROKEN INTO SMALLER METHODS:
+            // build URI
+            // build Headers
+            // build POST Data
+            // validate response
+            // deserializa appropriately
+
 
         /* Topic API */
 
@@ -125,10 +132,10 @@ namespace Livefyre.Api
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
 
-            Uri baseURL  = BuildURL(core);
-            Uri completeURL = new Uri(baseURL, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
+            Uri baseURI = BuildURL(core);
+            Uri completeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
 
-            WebRequest request = WebRequest.Create(completeURL);
+            WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
             request.Method = "POST";
 
@@ -205,10 +212,8 @@ namespace Livefyre.Api
             // return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
             
             // JSON nested underneath data prop! - CHECK THIS EVERYWHERE
-                // AND DRY UP THIS STUFF!
 
             JObject jsonResponse = JObject.Parse(responseString);
-
             
             // this may not work
             
@@ -220,11 +225,10 @@ namespace Livefyre.Api
     
         /* Collection Topic API */
         public static List<String> GetCollectionTopics(Collection collection) {
-            Uri uri = BuildURL(collection);
-            Uri completeURI = new Uri(uri, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+            Uri URI = BuildURL(collection);
+            Uri completeURI = new Uri(URI, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
 
-
-            WebRequest request = WebRequest.Create(uri);
+            WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, collection, null);
             request.Method = "GET";
 
@@ -248,21 +252,66 @@ namespace Livefyre.Api
             return topicIDs;
 
         }
-/*
-    
-        public static int addCollectionTopics(Collection collection, List<Topic> topics) {
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
-        
-            ClientResponse response = builder(collection)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
-    
-            return data.has("added") ? data.get("added").getAsInt() : 0;
+
+        public static int AddCollectionTopics(Collection collection, List<Topic> topics) {
+            List<string> topicIDs = new List<string>();
+
+            topics.ForEach(delegate(Topic t) {
+                //throws
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+                topicIDs.Add(t.GetId());
+            });
+
+            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
+
+            idMap.Add("topicIds", topicIDs);
+
+
+            Uri baseURL  = BuildURL(collection);
+            Uri wholeURI = new Uri(baseURL, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+            // STRING!  config me!
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, collection, null);
+            request.Method = "POST";
+
+
+            string jsonPostData = JsonConvert.SerializeObject(topicIDs);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+
+
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
+            JValue jvAdded = new JValue(jsonResponse["data"]["added"]);
+
+            return (int)jvAdded > 0 ? (int)jvAdded : 0;
         }
+     
+/*
     
         public static Map<String, Integer> replaceCollectionTopics(Collection collection, List<Topic> topics) {
             string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
