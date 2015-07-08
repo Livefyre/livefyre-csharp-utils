@@ -60,8 +60,7 @@ namespace Livefyre.Api
 
         }
 
-
-    /*
+        /*
         public static Topic createOrUpdateTopic(LFCore core, string topicId, string label) {
             return createOrUpdateTopics(core, ImmutableMap.of(topicId, label)).get(0);
         }
@@ -69,17 +68,35 @@ namespace Livefyre.Api
         public static boolean deleteTopic(LFCore core, Topic topic) {
             return deleteTopics(core, Lists.newArrayList(topic)) == 1;
         }
-    */
+         * 
+         */
+
         /* Multiple Topic API */
-    /*
-        public static List<Topic> getTopics(LFCore core, Integer limit, Integer offset) {
-            ClientResponse response = builder(core)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, core.getUrn()))
-                    .queryParam("limit", limit == null ? "100" : limit.toString())
-                    .queryParam("offset", offset == null ? "0" : offset.toString())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ClientResponse.class);
-            JsonObject content = evaluateResponse(response);
+        public static List<Topic> GetTopics(LFCore core, int limit, int offset) {
+            Uri uri = new Uri(String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
+            uri = BuildURL(uri, core);
+
+            // add params to uri
+            Uri limitParam = new Uri(uri, String.Format("?limit={0}", limit == null ? "100" : limit.ToString()));
+            Uri offsetParam = new Uri(uri, String.Format("&offset={0}", offset == null ? "0" : offset.ToString()));
+
+            WebRequest request = WebRequest.Create(uri);
+            request = PrepareRequest(request, core, null);
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // Convert responseString to List<Topics>
+            /*
             JsonArray topicsData = content.getAsJsonObject("data").getAsJsonArray("topics");
         
             List<Topic> topics = Lists.newArrayList();
@@ -89,7 +106,12 @@ namespace Livefyre.Api
                 }
             }
             return topics;
+             * 
+             */
+            return null;
         }
+
+    /*
     
         public static List<Topic> createOrUpdateTopics(LFCore core, Map<String, String> topicMap) {
             List<Topic> topics = Lists.newArrayList();
@@ -266,7 +288,7 @@ namespace Livefyre.Api
             return data.has("removed") ? data.get("removed").getAsInt() : 0;
         }
     
-        public static List<Subscription> getSubscribers(Network network, Topic topic, Integer limit, Integer offset) {
+        public static List<Subscription> getSubscribers(Network network, Topic topic, int limit, int offset) {
             ClientResponse response = builder(network)
                     .path(String.Format(TOPIC_SUBSCRIPTION_PATH, topic.getId()))
                     .queryParam("limit", limit == null ? "100" : limit.toString())
@@ -349,39 +371,6 @@ namespace Livefyre.Api
             return request;
         }
 
-
-
-        /*
-        private static WebRequest builder(WebRequest request, LFCore core) {
-            return builder(request, core, null);
-        }
-    
-        // these two builders append uri information onto the current url path
-        private static WebRequest builder(WebRequest request, LFCore core, string userToken) {
-            request = PrepareRequest(request, core, userToken);
-
-
-            // PrepareRequest(core, userToken)
-            //    .resource(String.Format(BASE_URL, Domain.quill(core)));
-
-            // return WebRequest with appended Path info
-            return request;
-        }
-    
-        private static WebRequest streamBuilder(WebRequest request, LFCore core) {
-         //       PrepareRequest(core, null).resource(String.Format(STREAM_BASE_URL, Domain.bootstrap(core)));
-            return request;
-        }
-
-        private static WebRequest AppendPath(WebRequest request, string path) {
-
-            Uri uri = request.RequestUri;
-
-            return request;
-        }
-        */
-
-    
         // evaluates && casts - separate?
         // dropping the cast
         private static void evaluateResponse(HttpWebResponse response) {
