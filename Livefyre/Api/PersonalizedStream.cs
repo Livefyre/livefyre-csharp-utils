@@ -95,20 +95,8 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
-            // Convert responseString to List<Topics>
-            /*
-            JsonArray topicsData = content.getAsJsonObject("data").getAsJsonArray("topics");
-        
-            List<Topic> topics = Lists.newArrayList();
-            if (topicsData != null) {
-                for (int i = 0; i < topicsData.size(); i++) {
-                    topics.add(Topic.serializeFromJson(topicsData.get(i).getAsJsonObject()));
-                }
-            }
-            return topics;
-             * 
-             */
-            return null;
+            return JsonConvert.DeserializeObject<List<Topic>>(responseString);
+
         }
 
     /*
