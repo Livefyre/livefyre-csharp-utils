@@ -499,13 +499,74 @@ namespace Livefyre.Api
             return subs;
 
         }
-/*
     
-        public static int addSubscriptions(Network network, string userToken, List<Topic> topics) {
-            string userId = getUserFromToken(network, userToken);
-            string userUrn = network.getUrnForUser(userId);
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("subscriptions", buildSubscriptions(topics, userUrn)));
+        public static int AddSubscriptions(Network network, string userToken, List<Topic> topics) {
+            
+            // JWT!
+            string userId = GetUserFromToken(network, userToken);
+            string userUrn = network.GetUrnForUser(userId);
 
+            /*
+            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("subscriptions", buildSubscriptions(topics, userUrn)));
+            */
+                        List<string> topicIDs = new List<string>();
+
+            topics.ForEach(delegate(Topic t) {
+                //throws
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+                topicIDs.Add(t.GetId());
+            });
+
+            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
+
+            idMap.Add("topicIds", topicIDs);
+
+
+            Uri baseURL  = BuildURL(collection);
+            Uri wholeURI = new Uri(baseURL, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+            // STRING!  config me!
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, collection, null);
+            request.Method = "POST";
+
+
+            string jsonPostData = JsonConvert.SerializeObject(idMap);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+
+
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
+            JValue jvAdded = new JValue(jsonResponse["data"]["added"]);
+
+            return (int)jvAdded > 0 ? (int)jvAdded : 0;
+
+
+            /*
             ClientResponse response = builder(network, userToken)
                     .path(String.Format(USER_SUBSCRIPTION_PATH, userUrn))
                     .accept(MediaType.APPLICATION_JSON)
@@ -515,7 +576,10 @@ namespace Livefyre.Api
             JsonObject data = content.getAsJsonObject("data");
 
             return data.has("added") ? data.get("added").getAsInt() : 0;
+             * 
+             */
         }
+/*
     
         public static Map<String, Integer> replaceSubscriptions(Network network, string userToken, List<Topic> topics) {
             string userId = getUserFromToken(network, userToken);

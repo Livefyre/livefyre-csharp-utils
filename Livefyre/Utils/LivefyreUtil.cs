@@ -4,8 +4,11 @@ using System.Linq;
 using System.IO;
 using System.Text;
 
-using Newtonsoft.Json;
 using Livefyre.Core;
+
+using JWT;
+
+using Newtonsoft.Json;
 
 
 
@@ -19,12 +22,12 @@ namespace Livefyre.Utils
             return typed;
         }
         
+
         // mapToJsonString
         public static string TypeToJsonString (Object o) {
             string s = JsonConvert.SerializeObject(o);
             return s;
         }
-
 
 
         public static Network GetNetworkFromCore(LFCore core) {
@@ -57,37 +60,32 @@ namespace Livefyre.Utils
             return true;
         }
 
-        /*
-        // change Map param type
-        public static String serializeAndSign(Map<String, Object> claims, String key) {
-            // grab lib
-            JsonWebSignature jws = new JsonWebSignature();
-            jws.setPayload(new Gson().toJson(claims));
-            jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.HMAC_SHA256);
-            jws.setHeader("typ", "JWT");
-            jws.setKey(new HmacKey(Arrays.copyOf(key.getBytes(), 32)));
 
-            try {
-                return jws.getCompactSerialization();
-            } catch (JoseException e) {
-                throw new TokenException(e);
+        public static string SerializeAndSign (Dictionary<string, object> claims, string key) {
+            // too easy?!
+            try
+            {
+                return JWT.JsonWebToken.Encode(claims, key, JWT.JwtHashAlgorithm.HS256);
+            }
+            catch (Exception)
+            {
+                // shorthand works?
+                throw;
             }
         }
-         * 
-         */
-    /*
-        public static JsonObject decodeJwt(String jwt, String key) {
-            JwtConsumer jwtConsumer;
-            try {
-                jwtConsumer = new JwtConsumerBuilder()
-                        .setVerificationKey(new HmacKey(Arrays.copyOf(key.getBytes(), 32)))
-                        .build();
-                return new Gson().fromJson(jwtConsumer.processToClaims(jwt).toJson(), JsonObject.class);
-            } catch (InvalidJwtException e) {
-                throw new TokenException(e);
+
+
+        public static string DecodeJWT(string jwt, string key) {
+            try
+            {
+                return JWT.JsonWebToken.Decode(jwt, key);
+            }
+            catch (JWT.SignatureVerificationException)
+            {
+                throw;
             }
         }
-    */
+
 
         public static Int32 UnixNow()
         {
