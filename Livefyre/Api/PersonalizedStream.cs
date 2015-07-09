@@ -671,27 +671,37 @@ namespace Livefyre.Api
         }
 
 
-/*
-    
-        public static List<Subscription> getSubscribers(Network network, Topic topic, int limit, int offset) {
-            ClientResponse response = builder(network)
-                    .path(String.Format(TOPIC_SUBSCRIPTION_PATH, topic.getId()))
-                    .queryParam("limit", limit == null ? "100" : limit.toString())
-                    .queryParam("offset", offset == null ? "0" : offset.toString())
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ClientResponse.class);
-            JsonObject content = evaluateResponse(response);
-            JsonArray data = content.getAsJsonObject("data").getAsJsonArray("subscriptions");
-        
-            List<Subscription> subscriptions = Lists.newArrayList();
-            if (data != null) {
-                for (int i = 0; i < data.size(); i++) {
-                    subscriptions.add(Subscription.serializeFromJson(data.get(i).getAsJsonObject()));
-                }
-            }
-            return subscriptions;
+        public static List<Subscription> GetSubscribers(Network network, Topic topic, int limit, int offset) {
+            Uri baseURI = BuildURL(network);
+            Uri wholeURI = new Uri(baseURI, String.Format(TOPIC_SUBSCRIPTION_PATH, topic.GetId()));
+
+            // add params to uri
+            // should check the right edge of the AbsoluteUri
+            Uri limitParamURI = new Uri(wholeURI, String.Format("?limit={0}", limit.ToString() == null ? "100" : limit.ToString()));
+
+            Uri completeURI = new Uri(limitParamURI,
+                String.Format("&offset={0}", offset.ToString() == null ? "0" : offset.ToString()));
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, network, null);
+            request.Method = "GET";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // mind that "data" prop?!  
+            return JsonConvert.DeserializeObject<List<Subscription>>(responseString);
         }
-    */
+
         /* This call is used specifically by the TimelineCursor class. */
 /*
         public static JsonObject getTimelineStream(TimelineCursor cursor, boolean isNext) {
