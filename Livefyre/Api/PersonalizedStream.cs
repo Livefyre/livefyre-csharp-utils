@@ -493,33 +493,11 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
-            JObject jsonResponse = JObject.Parse(responseString);
+            //this may just blow up
+            List<Subscription> subs = (List<Subscription>)JsonConvert.DeserializeObject(responseString);
 
-            //configzies really
-            JArray subs = new JArray(jsonResponse["data"]);
+            return subs;
 
-
-
-
-            // YOU ARE HERE!
-
-
-
-            // fix meh!
-            List<Subscription> subscriptions = JsonConvert.DeserializeObject<List<Subscription>>(subs);
-
-            /*
-            JsonArray subscriptionData = content.getAsJsonObject("data").getAsJsonArray("subscriptions");
-        
-            List<Subscription> subscriptions = Lists.newArrayList();
-            if (subscriptionData != null) {
-                for (int i = 0; i < subscriptionData.size(); i++) {
-                    subscriptions.add(Subscription.serializeFromJson(subscriptionData.get(i).getAsJsonObject()));
-                }
-            }
-            return subscriptions;
-             */
-            return null;
         }
 /*
     
