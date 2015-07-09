@@ -47,11 +47,34 @@ namespace Livefyre.Cursor
         // JObject here?
         // no native Type - return json string for consumers 
         // public JObject next()
-        public string next()
+        public string Next()
         {
-            //var responseData = PersonalizedStream.
+            string responseString = PersonalizedStream.GetTimelineStream(this, false);
 
-            return null;
+            //Cursor cursor = JsonConvert.DeserializeObject<Cursor>(responseString);
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
+            bool hasPrev = (bool)jsonResponse["meta"]["cursor"]["hasPrev"];
+
+            // might have to go from string to bool
+            string prevDate = (string)jsonResponse["meta"]["cursor"]["prev"];
+
+            // urgh?
+            bool prev = prevDate.Length > 0 ? true : false;
+
+            data.SetPrevious(hasPrev);
+            data.SetNext(prev);
+
+            if (data.isNext())
+            {
+                data.SetCursorTime(prevDate);
+            }
+
+            return responseString;
+
         }
 
         /**
@@ -62,7 +85,7 @@ namespace Livefyre.Cursor
 
         // JObject here?
 
-        public string previous()
+        public string Previous()
         {
             return null;
         }

@@ -708,7 +708,6 @@ namespace Livefyre.Api
         // no native JsonObject here
         //json string for outside consumers
         public static string GetTimelineStream(TimelineCursor cursor, bool isNext) {
-
             LFCore core = cursor.GetCore();
             Uri baseURI = BuildStreamURL(core);
             Uri wholeURI = new Uri(baseURI, TIMELINE_PATH);
