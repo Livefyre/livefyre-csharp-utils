@@ -43,7 +43,7 @@ namespace Livefyre.Api
             // build POST Data
             // validate response
             // deserializa appropriately
-
+            // MapToJSON can be reworked to fit my spaghetti below
 
         /* Topic API */
 
@@ -470,7 +470,6 @@ namespace Livefyre.Api
         }
 
 
-
         /* Subscription API */
         public static List<Subscription> GetSubscriptions(Network network, string userId) {
             Uri baseURI = BuildURL(network);
@@ -500,40 +499,29 @@ namespace Livefyre.Api
 
         }
     
+
         public static int AddSubscriptions(Network network, string userToken, List<Topic> topics) {
-            
             // JWT!
             string userId = GetUserFromToken(network, userToken);
             string userUrn = network.GetUrnForUser(userId);
 
-            /*
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("subscriptions", buildSubscriptions(topics, userUrn)));
-            */
-                        List<string> topicIDs = new List<string>();
+            List<Subscription> subscriptions = BuildSubscriptions(topics, userUrn);
+            Dictionary<String, List<Subscription>> subsMap = new Dictionary<String, List<Subscription>>();
+            subsMap.Add("subscriptions", subscriptions);
+            
 
-            topics.ForEach(delegate(Topic t) {
-                //throws
-                TopicValidator.ValidateTopicLabel(t.GetLabel());
-                topicIDs.Add(t.GetId());
-            });
-
-            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
-
-            idMap.Add("topicIds", topicIDs);
-
-
-            Uri baseURL  = BuildURL(collection);
-            Uri wholeURI = new Uri(baseURL, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+            Uri baseURL  = BuildURL(network);
+            Uri wholeURI = new Uri(baseURL, String.Format(USER_SUBSCRIPTION_PATH, userUrn));
             // STRING!  config me!
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
 
 
             WebRequest request = WebRequest.Create(completeURI);
-            request = PrepareRequest(request, collection, null);
+            request = PrepareRequest(request, network, userToken);
             request.Method = "POST";
 
 
-            string jsonPostData = JsonConvert.SerializeObject(idMap);
+            string jsonPostData = JsonConvert.SerializeObject(subsMap);
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
             byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
@@ -565,19 +553,6 @@ namespace Livefyre.Api
 
             return (int)jvAdded > 0 ? (int)jvAdded : 0;
 
-
-            /*
-            ClientResponse response = builder(network, userToken)
-                    .path(String.Format(USER_SUBSCRIPTION_PATH, userUrn))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
-
-            return data.has("added") ? data.get("added").getAsInt() : 0;
-             * 
-             */
         }
 /*
     
@@ -742,14 +717,17 @@ namespace Livefyre.Api
         }
 
 
-        /*
-         * JWT HERE
-        private static string getUserFromToken(Network network, string userToken) {
-            JsonObject json = LivefyreUtil.decodeJwt(userToken, network.getData().getKey());
-            return json.get("user_id").getAsString();
+        
+        private static string GetUserFromToken(Network network, string userToken) {
+            string decodedJWT = LivefyreUtil.DecodeJwt(userToken, network.GetData().GetKey());
+
+            JObject jwt = JObject.Parse(decodedJWT);
+
+            // AM I NESTED!?
+            return (string)jwt["user_id"];
         }
 
-        */
+        
 
 
 

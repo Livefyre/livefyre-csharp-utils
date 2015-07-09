@@ -24,6 +24,7 @@ namespace Livefyre.Utils
         
 
         // mapToJsonString
+        // too general?  look again
         public static string TypeToJsonString (Object o) {
             string s = JsonConvert.SerializeObject(o);
             return s;
@@ -61,7 +62,7 @@ namespace Livefyre.Utils
         }
 
 
-        public static string SerializeAndSign (Dictionary<string, object> claims, string key) {
+        public static string SerializeAndSign(Dictionary<string, object> claims, string key) {
             // too easy?!
             try
             {
