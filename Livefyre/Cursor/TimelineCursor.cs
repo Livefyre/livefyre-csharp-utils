@@ -57,6 +57,44 @@ namespace Livefyre.Cursor
 
             // Confligg-able STRING!
             // CHECK THIS PROP TREE!
+            bool hasNext = (bool)jsonResponse["meta"]["cursor"]["hasNext"];
+
+            // might have to go from string to bool
+            string nextDate = (string)jsonResponse["meta"]["cursor"]["next"];
+
+            // urgh?
+            bool next = nextDate.Length > 0 ? true : false;
+
+            data.SetPrevious(hasNext);
+            data.SetNext(next);
+
+            if (data.isNext())
+            {
+                data.SetCursorTime(nextDate);
+            }
+
+            return responseString;
+
+        }
+
+        /**
+         * Returns the previous set of events in the timeline from the cursorTime.
+
+         * @return JSONObject
+         */
+
+        // JObject here?
+
+        public string Previous()
+        {
+            string responseString = PersonalizedStream.GetTimelineStream(this, false);
+
+            //Cursor cursor = JsonConvert.DeserializeObject<Cursor>(responseString);
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
             bool hasPrev = (bool)jsonResponse["meta"]["cursor"]["hasPrev"];
 
             // might have to go from string to bool
@@ -74,20 +112,6 @@ namespace Livefyre.Cursor
             }
 
             return responseString;
-
-        }
-
-        /**
-         * Returns the previous set of events in the timeline from the cursorTime.
-
-         * @return JSONObject
-         */
-
-        // JObject here?
-
-        public string Previous()
-        {
-            return null;
         }
 
 

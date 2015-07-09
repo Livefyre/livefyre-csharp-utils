@@ -853,8 +853,6 @@ namespace Livefyre.Api
             return (string)jwt["user_id"];
         }
 
-        
-
 
 
     }
