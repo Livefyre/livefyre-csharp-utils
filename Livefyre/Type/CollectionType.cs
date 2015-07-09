@@ -24,8 +24,10 @@ namespace Livefyre.Type
         private CollectionType(string type) {
             this.type = type;
         }
-    
-        public string toString() {
+
+
+        public override string ToString()
+        {
             return type;
         }
 

@@ -88,34 +88,43 @@ namespace Livefyre.Core
          * 
          * @return String.
          */
-            /*
+
         public string BuildCollectionMetaToken() {
-            //convert to Dict
-            Map<String, Object> claims = data.asMap();
-            boolean isNetworkIssued = isNetworkIssued();
-            claims.put("iss", isNetworkIssued ? site.GetNetwork().GetUrn() : site.GetUrn());
-            return LivefyreUtil.serializeAndSign(claims, isNetworkIssued ?
+            Dictionary<string, object> claims = data.ToDictionary();
+
+            bool isNetworkIssued = IsNetworkIssued();
+
+            claims.Add("iss", isNetworkIssued ? site.GetNetwork().GetUrn() : site.GetUrn());
+
+            return LivefyreUtil.SerializeAndSign(claims, isNetworkIssued ?
                     site.GetNetwork().GetData().GetKey() : site.GetData().GetKey());
         }
-        */
+
         /**
          * Generates a MD5-encrypted checksum based on this collection's attributes.
          * 
          * @return String.
          */
-        /*
+
         public string BuildChecksum() {
             try {
-                // more dictionary-ing
-                Map<String, Object> attr = data.asMap();
-                byte[] digest = MessageDigest.GetInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).GetBytes());
-                return printHexBinary(digest);
-            } catch (NoSuchAlgorithmException e) {
-            // pull out these error strings. /make configurable some day?
-                throw new LivefyreException("MD5 message digest missing. This shouldn't ever happen." + e);
+                Dictionary<string, object> attr = data.ToDictionary();
+
+                string jsonString = JsonConvert.SerializeObject(attr);
+
+                // byte[] digest = MessageDigest.GetInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).GetBytes());
+                // return printHexBinary(digest);
+
+                return null;
+
+            } catch (Exception e) {
+                //NoSuchAlgorithmException
+                // pull out these error strings. /make configurable some day?
+                throw new Exception(String.Format("MD5 message digest missing. This shouldn't ever happen. Error: {0}", e));
+                //throw new LivefyreException("MD5 message digest missing. This shouldn't ever happen." + e);
             }
         }
-        */
+
         /**
          * Retrieves this collection's information from Livefyre. Makes an external API call.
          * 
@@ -272,17 +281,17 @@ namespace Livefyre.Core
 
         }
 
-    /*
+    
         private string GetPayload() {
             Dictionary<string, string> payload = new Dictionary<string, string>();
             
             payload.Add("articleId", data.GetArticleId());
-            payload.Add("checksum", BuildChecksum);
-            payload.Add("articleId", data.BuildCollectionMetaToken);
+            payload.Add("checksum", BuildChecksum());
+            payload.Add("articleId", BuildCollectionMetaToken());
             
-            return TypeToJson(payload);
+            return JsonConvert.SerializeObject(payload);
         }
-        */
+
         // check this
         /*
         private string PrintHexBinary(byte[] data) {

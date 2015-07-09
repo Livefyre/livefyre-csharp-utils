@@ -397,8 +397,6 @@ namespace Livefyre.Api
    
         // more similarities - refactor
         public static int RemoveCollectionTopics(Collection collection, List<Topic> topics) {
-            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
-
             List<string> topicIDs = new List<string>();
 
             topics.ForEach(delegate(Topic t)
@@ -449,10 +447,8 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
-            // return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
             
             // JSON nested underneath data prop! - CHECK THIS EVERYWHERE
-
             JObject jsonResponse = JObject.Parse(responseString);
             
             // this may not work

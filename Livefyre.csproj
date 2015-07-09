@@ -226,7 +226,6 @@
     <Compile Include="Livefyre\Properties\AssemblyInfo.cs" />
     <Compile Include="Livefyre\Type\CollectionType.cs" />
     <Compile Include="Livefyre\Type\SubscriptionType.cs" />
-    <Compile Include="Livefyre\Utils\LivefyreJwtUtil.cs" />
     <Compile Include="Livefyre\Utils\LivefyreUtil.cs" />
     <Compile Include="Livefyre\Utils\Precondition.cs" />
     <Compile Include="Livefyre\Validator\CollectionValidator.cs" />

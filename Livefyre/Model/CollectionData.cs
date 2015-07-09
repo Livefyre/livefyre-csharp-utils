@@ -30,36 +30,38 @@ namespace Livefyre.Model
             this.title = title;
             this.url = url;
         }
-        /*
+
+
         // make C# Dictionary
-        public Map<string, Object> AsMap() {
+        public Dictionary<string, object> ToDictionary() {
+            Dictionary<string, object> attr = new Dictionary<string, object>();
 
-            Map<string, Object> attr = Maps.newTreeMap();
-            attr.put("articleId", articleId);
-            attr.put("title", title);
-
+            attr.Add("articleId", articleId);
+            attr.Add("title", title);
 
             // work out the enum lang conversion puzzle
-            attr.put("type", (string)type);
-            attr.put("url", url);
+            attr.Add("type", type.ToString());
+            attr.Add("url", url);
         
             if (string.IsNullOrEmpty(tags)) {
-                attr.put("tags", tags);
+                attr.Add("tags", tags);
             }
-            if (topics != null && topics.Length > 0) {
-                attr.put("topics", topics);
+            if (topics != null && topics.Count > 0) {
+                attr.Add("topics", topics);
             }
             if (string.IsNullOrEmpty(extensions))
             {
-                attr.put("extensions", extensions);
+                attr.Add("extensions", extensions);
             }
+
             return attr;
         }
-        */
+
+
         // make C# set/get?
         // OVERRIDING ORIGINAL OBJECT BEHAVIOR
         // REMOVE WITH PROPS
-        public CollectionType GetType() {
+        public CollectionType GetLocalType() {
             return type;
         }
     
