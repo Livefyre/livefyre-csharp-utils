@@ -128,9 +128,16 @@ namespace Livefyre.Api
 
     
         public static List<Topic> CreateOrUpdateTopics(LFCore core, List<Topic> topics) {
-            topics.ForEach(delegate(Topic t) {
+            topics.ForEach(delegate(Topic t)
+            {
+                //throws
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
             });
+
+            Dictionary<String, List<Topic>> topicMap = new Dictionary<string, List<Topic>>();
+
+            // String - config meh!
+            topicMap.Add("topics", topics);
 
             Uri baseURI = BuildURL(core);
             Uri completeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
@@ -169,9 +176,21 @@ namespace Livefyre.Api
 
     
         public static int DeleteTopics(LFCore core, List<Topic> topics) {
-            topics.ForEach(delegate(Topic t) {
+            // GetTopicIds HERE
+            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
+
+            List<string> topicIDs = new List<string>();
+
+            topics.ForEach(delegate(Topic t)
+            {
+                //throws
                 TopicValidator.ValidateTopicLabel(t.GetLabel());
+                topicIDs.Add(t.GetId());
             });
+
+            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
+
+            idMap.Add("topicIds", topicIDs);
 
             Uri baseURI = BuildURL(core);
             Uri wholeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
@@ -314,6 +333,8 @@ namespace Livefyre.Api
      
     
         public static Dictionary<string, int> ReplaceCollectionTopics(Collection collection, List<Topic> topics) {
+
+            // CONVERT THIS TO GetTopicIds
             // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
 
             List<string> topicIDs = new List<string>();
@@ -375,27 +396,81 @@ namespace Livefyre.Api
             results.Add("added", (int)jvAdded);
             results.Add("removed", (int)jvRemoved);
 
-
             return results;
         }
 
+   
+        // more similarities - refactor
+        public static int RemoveCollectionTopics(Collection collection, List<Topic> topics) {
+            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
 
-    /*
-        public static int removeCollectionTopics(Collection collection, List<Topic> topics) {
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("delete", getTopicIds(topics)));
-        
-            ClientResponse response = builder(collection)
-                    .path(String.Format(MULTIPLE_TOPIC_PATH, collection.getUrn()))
-                    .queryParam("_method", PATCH_METHOD)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
+            List<string> topicIDs = new List<string>();
 
-            return data.has("removed") ? data.get("removed").getAsInt() : 0;
+            topics.ForEach(delegate(Topic t)
+            {
+                //throws
+                TopicValidator.ValidateTopicLabel(t.GetLabel());
+                topicIDs.Add(t.GetId());
+            });
+
+            Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
+
+            idMap.Add("delete", topicIDs);
+
+
+            Uri baseURI = BuildURL(collection);
+            Uri wholeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, collection.GetUrn()));
+            // Insert Patch Method
+            // STRING!  config me!
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+            
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, collection, null);
+            request.Method = "POST";
+
+            string jsonPostData = JsonConvert.SerializeObject(idMap);
+
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+    
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            // return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
+            
+            // JSON nested underneath data prop! - CHECK THIS EVERYWHERE
+
+            JObject jsonResponse = JObject.Parse(responseString);
+            
+            // this may not work
+            
+            // Configurable String!
+            // CHECK ME FOR CORRECT JSON PROP TREE
+            int removed = (int)jsonResponse.SelectToken("data.removed");
+
+            return removed > 0 ? removed : 0;
         }
-    */
+
+
+
         /* Subscription API */
 /*
         public static List<Subscription> getSubscriptions(Network network, string userId) {
