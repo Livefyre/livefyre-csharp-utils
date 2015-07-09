@@ -6,7 +6,7 @@ using System.Text;
 using Livefyre.Dto;
 
 
-namespace Livefyre.Validator
+namespace Livefyre.Validators
 {
     public class TopicValidator : Validator
     {

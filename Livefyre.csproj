@@ -228,13 +228,13 @@
     <Compile Include="Livefyre\Type\SubscriptionType.cs" />
     <Compile Include="Livefyre\Utils\LivefyreUtil.cs" />
     <Compile Include="Livefyre\Utils\Precondition.cs" />
-    <Compile Include="Livefyre\Validator\CollectionValidator.cs" />
-    <Compile Include="Livefyre\Validator\CursorValidator.cs" />
-    <Compile Include="Livefyre\Validator\NetworkValidator.cs" />
-    <Compile Include="Livefyre\Validator\ReflectiveValidator.cs" />
-    <Compile Include="Livefyre\Validator\SiteValidator.cs" />
-    <Compile Include="Livefyre\Validator\TopicValidator.cs" />
-    <Compile Include="Livefyre\Validator\Validator.cs" />
+    <Compile Include="Livefyre\Validators\CollectionValidator.cs" />
+    <Compile Include="Livefyre\Validators\CursorValidator.cs" />
+    <Compile Include="Livefyre\Validators\NetworkValidator.cs" />
+    <Compile Include="Livefyre\Validators\ReflectiveValidator.cs" />
+    <Compile Include="Livefyre\Validators\SiteValidator.cs" />
+    <Compile Include="Livefyre\Validators\TopicValidator.cs" />
+    <Compile Include="Livefyre\Validators\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".git\objects\info\" />

@@ -11,7 +11,7 @@ using Livefyre.Cursor;
 using Livefyre.Dto;
 using Livefyre.Type;
 using Livefyre.Utils;
-using Livefyre.Validator;
+using Livefyre.Validators;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

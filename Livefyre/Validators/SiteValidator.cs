@@ -6,7 +6,7 @@ using System.Text;
 using Livefyre.Model;
 
 
-namespace Livefyre.Validator
+namespace Livefyre.Validators
 {
     public class SiteValidator : Validator {
 

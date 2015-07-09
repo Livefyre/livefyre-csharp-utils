@@ -8,11 +8,11 @@ using Livefyre.Utils;
 
 
 
-namespace Livefyre.Validator
+namespace Livefyre.Validators
 {
     public class CollectionValidator : Validator {
 
-        public String Validate(CollectionData data) {
+        public String Validate<T>(CollectionData data) {
 
             StringBuilder reason = new StringBuilder();
 
