@@ -176,9 +176,6 @@ namespace Livefyre.Api
 
     
         public static int DeleteTopics(LFCore core, List<Topic> topics) {
-            // GetTopicIds HERE
-            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
-
             List<string> topicIDs = new List<string>();
 
             topics.ForEach(delegate(Topic t)
@@ -190,7 +187,7 @@ namespace Livefyre.Api
 
             Dictionary<String, List<String>> idMap = new Dictionary<string, List<string>>();
 
-            idMap.Add("topicIds", topicIDs);
+            idMap.Add("delete", topicIDs);
 
             Uri baseURI = BuildURL(core);
             Uri wholeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
@@ -227,8 +224,6 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
-            // return data.has("deleted") ? data.get("deleted").getAsInt() : 0;
-            
             // JSON nested underneath data prop! - CHECK THIS EVERYWHERE
 
             JObject jsonResponse = JObject.Parse(responseString);
@@ -615,24 +610,68 @@ namespace Livefyre.Api
             return results;
         }
 
-/*
 
-        public static int removeSubscriptions(Network network, string userToken, List<Topic> topics) {
-            string userId = getUserFromToken(network, userToken);
-            string userUrn = network.getUrnForUser(userId);
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("delete", buildSubscriptions(topics, userUrn)));
+        public static int RemoveSubscriptions(Network network, string userToken, List<Topic> topics) {
+            string userId = GetUserFromToken(network, userToken);
+            string userUrn = network.GetUrnForUser(userId);
 
-            ClientResponse response = builder(network, userToken)
-                    .path(String.Format(USER_SUBSCRIPTION_PATH, userUrn))
-                    .queryParam("_method", PATCH_METHOD)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .post(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
 
-            return data.has("removed") ? data.get("removed").getAsInt() : 0;
+            List<Subscription> subscriptions = BuildSubscriptions(topics, userUrn);
+            Dictionary<String, List<Subscription>> subsMap = new Dictionary<String, List<Subscription>>();
+            subsMap.Add("delete", subscriptions);
+
+
+            Uri baseURI = BuildURL(network);
+            Uri wholeURI = new Uri(baseURI, String.Format(USER_SUBSCRIPTION_PATH, network.GetUrn()));
+            // Insert Patch Method
+            // STRING!  config me!
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, network, null);
+            request.Method = "POST";
+
+
+            string jsonPostData = JsonConvert.SerializeObject(topics);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // this may not work
+
+            // Configurable String!
+            // CHECK ME FOR CORRECT JSON PROP TREE
+            int deleted = (int)jsonResponse.SelectToken("data.deleted");
+
+            return deleted > 0 ? deleted : 0;
+
         }
+
+
+/*
     
         public static List<Subscription> getSubscribers(Network network, Topic topic, int limit, int offset) {
             ClientResponse response = builder(network)
