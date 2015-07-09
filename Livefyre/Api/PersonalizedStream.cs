@@ -472,13 +472,38 @@ namespace Livefyre.Api
 
 
         /* Subscription API */
-/*
-        public static List<Subscription> getSubscriptions(Network network, string userId) {
+        public static List<Subscription> GetSubscriptions(Network network, string userId) {
+            Uri baseURI = BuildURL(network);
+            Uri completeURI = new Uri(baseURI, String.Format(USER_SUBSCRIPTION_PATH, network.GetUrnForUser(userId)));
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, network, null);
+            request.Method = "GET";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+
+            // MORE OF THE SAME
+            /*
             ClientResponse response = builder(network)
                     .path(String.Format(USER_SUBSCRIPTION_PATH, network.getUrnForUser(userId)))
                     .accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
             JsonObject content = evaluateResponse(response);
+             */
+
+            /*
             JsonArray subscriptionData = content.getAsJsonObject("data").getAsJsonArray("subscriptions");
         
             List<Subscription> subscriptions = Lists.newArrayList();
@@ -488,7 +513,10 @@ namespace Livefyre.Api
                 }
             }
             return subscriptions;
+             */
+            return null;
         }
+/*
     
         public static int addSubscriptions(Network network, string userToken, List<Topic> topics) {
             string userId = getUserFromToken(network, userToken);
