@@ -50,7 +50,6 @@ namespace Livefyre.Core
             return Site.Init(this.network, siteId, siteKey);
         }
 
-        /*
         public Collection BuildBlogCollection(string title, string articleId, string url)
         {
             return BuildCollection(CollectionType.BLOG, title, articleId, url);
@@ -85,7 +84,8 @@ namespace Livefyre.Core
         {
             return BuildCollection(CollectionType.SIDENOTES, title, articleId, url);
         }
-        */
+
+
         /**
          * Creates and returns a Collection object. Be sure to call createOrUpdate() on it to inform Livefyre to
          * complete creation and any updates.
@@ -102,12 +102,10 @@ namespace Livefyre.Core
          * @return Collection
          */
 
-        /*
-        public Collection BuildCollection(CollectionType type, string title, string articleId, string url)
+        public Collection BuildCollection(string type, string title, string articleId, string url)
         {
             return Collection.Init(this, type, title, articleId, url);
         }
-        */
 
 
     }

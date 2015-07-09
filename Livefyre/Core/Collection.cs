@@ -30,7 +30,7 @@ namespace Livefyre.Core
             this.data = data;
         }
     
-        public static Collection Init(Site site, CollectionType type, string title, string articleId, string url) {
+        public static Collection Init(Site site, string type, string title, string articleId, string url) {
             CollectionData data = new CollectionData(type, title, articleId, url);
             // validate data
             // return new Collection(site, ReflectiveValidator.validate(data));

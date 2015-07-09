@@ -13,7 +13,7 @@ namespace Livefyre.Model
     public class CollectionData
     {
         
-        private CollectionType type;
+        private string type;
         private string id;
         private string articleId;
         private string title;
@@ -24,7 +24,7 @@ namespace Livefyre.Model
         private List<Topic> topics;
         private string extensions;
     
-        public CollectionData(CollectionType type, string title, string articleId, string url) {
+        public CollectionData(string type, string title, string articleId, string url) {
             this.type = type;
             this.articleId = articleId;
             this.title = title;
@@ -61,11 +61,11 @@ namespace Livefyre.Model
         // make C# set/get?
         // OVERRIDING ORIGINAL OBJECT BEHAVIOR
         // REMOVE WITH PROPS
-        public CollectionType GetLocalType() {
+        public string GetLocalType() {
             return type;
         }
     
-        public CollectionData SetType(CollectionType type) {
+        public CollectionData SetType(string type) {
             this.type = type;
             return this;
         }

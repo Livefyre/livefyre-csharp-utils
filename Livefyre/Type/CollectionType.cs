@@ -17,6 +17,7 @@ namespace Livefyre.Type
         public static readonly string COMMENTS = "comments";
         public static readonly string RATINGS = "ratings";
         public static readonly string SIDENOTES = "sidenotes";
+        public static readonly string REVIEWS = "reviews";
 
         private string type;
     
