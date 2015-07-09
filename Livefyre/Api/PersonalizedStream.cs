@@ -331,7 +331,6 @@ namespace Livefyre.Api
         public static Dictionary<string, int> ReplaceCollectionTopics(Collection collection, List<Topic> topics) {
 
             // CONVERT THIS TO GetTopicIds
-            // string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("topicIds", getTopicIds(topics)));
 
             List<string> topicIDs = new List<string>();
 

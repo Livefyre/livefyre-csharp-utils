@@ -10,6 +10,10 @@ using Livefyre.Api;
 using Livefyre.Model;
 using Livefyre.Utils;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+
 namespace Livefyre.Core
 {
     public class Network : LFCore
@@ -186,19 +190,14 @@ namespace Livefyre.Core
             // var/mem this error message
             if (pattern.IsMatch(userId))
             {
+                Dictionary<string, object> claims = new Dictionary<string, object>();
 
-                /*
-                // change this to MS type
-                Map<string, Object> claims = ImmutableMap.<string, Object>of(
-                        "domain", data.GetName(),
-                        "user_id", userId,
-                        "display_name", displayName,
-                        "expires", GetExpiryInSeconds(expires)
-                    );
+                claims.Add("domain", data.GetName());
+                claims.Add("user_id", userId);
+                claims.Add("display_name", displayName);
+                claims.Add("expires", GetExpiryInSeconds(expires));
 
-                return SerializeAndSign(claims, data.GetKey());
-                */
-                return "";
+                return LivefyreUtil.SerializeAndSign(claims, data.GetKey());
 
             }
             else
@@ -220,15 +219,27 @@ namespace Livefyre.Core
         {
             Precondition.CheckNotNull(lfToken);
 
-            // JSON.Net http://www.newtonsoft.com/json lib or MS JSON Serializer?
+            string jwt = LivefyreUtil.DecodeJWT(lfToken, data.GetKey());
 
-            /*
-            JsonObject json = LivefyreUtil.decodeJwt(lfToken, data.GetKey());
-            return json.Get("domain").GetAsstring().compareTo(data.GetName()) == 0
-                && json.Get("user_id").GetAsstring().compareTo("system") == 0
-                && json.Get("expires").GetAsLong() >= Calendar.GetInstance().GetTimeInMillis()/1000L;
-             */
-            return false;
+            JObject jwtObject = JObject.Parse(jwt);
+
+            // check tree
+            // so many strings
+            string domain = (string)jwtObject["data"]["domain"];
+            string userID = (string)jwtObject["data"]["user_id"];
+            long expires = (long)jwtObject["data"]["expires"];
+
+            if ( domain.Equals(data.GetName()) &&
+                    userID.Equals("system") &&
+                    expires >= LivefyreUtil.UnixNow())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
 

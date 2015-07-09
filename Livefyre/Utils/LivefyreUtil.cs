@@ -70,7 +70,6 @@ namespace Livefyre.Utils
             }
             catch (Exception)
             {
-                // shorthand works?
                 throw;
             }
         }
