@@ -493,15 +493,20 @@ namespace Livefyre.Api
             responseReader.Close();
             responseStream.Close();
 
+            JObject jsonResponse = JObject.Parse(responseString);
 
-            // MORE OF THE SAME
-            /*
-            ClientResponse response = builder(network)
-                    .path(String.Format(USER_SUBSCRIPTION_PATH, network.getUrnForUser(userId)))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ClientResponse.class);
-            JsonObject content = evaluateResponse(response);
-             */
+            //configzies really
+            JArray subs = new JArray(jsonResponse["data"]);
+
+
+
+
+            // YOU ARE HERE!
+
+
+
+            // fix meh!
+            List<Subscription> subscriptions = JsonConvert.DeserializeObject<List<Subscription>>(subs);
 
             /*
             JsonArray subscriptionData = content.getAsJsonObject("data").getAsJsonArray("subscriptions");
