@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
+using Livefyre.Api;
 using Livefyre.Core;
+using Livefyre.Model;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace Livefyre.Cursor
 {
@@ -19,16 +24,19 @@ namespace Livefyre.Cursor
         private LFCore core;
         private CursorData data;
 
-        public TimelineCursor(LfCore core, CursorData data)
+        public TimelineCursor(LFCore core, CursorData data)
         {
             this.core = core;
             this.data = data;
         }
 
-        public static TimelineCursor init(LfCore core, String resource, Integer limit, Date startTime)
+        public static TimelineCursor Init(LFCore core, String resource, int limit, DateTime startTime)
         {
             CursorData data = new CursorData(resource, limit, startTime);
-            return new TimelineCursor(core, ReflectiveValidator.validate(data));
+
+            //return new TimelineCursor(core, ReflectiveValidator.validate(data));
+            // validate me
+            return new TimelineCursor(core, data);
         }
 
         /**
@@ -36,18 +44,14 @@ namespace Livefyre.Cursor
 
          * @return JSONObject
          */
-        public JsonObject next()
+        // JObject here?
+        // no native Type - return json string for consumers 
+        // public JObject next()
+        public string next()
         {
-            JsonObject responseData = PersonalizedStream.getTimelineStream(this, true);
-            JsonObject cursor = responseData.getAsJsonObject("meta").getAsJsonObject("cursor");
+            //var responseData = PersonalizedStream.
 
-            data.setNext(cursor.get("hasNext").getAsBoolean());
-            data.setPrevious(!cursor.get("next").isJsonNull());
-            if (data.isPrevious())
-            {
-                data.setCursorTime(cursor.get("next").getAsString());
-            }
-            return responseData;
+            return null;
         }
 
         /**
@@ -55,36 +59,33 @@ namespace Livefyre.Cursor
 
          * @return JSONObject
          */
-        public JsonObject previous()
-        {
-            JsonObject responseData = PersonalizedStream.getTimelineStream(this, false);
-            JsonObject cursor = responseData.getAsJsonObject("meta").getAsJsonObject("cursor");
 
-            data.setPrevious(cursor.get("hasPrev").getAsBoolean());
-            data.setNext(!cursor.get("prev").isJsonNull());
-            if (data.isNext())
-            {
-                data.setCursorTime(cursor.get("prev").getAsString());
-            }
-            return responseData;
+        // JObject here?
+
+        public string previous()
+        {
+            return null;
         }
 
-        public LfCore getCore()
+
+ 
+
+        public LFCore GetCore()
         {
             return core;
         }
 
-        public void setCore(LfCore core)
+        public void SetCore(LFCore core)
         {
             this.core = core;
         }
 
-        public CursorData getData()
+        public CursorData GetData()
         {
             return data;
         }
 
-        public void setData(CursorData data)
+        public void SetData(CursorData data)
         {
             this.data = data;
         }

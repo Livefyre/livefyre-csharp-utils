@@ -17,12 +17,16 @@ public class CursorData {
     private bool previous = false;
     private int limit;
     
-    public CursorData(string resource, int limit, Date startTime) {
+    public CursorData(string resource, int limit, DateTime startTime) {
         // figure out this-ness 
        // DATE_FORMAT.SetTimeZone(TimeZone.GetTimeZone("UTC"));
         this.resource = resource;
         this.limit = limit;
-       // this.cursorTime = startTime == null ? null: DATE_FORMAT.format(startTime);
+
+        // FORMATTINGS
+        // this.cursorTime = startTime == null ? null : DATE_FORMAT.format(startTime);
+        // this shall go boom
+        this.cursorTime = startTime == null ? null : startTime.ToString();
     }
 
     public string GetResource() {
@@ -45,6 +49,9 @@ public class CursorData {
 
     public CursorData SetCursorTime(DateTime newTime) {
        // this.cursorTime = DATE_FORMAT.format(newTime);
+        // WATCH THE FORMATTING HERE
+        // kaboom
+        this.cursorTime = newTime.ToString();
         return this;
     }
 

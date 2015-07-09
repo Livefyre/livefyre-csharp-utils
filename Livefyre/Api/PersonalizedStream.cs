@@ -7,6 +7,7 @@ using System.Text;
 
 using Livefyre.Api.Filter;
 using Livefyre.Core;
+using Livefyre.Cursor;
 using Livefyre.Dto;
 using Livefyre.Type;
 using Livefyre.Utils;
@@ -703,23 +704,58 @@ namespace Livefyre.Api
         }
 
         /* This call is used specifically by the TimelineCursor class. */
-/*
-        public static JsonObject getTimelineStream(TimelineCursor cursor, boolean isNext) {
-            WebRequest r = streamBuilder(cursor.getCore())
-                    .path(TIMELINE_PATH)
-                    .queryParam("limit", cursor.getData().getLimit().toString())
-                    .queryParam("resource", cursor.getData().getResource());
-        
-            if (isNext) {
-                r = r.queryParam("since", cursor.getData().getCursorTime());
-            } else {
-                r = r.queryParam("until", cursor.getData().getCursorTime());
+
+        // no native JsonObject here
+        //json string for outside consumers
+        public static string GetTimelineStream(TimelineCursor cursor, bool isNext) {
+
+            LFCore core = cursor.GetCore();
+            Uri baseURI = BuildStreamURL(core);
+            Uri wholeURI = new Uri(baseURI, TIMELINE_PATH);
+
+            string limit = cursor.GetData().GetLimit().ToString();
+            limit = limit == null ? "100" : limit;
+
+            string resource = cursor.GetData().GetResource();
+
+            // add params to uri
+            // should check the right edge of the AbsoluteUri
+            Uri limitParamURI = new Uri(wholeURI, String.Format("?limit={0}", limit));
+            Uri resourceURI = new Uri(limitParamURI, String.Format("&resource={0}", resource));
+
+
+            string cursorTime = cursor.GetData().GetCursorTime();
+            Uri completeURI = null;
+
+            if (isNext)
+            {
+                completeURI = new Uri(resourceURI, String.Format("&since={0}", cursorTime));
             }
-        
-            ClientResponse response = r.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-            return evaluateResponse(response);
+            else
+            {
+                completeURI = new Uri(resourceURI, String.Format("&until={0}", cursorTime));
+            }
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, core, null);
+            request.Method = "GET";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            return responseString;
         }
-  */  
+   
 
 
         /* Helper methods */
@@ -810,7 +846,7 @@ namespace Livefyre.Api
 
         
         private static string GetUserFromToken(Network network, string userToken) {
-            string decodedJWT = LivefyreUtil.DecodeJwt(userToken, network.GetData().GetKey());
+            string decodedJWT = LivefyreUtil.DecodeJWT(userToken, network.GetData().GetKey());
 
             JObject jwt = JObject.Parse(decodedJWT);
 
