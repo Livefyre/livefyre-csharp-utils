@@ -10,7 +10,7 @@ namespace Livefyre.Validator
 {
     public class SiteValidator : Validator {
 
-        public string validate(SiteData data) {
+        public string Validate(SiteData data) {
 
             StringBuilder reason = new StringBuilder();
 

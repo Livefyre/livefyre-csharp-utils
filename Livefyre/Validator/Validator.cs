@@ -7,6 +7,6 @@ namespace Livefyre.Validator
 {
     public interface Validator
     {
-        string Validate<T>(System.Type t);
+        string Validate(System.Type t);
     }
 }

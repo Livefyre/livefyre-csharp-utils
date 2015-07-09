@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 
-using Livefyre.Core;
 using Livefyre.Model;
 
 
@@ -13,7 +12,7 @@ namespace Livefyre.Validator
 
     public class NetworkValidator : Validator {
 
-        public String validate(NetworkData data) {
+        public String Validate(NetworkData data) {
 
             StringBuilder reason = new StringBuilder();
 
