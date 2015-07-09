@@ -18,7 +18,6 @@ namespace Livefyre.Type
         public static readonly string RATINGS = "ratings";
         public static readonly string SIDENOTES = "sidenotes";
 
-        //make sense of this from the JAVA Enum side of things
         private string type;
     
         private CollectionType(string type) {

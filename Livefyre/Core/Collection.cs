@@ -293,17 +293,22 @@ namespace Livefyre.Core
         }
 
         // check this
-        /*
         private string PrintHexBinary(byte[] data) {
-            StringBuilder r = new StringBuilder(data.length * 2);
-            for (byte b : data) {
-                r.append(hexCode[(b >> 4) & 0xF]);
-                r.append(hexCode[(b & 0xF)]);
-            }
-            return r.toString();
-        }
-        */
+            int l = data.Length;
+            StringBuilder r = new StringBuilder(l * 2);
 
+            int i = 0;
+            byte b;
+
+            for (; i < l; i +=1) {
+                b = data[i];
+                r.Append(hexCode[(b >> 4) & 0xF]);
+                r.Append(hexCode[(b & 0xF)]);
+            }
+
+            return r.ToString();
+
+        }
 
 
     }
