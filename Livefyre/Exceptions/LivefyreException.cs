@@ -5,7 +5,20 @@ using System.Text;
 
 namespace Livefyre.Exceptions
 {
-    class LivefyreException
+
+    public class LivefyreException : Exception
     {
+        public LivefyreException()
+        {
+        }
+
+        public LivefyreException(string message) : base(message)
+        {
+        }
+
+        public LivefyreException(string message, Exception inner) : base(message, inner)
+        {
+        }
     }
+
 }
