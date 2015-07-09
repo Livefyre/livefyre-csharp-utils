@@ -24,7 +24,7 @@ namespace Livefyre.Validator
             }
 
             if (reason.Length > 0) {
-                 return String.Format("Problems with your site input: {0}", reason);
+                 return String.Format("Problems with your site input: {0}", reason.ToString());
             }
 
             return null;

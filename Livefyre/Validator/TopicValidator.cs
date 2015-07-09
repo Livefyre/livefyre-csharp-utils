@@ -19,14 +19,6 @@ namespace Livefyre.Validator
         public static void ValidateTopicLabel(string label)
         {
             // checking topic key length
-            // make part of validation
-            /*
-                string label = topicMap.get(k);
-                if (StringUtils.isEmpty(label) || label.length() > 128)
-                {
-                    throw new IllegalArgumentException("Topic label is of incorrect length or empty.");
-                }
-             */
 
             if (label == null || label.Length == 0 )
             {
