@@ -39,6 +39,8 @@ A translation from our Java library that hopes to become idiomatic C#, with help
 https://github.com/Livefyre/livefyre-java-utils
 
 
+As a library, I would love to be better, continually improve and evolve. I am very grateful for any help you may spare on my journey.
+
 
 TODO: DRY ME!
 

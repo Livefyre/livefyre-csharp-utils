@@ -554,26 +554,68 @@ namespace Livefyre.Api
             return (int)jvAdded > 0 ? (int)jvAdded : 0;
 
         }
-/*
     
-        public static Map<String, Integer> replaceSubscriptions(Network network, string userToken, List<Topic> topics) {
-            string userId = getUserFromToken(network, userToken);
-            string userUrn = network.getUrnForUser(userId);
-            string form = LivefyreUtil.mapToJsonString(ImmutableMap.<String, Object>of("subscriptions", buildSubscriptions(topics, userUrn)));
 
-            ClientResponse response = builder(network, userToken)
-                    .path(String.Format(USER_SUBSCRIPTION_PATH, userUrn))
-                    .accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON)
-                    .put(ClientResponse.class, form);
-            JsonObject content = evaluateResponse(response);
-            JsonObject data = content.getAsJsonObject("data");
-        
-            Map<String, Integer> results = Maps.newHashMap();
-            results.put("added", data.has("added") ? data.get("added").getAsInt() : 0);
-            results.put("removed", data.has("removed") ? data.get("removed").getAsInt() : 0);
+        public static Dictionary<string, int> replaceSubscriptions(Network network, string userToken, List<Topic> topics) {
+            string userId = GetUserFromToken(network, userToken);
+            string userUrn = network.GetUrnForUser(userId);
+
+            List<Subscription> subscriptions = BuildSubscriptions(topics, userUrn);
+            Dictionary<String, List<Subscription>> subsMap = new Dictionary<String, List<Subscription>>();
+            subsMap.Add("subscriptions", subscriptions);
+
+            Uri baseURL = BuildURL(network);
+            Uri wholeURI = new Uri(baseURL, String.Format(USER_SUBSCRIPTION_PATH, userUrn));
+            // STRING!  config me!
+            Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
+
+
+            WebRequest request = WebRequest.Create(completeURI);
+            request = PrepareRequest(request, network, userToken);
+            request.Method = "PUT";
+
+
+            string jsonPostData = JsonConvert.SerializeObject(subsMap);
+            // ascii or utf8?
+            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
+            byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
+
+
+            // inject Post Data
+            Stream requestStream = request.GetRequestStream();
+            requestStream.Write(postBytes, 0, postBytes.Length);
+
+            requestStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            response.Close();
+            // throws on >= 400
+            evaluateResponse(response);
+
+            Stream responseStream = response.GetResponseStream();
+            StreamReader responseReader = new StreamReader(responseStream);
+            string responseString = responseReader.ReadToEnd();
+
+            responseReader.Close();
+            responseStream.Close();
+
+            JObject jsonResponse = JObject.Parse(responseString);
+
+            // Confligg-able STRING!
+            // CHECK THIS PROP TREE!
+            JValue jvAdded = new JValue(jsonResponse["data"]["added"]);
+            JValue jvRemoved = new JValue(jsonResponse["data"]["removed"]);
+
+            Dictionary<string, int> results = new Dictionary<string, int>();
+
+            // more String cofigs
+            results.Add("added", (int)jvAdded);
+            results.Add("removed", (int)jvRemoved);
+
             return results;
         }
+
+/*
 
         public static int removeSubscriptions(Network network, string userToken, List<Topic> topics) {
             string userId = getUserFromToken(network, userToken);
