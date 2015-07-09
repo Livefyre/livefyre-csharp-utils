@@ -11,7 +11,7 @@ namespace Livefyre.Validators
 
     public class CursorValidator : Validator {
 
-        public string Validate(CursorData data) {
+        public string Validate<CursorData>(CursorData data) {
 
             StringBuilder reason = new StringBuilder();
 

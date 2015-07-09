@@ -12,7 +12,7 @@ namespace Livefyre.Validators
 
     public class NetworkValidator : Validator {
 
-        public String Validate(NetworkData data) {
+        public string Validate<NetworkData>(NetworkData data) {
 
             StringBuilder reason = new StringBuilder();
 
