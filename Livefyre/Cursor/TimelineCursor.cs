@@ -50,9 +50,6 @@ namespace Livefyre.Cursor
         public string Next()
         {
             string responseString = PersonalizedStream.GetTimelineStream(this, false);
-
-            //Cursor cursor = JsonConvert.DeserializeObject<Cursor>(responseString);
-
             JObject jsonResponse = JObject.Parse(responseString);
 
             // Confligg-able STRING!
@@ -88,9 +85,6 @@ namespace Livefyre.Cursor
         public string Previous()
         {
             string responseString = PersonalizedStream.GetTimelineStream(this, false);
-
-            //Cursor cursor = JsonConvert.DeserializeObject<Cursor>(responseString);
-
             JObject jsonResponse = JObject.Parse(responseString);
 
             // Confligg-able STRING!

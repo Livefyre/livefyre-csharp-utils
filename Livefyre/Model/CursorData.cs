@@ -7,9 +7,7 @@ namespace Livefyre.Model
 {
 
 public class CursorData {
-    // may need to be special type
     protected static readonly string DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    //DateTime.Now.ToString("yyyyMMddHHmmss");
 
     private string resource;
     private string cursorTime;
@@ -18,15 +16,12 @@ public class CursorData {
     private int limit;
     
     public CursorData(string resource, int limit, DateTime startTime) {
-        // figure out this-ness 
-       // DATE_FORMAT.SetTimeZone(TimeZone.GetTimeZone("UTC"));
         this.resource = resource;
         this.limit = limit;
 
-        // FORMATTINGS
-        // this.cursorTime = startTime == null ? null : DATE_FORMAT.format(startTime);
-        // this shall go boom
-        this.cursorTime = startTime == null ? null : startTime.ToString();
+        // try catch meh!?
+        string start = startTime.ToUniversalTime().ToString(DATE_FORMAT);
+        this.cursorTime = start == null ? null : start;
     }
 
     public string GetResource() {
@@ -48,10 +43,7 @@ public class CursorData {
     }
 
     public CursorData SetCursorTime(DateTime newTime) {
-       // this.cursorTime = DATE_FORMAT.format(newTime);
-        // WATCH THE FORMATTING HERE
-        // kaboom
-        this.cursorTime = newTime.ToString();
+        this.cursorTime = newTime.ToUniversalTime().ToString(DATE_FORMAT);
         return this;
     }
 
