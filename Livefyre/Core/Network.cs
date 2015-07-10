@@ -65,19 +65,22 @@ namespace Livefyre.Core
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
             try {
-                WebClient client = new WebClient();
-                NameValueCollection postParams = new NameValueCollection() { 
-                   { "actor_token", BuildLivefyreToken() },
-                   { "pull_profile", urlTemplate }
-                };
+                using(WebClient client = new WebClient()) {
 
-                Uri uri = new Uri(string.Format("{0}", Domain.quill(this)));
-                byte[] response = client.UploadValues(uri, postParams);
-                string result = Encoding.UTF8.GetString(response);
+                    NameValueCollection postParams = new NameValueCollection() { 
+                       { "actor_token", BuildLivefyreToken() },
+                       { "pull_profile", urlTemplate }
+                    };
 
-                Console.WriteLine(result);
+                    Uri uri = new Uri(string.Format("{0}", Domain.quill(this)));
+                    byte[] response = client.UploadValues(uri, postParams);
+                    string result = Encoding.UTF8.GetString(response);
 
-            } catch (Exception e) {
+                    Console.WriteLine(result);
+                }
+
+
+            } catch (Exception) {
                 throw;
             }
        
