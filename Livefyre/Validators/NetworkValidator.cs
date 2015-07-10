@@ -10,9 +10,9 @@ using Livefyre.Model;
 namespace Livefyre.Validators
 {
 
-    public class NetworkValidator : Validator {
+    public class NetworkValidator : Validator<NetworkData> {
 
-        public string Validate<NetworkData>(NetworkData data) {
+        public string Validate(NetworkData data) {
 
             StringBuilder reason = new StringBuilder();
 

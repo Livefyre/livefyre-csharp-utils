@@ -10,9 +10,9 @@ using Livefyre.Utils;
 
 namespace Livefyre.Validators
 {
-    public class CollectionValidator : Validator {
+    public class CollectionValidator : Validator<CollectionData>{
 
-        public string Validate<CollectionData>(CollectionData data) {
+        public string Validate(CollectionData data) {
 
             StringBuilder reason = new StringBuilder();
 

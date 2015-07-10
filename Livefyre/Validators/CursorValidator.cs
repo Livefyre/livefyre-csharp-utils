@@ -9,9 +9,9 @@ using Livefyre.Model;
 namespace Livefyre.Validators
 {
 
-    public class CursorValidator : Validator {
+    public class CursorValidator : Validator<CursorData> {
 
-        public string Validate<CursorData>(CursorData data) {
+        public string Validate(CursorData data) {
 
             StringBuilder reason = new StringBuilder();
 
@@ -20,7 +20,7 @@ namespace Livefyre.Validators
 
             }
         
-            if (data.GetLimit() == null) {
+            if (data.GetLimit().ToString() == null) {
                 reason.Append("\n Limit is null.");
 
             }

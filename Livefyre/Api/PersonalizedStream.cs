@@ -36,7 +36,7 @@ namespace Livefyre.Api
     
 
 
-        // REPETITION ON REQUESTS - DRYYYYYYY THIS
+        // REPETITION ON REQUESTS - DRY THIS
 
         // THE REQUEST METHODS BELOW CAN BE BROKEN INTO SMALLER METHODS:
             // build URI

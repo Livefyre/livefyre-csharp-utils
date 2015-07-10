@@ -8,9 +8,9 @@ using Livefyre.Model;
 
 namespace Livefyre.Validators
 {
-    public class SiteValidator : Validator {
+    public class SiteValidator : Validator<SiteData> {
 
-        public string Validate<SiteData>(SiteData data) {
+        public string Validate(SiteData data) {
 
             StringBuilder reason = new StringBuilder();
 

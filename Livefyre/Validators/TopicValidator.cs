@@ -8,10 +8,10 @@ using Livefyre.Dto;
 
 namespace Livefyre.Validators
 {
-    public class TopicValidator : Validator
+    public class TopicValidator : Validator<Topic>
     {
 
-        public string Validate<Topic>(Topic t)
+        public string Validate(Topic t)
         {
             Console.WriteLine(t);
             return null;

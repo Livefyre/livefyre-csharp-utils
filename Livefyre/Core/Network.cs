@@ -242,6 +242,18 @@ namespace Livefyre.Core
 
         }
 
+        /**
+         * Constructs a new Site object based on the parameters passed in.
+         * 
+         * @param siteId the id for the Site.
+         * @param siteKey the secret key for the Site.
+         * @return Site
+         */
+        public Site GetSite(string siteId, string siteKey)
+        {
+            return Site.Init(this, siteId, siteKey);
+        }
+
 
         public string GetUrn()
         {

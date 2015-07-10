@@ -219,6 +219,7 @@
     <Compile Include="Livefyre\Exceptions\LivefyreException.cs" />
     <Compile Include="Livefyre\Exceptions\TokenException.cs" />
     <Compile Include="Livefyre\Factory\CursorFactory.cs" />
+    <Compile Include="Livefyre\Livefyre.cs" />
     <Compile Include="Livefyre\Model\CollectionData.cs" />
     <Compile Include="Livefyre\Model\CursorData.cs" />
     <Compile Include="Livefyre\Model\NetworkData.cs" />
