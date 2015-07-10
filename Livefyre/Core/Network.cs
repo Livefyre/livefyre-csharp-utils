@@ -47,12 +47,6 @@ namespace Livefyre.Core
            * 
            * @param urlTemplate the url template to Set.
         */
-        /**
-         * Updates the user sync url. Makes an external API call. 
-         * http://answers.livefyre.com/developers/user-auth/remote-profiles/#ping-for-pull.
-         * 
-         * @param urlTemplate the url template to Set.
-         */
         public void SetUserSyncUrl(string urlTemplate)
         {
             if (urlTemplate.IndexOf(ID) == -1)
