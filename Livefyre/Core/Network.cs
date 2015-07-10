@@ -18,11 +18,10 @@ namespace Livefyre.Core
 {
     public class Network : LFCore
     {
-        private static double DEFAULT_EXPIRES = 86000.0;
-
-        private static string DEFAULT_USER = "system";
-        private static string ID = "{id}";
-        private static string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
+        private static readonly double DEFAULT_EXPIRES = 86000.0;
+        private static readonly string DEFAULT_USER = "system";
+        private static readonly string ID = "{id}";
+        private static readonly string ALPHA_DASH_UNDER_DOT_REGEX = "^[a-zZA-Z0-9_\\.-]+$";
 
         private NetworkData data;
 
@@ -74,8 +73,8 @@ namespace Livefyre.Core
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
 
             Uri uri = new Uri(urlTemplate);
-
             WebRequest request = WebRequest.Create(uri);
+
             request.ContentType = "application/json";
             request.ContentLength = postBytes.Length;
             request.Method = "POST";
@@ -225,9 +224,10 @@ namespace Livefyre.Core
 
             // check tree
             // so many strings
-            string domain = (string)jwtObject["data"]["domain"];
-            string userID = (string)jwtObject["data"]["user_id"];
-            long expires = (long)jwtObject["data"]["expires"];
+            string domain = (string)jwtObject["domain"];
+
+            string userID = (string)jwtObject["user_id"];
+            long expires = (long)jwtObject["expires"];
 
             if ( domain.Equals(data.GetName()) &&
                     userID.Equals("system") &&
