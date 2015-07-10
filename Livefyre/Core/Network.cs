@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -38,6 +39,8 @@ namespace Livefyre.Core
         public static Network Init(string name, string key)
         {
             NetworkData data = new NetworkData(name, key);
+
+//            return new Network(data/* David: not nec to use reflection for Validation here */);
             return new Network(data/* David: not nec to use reflection for Validation here */);
         }
 
@@ -57,41 +60,27 @@ namespace Livefyre.Core
 
             //REFACTOR REQUEST INTO UTIL METHOD?
             // make params vars/members?
-            // better way to add params?
-            string postData = string.Format("{0}", Domain.quill(this));
-            postData = string.Format(postData + "&actor_token={0}", BuildLivefyreToken());
-            postData = string.Format(postData + "&pull_profile_url={0}", urlTemplate);
-                
-            // ascii or utf8?
-            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
-            byte[] postBytes = Encoding.UTF8.GetBytes(postData);
-
-            Uri uri = new Uri(urlTemplate);
-            WebRequest request = WebRequest.Create(uri);
-
-            request.ContentType = "application/json";
-            request.ContentLength = postBytes.Length;
-            request.Method = "POST";
 
             // USER AGENT MAY BE NECESSARY!
             //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
 
-            Stream requestStream = request.GetRequestStream();
-            requestStream.Write(postBytes, 0, postBytes.Length);
+            try {
+                WebClient client = new WebClient();
+                NameValueCollection postParams = new NameValueCollection() { 
+                   { "actor_token", BuildLivefyreToken() },
+                   { "pull_profile", urlTemplate }
+                };
 
-            requestStream.Close();
+                Uri uri = new Uri(string.Format("{0}", Domain.quill(this)));
+                byte[] response = client.UploadValues(uri, postParams);
+                string result = Encoding.UTF8.GetString(response);
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Console.WriteLine(result);
 
-            response.Close();
-
-            // ripe for DRY-ing
-            if ((int)response.StatusCode >= 400)
-            {
-                // Pull from API Exception
-                throw new Exception(string.Format("An error has occurred: {0}", response.StatusCode));
+            } catch (Exception e) {
+                throw;
             }
-
+       
         }
 
 
