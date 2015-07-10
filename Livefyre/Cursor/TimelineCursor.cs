@@ -6,6 +6,7 @@ using System.Text;
 using Livefyre.Api;
 using Livefyre.Core;
 using Livefyre.Model;
+using Livefyre.Validators;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -33,10 +34,9 @@ namespace Livefyre.Cursor
         public static TimelineCursor Init(LFCore core, String resource, int limit, DateTime startTime)
         {
             CursorData data = new CursorData(resource, limit, startTime);
-
-            //return new TimelineCursor(core, ReflectiveValidator.validate(data));
-            // validate me
-            return new TimelineCursor(core, data);
+            CursorValidator validator = new CursorValidator();
+            
+            return new TimelineCursor(core, validator.Validate(data));
         }
 
         /**

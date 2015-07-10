@@ -11,10 +11,9 @@ namespace Livefyre.Validators
     public class TopicValidator : Validator<Topic>
     {
 
-        public string Validate(Topic t)
+        public Topic Validate(Topic t)
         {
-            Console.WriteLine(t);
-            return null;
+            return t;
         }
 
         public static void ValidateTopicLabel(string label)

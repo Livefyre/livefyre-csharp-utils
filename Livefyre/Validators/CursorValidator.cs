@@ -11,7 +11,7 @@ namespace Livefyre.Validators
 
     public class CursorValidator : Validator<CursorData> {
 
-        public string Validate(CursorData data) {
+        public CursorData Validate(CursorData data) {
 
             StringBuilder reason = new StringBuilder();
 
@@ -32,10 +32,10 @@ namespace Livefyre.Validators
 
             if (reason.Length > 0)
             {
-                return String.Format("Problems with your cursor input: {0}", reason.ToString());
+                throw new Exception(String.Format("Problems with your cursor input: \n {0} \n", reason.ToString()));
             }
 
-            return null;
+            return data;
 
         }
     }

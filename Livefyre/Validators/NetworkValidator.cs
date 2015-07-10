@@ -12,7 +12,7 @@ namespace Livefyre.Validators
 
     public class NetworkValidator : Validator<NetworkData> {
 
-        public string Validate(NetworkData data) {
+        public NetworkData Validate(NetworkData data) {
 
             StringBuilder reason = new StringBuilder();
 
@@ -34,10 +34,10 @@ namespace Livefyre.Validators
 
             if (reason.Length > 0)
             {
-                return String.Format("Problems with your network input: {0}", reason.ToString());
+                throw new Exception(String.Format("Problems with your network input: \n {0} \n", reason.ToString()));
             }
 
-            return null;
+            return data;
         }
 
     }

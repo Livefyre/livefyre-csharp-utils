@@ -15,6 +15,7 @@ using Livefyre.Dto;
 using Livefyre.Model;
 using Livefyre.Type;
 using Livefyre.Utils;
+using Livefyre.Validators;
 
 
 namespace Livefyre.Core
@@ -32,9 +33,12 @@ namespace Livefyre.Core
     
         public static Collection Init(Site site, string type, string title, string articleId, string url) {
             CollectionData data = new CollectionData(type, title, articleId, url);
+
             // validate data
-            // return new Collection(site, ReflectiveValidator.validate(data));
-            return new Collection(site, data);
+            CollectionValidator validator = new CollectionValidator();
+
+            return new Collection(site, validator.Validate(data));
+
         }
     
         /**

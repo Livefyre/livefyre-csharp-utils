@@ -5,6 +5,7 @@ using System.Text;
 
 using Livefyre.Model;
 using Livefyre.Type;
+using Livefyre.Validators;
 
 namespace Livefyre.Core
 {
@@ -17,11 +18,14 @@ namespace Livefyre.Core
             this.network = network;
             this.data = data;
         }
-            // BAKE INIT into Constructor?
+
+
+        // BAKE INIT into Constructor?
         public static Site Init(Network network, string siteId, string siteKey) {
             SiteData data = new SiteData(siteId, siteKey);
-            //return new Site(network, ReflectiveValidator.validate(data));
-            return new Site(network, data);
+            SiteValidator validator = new SiteValidator();
+
+            return new Site(network, validator.Validate(data));
         }
 
         /* Getters/Setters */

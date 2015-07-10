@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using Livefyre.Api;
 using Livefyre.Model;
 using Livefyre.Utils;
+using Livefyre.Validators;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -40,13 +41,14 @@ namespace Livefyre.Core
         {
             NetworkData data = new NetworkData(name, key);
 
-//            return new Network(data/* David: not nec to use reflection for Validation here */);
-            return new Network(data/* David: not nec to use reflection for Validation here */);
+            NetworkValidator validator = new NetworkValidator();
+
+            return new Network(validator.Validate(data));
         }
 
         /**
            * Updates the user sync url. Makes an external API call. 
-           * http://answers.livefyre.com/developers/user-auth/remote-profiles/#ping-for-pull.
+           * http://answers.livefyre.com/developers/identity-integration/your-identity/#PingForPull
            * 
            * @param urlTemplate the url template to Set.
         */

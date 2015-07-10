@@ -12,7 +12,7 @@ namespace Livefyre.Validators
 {
     public class CollectionValidator : Validator<CollectionData>{
 
-        public string Validate(CollectionData data) {
+        public CollectionData Validate(CollectionData data) {
 
             StringBuilder reason = new StringBuilder();
 
@@ -44,10 +44,10 @@ namespace Livefyre.Validators
 
             if (reason.Length > 0)
             {
-                return String.Format("Problems with your collection input: {0}", reason.ToString());
+                throw new Exception(String.Format("Problems with your collection input: \n {0} \n", reason.ToString()));
             }
 
-            return null;
+            return data;
         }
     }
 }

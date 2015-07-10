@@ -10,7 +10,7 @@ namespace Livefyre.Validators
 {
     public class SiteValidator : Validator<SiteData> {
 
-        public string Validate(SiteData data) {
+        public SiteData Validate(SiteData data) {
 
             StringBuilder reason = new StringBuilder();
 
@@ -23,11 +23,12 @@ namespace Livefyre.Validators
                 reason.Append("\n Key is null or blank.");
             }
 
-            if (reason.Length > 0) {
-                 return String.Format("Problems with your site input: {0}", reason.ToString());
+            if (reason.Length > 0)
+            {
+                throw new Exception(String.Format("Problems with your site input: \n {0} \n", reason.ToString()));
             }
 
-            return null;
+            return data;
         }
 
     }
