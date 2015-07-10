@@ -130,8 +130,8 @@ namespace Livefyre.Core
          * 
          * @return JSONObject.
          */
-        
-        
+
+       
         public JObject GetCollectionContent() {
             string articleID = this.data.GetArticleId();
             byte[] bytesID = Encoding.ASCII.GetBytes(articleID);
@@ -184,7 +184,6 @@ namespace Livefyre.Core
             responseReader.Close();
             responseStream.Close();
 
-            // is String.class helping to create the actual Java type?
             return new JObject(responseString);
         }
         
