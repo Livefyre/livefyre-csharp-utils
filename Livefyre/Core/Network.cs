@@ -69,6 +69,8 @@ namespace Livefyre.Core
             try {
                 using(WebClient client = new WebClient()) {
 
+                    // what about 'Accepts JSON' here?
+
                     NameValueCollection postParams = new NameValueCollection() { 
                        { "actor_token", BuildLivefyreToken() },
                        { "pull_profile", urlTemplate }

@@ -143,6 +143,9 @@ namespace Livefyre.Api
             Uri baseURI = BuildURL(core);
             Uri completeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
 
+
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
             request.Method = "POST";
@@ -195,8 +198,10 @@ namespace Livefyre.Api
             // Insert Patch Method
             // STRING!  config me!
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
-            
 
+
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, core, null);
             request.Method = "POST";
@@ -289,6 +294,8 @@ namespace Livefyre.Api
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
 
 
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, collection, null);
             request.Method = "POST";
@@ -416,8 +423,10 @@ namespace Livefyre.Api
             // Insert Patch Method
             // STRING!  config me!
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
-            
 
+
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, collection, null);
             request.Method = "POST";
@@ -507,6 +516,8 @@ namespace Livefyre.Api
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
 
 
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, network, userToken);
             request.Method = "POST";
@@ -624,6 +635,8 @@ namespace Livefyre.Api
             Uri completeURI = new Uri(wholeURI, String.Format("&_method={0}", PATCH_METHOD));
 
 
+            // POSTS become WebClient - ease of NameValueCollection
+            // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
             request = PrepareRequest(request, network, null);
             request.Method = "POST";
@@ -781,8 +794,6 @@ namespace Livefyre.Api
             // BEWARE of this SETTING for all requests
             request.Headers.Set("Accept", "application/json");
             // PATCH is added as _method PARAM in individual calls!
-            // request.Method = PATCH_METHOD;
-            // is request.Timeout connect, read or both in Java Jersey Client terms?
             // ClientConfig.PROPERTY_CONNECT_TIMEOUT, 1000
             // ClientConfig.PROPERTY_READ_TIMEOUT, 10000
             // this timeout should be confliggle-able?

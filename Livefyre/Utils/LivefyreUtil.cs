@@ -63,7 +63,6 @@ namespace Livefyre.Utils
 
 
         public static string SerializeAndSign(Dictionary<string, object> claims, string key) {
-            // too easy?!
             try
             {
                 return JWT.JsonWebToken.Encode(claims, key, JWT.JwtHashAlgorithm.HS256);
