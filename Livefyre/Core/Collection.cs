@@ -276,13 +276,19 @@ namespace Livefyre.Core
 
             requestStream.Close();
 
-            
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                response.Close();
+                return response;
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (Exception e)
+            {
+                
+                throw e;
+            }
 
-            response.Close();
-
-            return response;
 
         }
 
