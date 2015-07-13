@@ -54,7 +54,7 @@ namespace Livefyre.Utils
             try {
                 Uri uri = new Uri(url);
 
-            } catch (Exception) {
+            } catch (Exception e) {
                 return false;
             }
 

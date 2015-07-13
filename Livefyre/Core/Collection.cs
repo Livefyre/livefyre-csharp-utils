@@ -276,6 +276,8 @@ namespace Livefyre.Core
 
             requestStream.Close();
 
+            
+
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             response.Close();

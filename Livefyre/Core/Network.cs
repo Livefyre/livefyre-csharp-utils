@@ -80,7 +80,6 @@ namespace Livefyre.Core
                     byte[] response = client.UploadValues(uri, postParams);
                     string result = Encoding.UTF8.GetString(response);
 
-                    Console.WriteLine(result);
                 }
 
 

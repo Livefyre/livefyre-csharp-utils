@@ -55,26 +55,26 @@ namespace ExecuteLivefyreLib
             DateTime expiration = DateTime.UtcNow.AddDays(30);
             double expires = (Int32)(expiration.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                 
-            string userSyncURL = "www.groovyverse.com/user/{id}";
+            string userSyncURL = "http://www.groovyverse.com/user/{id}";
             
             string blogTitle = "My First Blog";
             string blogID = "UNIQUE-ID-59487632945749";
-            string blogURL = "www.groovyverse.com/blog";
+            string blogURL = "http://www.groovyverse.com/blog";
             string blogTag1 = "tag1";
             string blogTag2 = "tag2, superb, awesome";
 
             string commentsTitle = "My First Comment";
             string commentsID = "UNIQUE-ID-497397r98efhisudhf95y";
-            string commentsURL = "www.groovyverse.com/comments";
+            string commentsURL = "http://www.groovyverse.com/comments";
             string commentsExtensionsJSON = "{\"something\":\"extra\"}";
 
             string chatTitle = "My First Chat";
             string chatID = "UNIQUE-ID-805732495873FHSKLFJSDF";
-            string chatURL = "www.groovyverse.com/chat";
+            string chatURL = "http://www.groovyverse.com/chat";
 
             string sideNotesTitle = "My First Sidenotes";
             string sideNotesID = "UNIQUE-ID-FJKHASKDJFHASLHRR9587934875KGHJ";
-            string sideNotesURL = "www.groovyverse.com/sidenotes";
+            string sideNotesURL = "http://www.groovyverse.com/sidenotes";
 
 
 
@@ -99,7 +99,11 @@ namespace ExecuteLivefyreLib
         
             //Get the URN for a specific user
             string userUrn = network.GetUrnForUser(userID);
-        
+
+
+            // set SSL for 
+            network.SetSsl(true);
+
             //Ping for Pull (Set URL then sync user afterwards)
             network.SetUserSyncUrl(userSyncURL);
             network.SyncUser(userID);
