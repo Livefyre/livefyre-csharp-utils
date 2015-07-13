@@ -252,47 +252,9 @@ namespace Livefyre.Core
         // PRIVATE
             
         private HttpWebResponse InvokeCollectionApi(string method) {
-        //private string InvokeCollectionApi(string method) {
-
-            // REFACTOR REQUEST INTO UTIL METHOD?
-            /*
-             try
-             {
-                 using (WebClient client = new WebClient())
-                 {
-                     // string frag - pull to config object
-                    // what about 'Accepts JSON' here?
-                    Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
-
-                    NameValueCollection postParams = new NameValueCollection() { 
-                       { "sync", "1" }
-                    };
-
-                    // may be defaults for ALL Lib requests
-                    client.Headers.Add("Accept", "application/json");
-                    client.Headers.Add("Content-Type", "application/json");
-
-
-                    byte[] byteResponse = client.UploadValues(uri, postParams);
-                    
-                    string strResponse = byteResponse.ToString();
-
-                    HttpWebResponse response = (HttpWebResponse)strResponse;
-                     
-                    return strResponse;
-                 }
-
-
-             }
-             catch (Exception)
-             {
-                 throw;
-             }
-
-            */
-
+            // LOOKS LIKE ITS WORKING!
             Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
-            string postData = "sync=1";
+            string postData = GetPayload();
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
@@ -305,7 +267,7 @@ namespace Livefyre.Core
             request.Method = "POST";
             request.Accept = "application/json";
             // USER AGENT MAY BE NECESSARY!
-            request.UserAgent = "Mozilla/4.0";
+            // request.UserAgent = "Mozilla/4.0";
                 
             // inject Post Data
             Stream requestStream = request.GetRequestStream();
@@ -357,7 +319,9 @@ namespace Livefyre.Core
     
         private string GetPayload() {
             Dictionary<string, string> payload = new Dictionary<string, string>();
-            
+
+            // sync=1 makes sense here
+            payload.Add("sync", "1");
             payload.Add("articleId", data.GetArticleId());
             payload.Add("checksum", BuildChecksum());
             payload.Add("articleId", BuildCollectionMetaToken());
