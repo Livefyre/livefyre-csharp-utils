@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -51,12 +52,13 @@ namespace Livefyre.Core
             HttpWebResponse response = InvokeCollectionApi("create");
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
-
             string responseString = responseReader.ReadToEnd(); 
-                
             responseReader.Close();
             responseStream.Close();
 
+            /*
+            string responseString = InvokeCollectionApi("create");
+            */
 
             if ((int)response.StatusCode == 200) {
 
@@ -250,29 +252,91 @@ namespace Livefyre.Core
         // PRIVATE
             
         private HttpWebResponse InvokeCollectionApi(string method) {
-            // string frag - pull to config object
-             Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
+        //private string InvokeCollectionApi(string method) {
 
             // REFACTOR REQUEST INTO UTIL METHOD?
-            // WebClient doesn't allow coercion to response object!?
-            // using WebRequest instead
+            /*
+             try
+             {
+                 using (WebClient client = new WebClient())
+                 {
+                     // string frag - pull to config object
+                    // what about 'Accepts JSON' here?
+                    Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
 
+                    NameValueCollection postParams = new NameValueCollection() { 
+                       { "sync", "1" }
+                    };
+
+                    // may be defaults for ALL Lib requests
+                    client.Headers.Add("Accept", "application/json");
+                    client.Headers.Add("Content-Type", "application/json");
+
+
+                    byte[] byteResponse = client.UploadValues(uri, postParams);
+                    
+                    string strResponse = byteResponse.ToString();
+
+                    HttpWebResponse response = (HttpWebResponse)strResponse;
+                     
+                    return strResponse;
+                 }
+
+
+             }
+             catch (Exception)
+             {
+                 throw;
+             }
+
+            */
+
+            Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
             string postData = "sync=1";
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
-            WebRequest request = WebRequest.Create(uri);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            //WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/json";
             request.ContentLength = postBytes.Length;
             request.Method = "POST";
-
+            request.Accept = "application/json";
             // USER AGENT MAY BE NECESSARY!
-            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
+            request.UserAgent = "Mozilla/4.0";
                 
             // inject Post Data
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(postBytes, 0, postBytes.Length);
+
+            Console.WriteLine(request.RequestUri);
+            Console.WriteLine("\n");
+
+            Console.WriteLine(request.Method);
+
+            int i = 0;
+            int l = request.Headers.Count;
+
+
+            foreach (var hdr in request.Headers)
+            {
+                Console.WriteLine(hdr.ToString());
+            }
+
+            Console.WriteLine("\n");
+
+            for (; i < l; i += 1)
+            {
+                string[] something = request.Headers.GetValues(i);
+
+                foreach (var some in something) {
+                    Console.WriteLine(some.ToString());
+                }
+            }
+
+
 
             requestStream.Close();
 
@@ -285,10 +349,8 @@ namespace Livefyre.Core
             }
             catch (Exception e)
             {
-                
                 throw e;
             }
-
 
         }
 
