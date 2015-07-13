@@ -12,14 +12,14 @@ namespace Livefyre.Api
 
     public class Domain
     {
-        public static String quill(LFCore core)
+        public static string quill(LFCore core)
         {
             Network network = LivefyreUtil.GetNetworkFromCore(core);
             return network.IsSsl() ? String.Format("https://{0}.quill.fyre.co",
                     network.GetNetworkName()) : String.Format("http://quill.{0}.fyre.co/", network.GetNetworkName());
         }
 
-        public static String bootstrap(LFCore core)
+        public static string bootstrap(LFCore core)
         {
             Network network = LivefyreUtil.GetNetworkFromCore(core);
             return network.IsSsl() ? String.Format("https://{0}.bootstrap.fyre.co",

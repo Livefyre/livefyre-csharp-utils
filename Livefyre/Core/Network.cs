@@ -259,9 +259,9 @@ namespace Livefyre.Core
         public string GetNetworkName()
         {
             string netName = this.data.GetName();
-            string[] splitString = new string[] { "\\." };
+            char[] splitChar = { '.' };
 
-            return netName.Split(splitString, 1, StringSplitOptions.None)[0];
+            return netName.Split(splitChar)[0];
         }
 
         public bool IsSsl()
