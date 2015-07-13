@@ -144,6 +144,7 @@ namespace Livefyre.Api
             Uri completeURI = new Uri(baseURI, String.Format(MULTIPLE_TOPIC_PATH, core.GetUrn()));
 
 
+
             // POSTS become WebClient - ease of NameValueCollection
             // using Statement here for iDisposable
             WebRequest request = WebRequest.Create(completeURI);
@@ -154,7 +155,39 @@ namespace Livefyre.Api
             // ascii or utf8?
             // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
             byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
-    
+
+
+            /*
+             * wedge this in here
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+
+                    // what about 'Accepts JSON' here?
+
+                    NameValueCollection postParams = new NameValueCollection() { 
+                       { "actor_token", BuildLivefyreToken() },
+                       { "pull_profile", urlTemplate }
+                    };
+
+                    Uri uri = new Uri(string.Format("{0}", Domain.quill(this)));
+                    byte[] response = client.UploadValues(uri, postParams);
+                    string result = Encoding.UTF8.GetString(response);
+
+                    Console.WriteLine(result);
+                }
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            */
+
+
             // inject Post Data
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(postBytes, 0, postBytes.Length);

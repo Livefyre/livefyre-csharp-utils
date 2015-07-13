@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using Livefyre.Core;
 using Livefyre;
 
+using JWT;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+
 
 namespace ExecuteLivefyreLib
 {
@@ -15,44 +20,61 @@ namespace ExecuteLivefyreLib
         static void Main(string[] args)
         {
             // Options/Config
-            string networkName = "example.fyre.co";
-            string networkKey = "exampleprodbase64key";
-
-            string updatedNetworkName = "example-qa-fyre.co";
-            string updatedNetworkKey = "exampleqabase64key";
-
-            string siteID = "";
-            string siteKey = "";
-
-            string updatedSiteID = "";
-            string updatedSiteKey = "";
+            string networkName = "mwebb-integration.fyre.co";
 
 
-            string userID = "";
-            string displayName = "";
-            double expires = 0;
+            // PARSE ARGS? LOOK FOR SHELL VARS?
 
-            string userSyncURL = "www.example-qa.com/user/{id}";
             
-            string blogTitle = "";
-            string blogID = "";
-            string blogURL = "";
-            string blogTag1 = "";
-            string blogTag2 = "superb, awesome";
+            // SECURE ME!
+            // BAD FOR REPOS!
+            string networkKey = "Mr7p8Pfx1rR7cC2bgLTIeyO+nBQ=";
 
+            string updatedNetworkName = "mwebb-integration.fyre.co";
 
-            string commentsTitle = "";
-            string commentsID = "";
-            string commentsURL = "";
+            // SECURE ME!
+            // BAD FOR REPOS!
+            string updatedNetworkKey = "Mr7p8Pfx1rR7cC2bgLTIeyO+nBQ=";
+
+            string siteID = "305377";
+
+            // SECURE ME!
+            // BAD FOR REPOS!
+            string siteKey = "E+1EdBnTf9NvcuFjgRAh2kNX2qo=";
+
+            string updatedSiteID = "305377";
+
+            // SECURE ME!
+            // BAD FOR REPOS!
+            string updatedSiteKey = "E+1EdBnTf9NvcuFjgRAh2kNX2qo=";
+
+            string userID = "71037700";
+            string displayName = "mwebb";
+
+            // pad 30 days
+            DateTime expiration = DateTime.UtcNow.AddDays(30);
+            double expires = (Int32)(expiration.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                
+            string userSyncURL = "www.groovyverse.com/user/{id}";
+            
+            string blogTitle = "My First Blog";
+            string blogID = "UNIQUE-ID-59487632945749";
+            string blogURL = "www.groovyverse.com/blog";
+            string blogTag1 = "tag1";
+            string blogTag2 = "tag2, superb, awesome";
+
+            string commentsTitle = "My First Comment";
+            string commentsID = "UNIQUE-ID-497397r98efhisudhf95y";
+            string commentsURL = "www.groovyverse.com/comments";
             string commentsExtensionsJSON = "{\"something\":\"extra\"}";
 
-            string chatTitle = "";
-            string chatID = "";
-            string chatURL = "";
+            string chatTitle = "My First Chat";
+            string chatID = "UNIQUE-ID-805732495873FHSKLFJSDF";
+            string chatURL = "www.groovyverse.com/chat";
 
-            string sideNotesTitle = "";
-            string sideNotesID = "";
-            string sideNotesURL = "";
+            string sideNotesTitle = "My First Sidenotes";
+            string sideNotesID = "UNIQUE-ID-FJKHASKDJFHASLHRR9587934875KGHJ";
+            string sideNotesURL = "www.groovyverse.com/sidenotes";
 
 
 
@@ -66,17 +88,17 @@ namespace ExecuteLivefyreLib
             network.SetSsl(false);
         
             //Get system and user tokens
-            String systemToken = network.BuildLivefyreToken();
-            String userToken = network.BuildUserAuthToken(userID, displayName, expires);
+            string systemToken = network.BuildLivefyreToken();
+            string userToken = network.BuildUserAuthToken(userID, displayName, expires);
         
             //make sure a system token is still valid
-            Boolean isValid = network.ValidateLivefyreToken(systemToken);
+            bool isValid = network.ValidateLivefyreToken(systemToken);
         
             //Get the network URN
-            String networkUrn = network.GetUrn();
+            string networkUrn = network.GetUrn();
         
             //Get the URN for a specific user
-            String userUrn = network.GetUrnForUser(userID);
+            string userUrn = network.GetUrnForUser(userID);
         
             //Ping for Pull (Set URL then sync user afterwards)
             network.SetUserSyncUrl(userSyncURL);
@@ -90,7 +112,7 @@ namespace ExecuteLivefyreLib
             site.GetData().SetKey(updatedSiteKey);
         
             //Get the Site's URN
-            String siteUrn = site.GetUrn();
+            string siteUrn = site.GetUrn();
         
             //build a Live Blog Collection
             Collection blogCollection = site.BuildBlogCollection(blogTitle, blogID, blogURL);
@@ -119,17 +141,16 @@ namespace ExecuteLivefyreLib
             }
         
             // this would be the point of ILMerge
-            //JObject chatCollectionData = chatCollection.CreateOrUpdate().GetCollectionContent();
-            string chatCollectionData = chatCollection.CreateOrUpdate().GetCollectionContent();
+            JObject chatCollectionData = chatCollection.CreateOrUpdate().GetCollectionContent();
         
             //build a Sidenotes Collection and create checksum/token/URN
             Collection sidenotesCollection = site.buildSidenotesCollection(sideNotesTitle, sideNotesID, sideNotesURL);
-            String checksum = sidenotesCollection.BuildChecksum();
-            String token = sidenotesCollection.BuildCollectionMetaToken();
+            string checksum = sidenotesCollection.BuildChecksum();
+            string token = sidenotesCollection.BuildCollectionMetaToken();
             sidenotesCollection.CreateOrUpdate();
         
             //createOrUpdate must be called to Get an ID for sidenotesCollection.
-            String collectionUrn = sidenotesCollection.GetUrn();
+            string collectionUrn = sidenotesCollection.GetUrn();
 
         }
     }
