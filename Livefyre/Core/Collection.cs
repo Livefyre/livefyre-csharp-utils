@@ -116,12 +116,12 @@ namespace Livefyre.Core
             try {
                 Dictionary<string, object> attr = data.ToDictionary();
 
-                string jsonString = JsonConvert.SerializeObject(attr);
+                object md5 = attr["MD5"];
 
-                // byte[] digest = MessageDigest.GetInstance("MD5").digest(LivefyreUtil.mapToJsonString(attr).GetBytes());
-                // return printHexBinary(digest);
+                string jsonString = JsonConvert.SerializeObject(md5);
 
-                return null;
+                byte[] digest = UTF8Encoding.UTF8.GetBytes(jsonString);
+                return PrintHexBinary(digest);
 
             } catch (Exception e) {
                 //NoSuchAlgorithmException
@@ -213,7 +213,8 @@ namespace Livefyre.Core
             int i = 0;
 
             Topic t;
-
+            // should only pass if ALL PASS?
+            // currently passes if ONE PASSES
             for (; i < l; i += 1)
             {
                 t = topics[i];
