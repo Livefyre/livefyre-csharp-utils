@@ -121,6 +121,7 @@ namespace Livefyre.Core
                 string jsonString = JsonConvert.SerializeObject(md5);
 
                 byte[] digest = UTF8Encoding.UTF8.GetBytes(jsonString);
+
                 return PrintHexBinary(digest);
 
             } catch (Exception e) {
@@ -203,11 +204,13 @@ namespace Livefyre.Core
         public bool IsNetworkIssued() {
             List<Topic> topics = data.GetTopics();
 
-            int l = topics.Count;
 
-            if (topics == null || l == 0) {
+            if (topics == null || topics.Count == 0) {
                 return false;
             }
+
+            int l = topics.Count;
+
 
             string netURN = this.site.GetNetwork().GetUrn();
             int i = 0;
