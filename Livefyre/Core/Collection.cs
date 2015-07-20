@@ -51,15 +51,37 @@ namespace Livefyre.Core
          */
         public Collection CreateOrUpdate() {
             HttpWebResponse response = InvokeCollectionApi("create");
+            Console.WriteLine(response.ContentEncoding);
+            Console.WriteLine(response.ContentLength);
+            Console.WriteLine(response.ContentType);
+            Console.WriteLine(response.StatusCode);
+            Console.WriteLine(response.StatusDescription);
+            Console.WriteLine(response.Cookies);
 
-            //return null;
-            
+            JObject whee = new JObject(response.GetResponseStream());
+            string whoo = JsonConvert.SerializeObject(whee);
+            Console.WriteLine(whoo);
+
+            /*
             Stream responseStream = response.GetResponseStream();
-            StreamReader responseReader = new StreamReader(responseStream);
+
+            byte[] resBytes = new byte[7068];
+
+            responseStream.Write(resBytes, 0, resBytes.Length);
+
+            string resString = UTF8Encoding.UTF8.GetString(resBytes);
+            //StreamReader responseReader = new StreamReader(responseStream);
+
+            Console.WriteLine(resString);
+            */
+            return null;
+
+
+            /*
             string responseString = responseReader.ReadToEnd(); 
             responseReader.Close();
             responseStream.Close();
-            
+            */
 
 
             /*
@@ -266,11 +288,9 @@ namespace Livefyre.Core
 
             try
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    response.Close();
-                    return response;
-                }
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                response.Close();
+                return response;
 
             }
             catch (Exception e)

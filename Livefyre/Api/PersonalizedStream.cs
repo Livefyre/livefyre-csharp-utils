@@ -393,8 +393,6 @@ namespace Livefyre.Api
             request.Method = "PUT";
 
             string jsonPostData = JsonConvert.SerializeObject(idMap);
-            // ascii or utf8?
-            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
             byte[] postBytes = Encoding.UTF8.GetBytes(jsonPostData);
     
             // inject Post Data
@@ -424,7 +422,6 @@ namespace Livefyre.Api
             JValue jvAdded = new JValue(jsonResponse["data"]["added"]);
             JValue jvRemoved = new JValue(jsonResponse["data"]["removed"]);
 
-            // EITHER USE lower type OR PROPER TYPE  CHOOSE ONE
             Dictionary<string, int> results = new Dictionary<string, int>();
 
             // more String cofigs
