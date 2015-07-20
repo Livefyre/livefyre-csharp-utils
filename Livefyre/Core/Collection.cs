@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
@@ -50,16 +51,20 @@ namespace Livefyre.Core
          */
         public Collection CreateOrUpdate() {
             HttpWebResponse response = InvokeCollectionApi("create");
+
+
+            return null;
+            /*
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
             string responseString = responseReader.ReadToEnd(); 
             responseReader.Close();
             responseStream.Close();
-
+            */
             /*
             string responseString = InvokeCollectionApi("create");
             */
-
+            /*
             if ((int)response.StatusCode == 200) {
 
                 JObject json = JObject.Parse(responseString);
@@ -82,6 +87,7 @@ namespace Livefyre.Core
 
                 }
             }
+             */
 
             // fill in from Custom Exceptions
             //throw new ApiException((int)response.StatusCode);
@@ -114,20 +120,19 @@ namespace Livefyre.Core
 
         public string BuildChecksum() {
             try {
-                Dictionary<string, object> attr = data.ToDictionary();
+                Dictionary<string, object> values = data.ToDictionary();
+                MD5 md5 = MD5.Create();
 
-                object md5 = attr["MD5"];
-
-                string jsonString = JsonConvert.SerializeObject(md5);
-
-                byte[] digest = UTF8Encoding.UTF8.GetBytes(jsonString);
-
+                string jsonVals = JsonConvert.SerializeObject(values);
+                byte[] hashBytes = UTF8Encoding.UTF8.GetBytes(jsonVals);
+                byte[] digest = md5.ComputeHash(hashBytes);
+                
                 return PrintHexBinary(digest);
 
             } catch (Exception e) {
                 //NoSuchAlgorithmException
-                // pull out these error strings. /make configurable some day?
-                throw new Exception(String.Format("MD5 message digest missing. This shouldn't ever happen. Error: {0}", e));
+                // pull out these error strings. -make configurable some day?
+                throw new Exception(String.Format("MD5 message digest missing. This shouldn't ever happen. Error: \n {0} \n", e));
                 //throw new LivefyreException("MD5 message digest missing. This shouldn't ever happen." + e);
             }
         }
@@ -162,22 +167,14 @@ namespace Livefyre.Core
             
             WebRequest request = WebRequest.Create(url);
             request.ContentType = "application/json";
-
-            // USER AGENT MAY BE NECESSARY!
-            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
-                
-
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             response.Close();
 
-            // responseCode check - make Utils method
-            // 300s wont work here either
             // should be 200 or ERROR?
             // if ((int)response.StatusCode !== 200) {
             if ((int)response.StatusCode >= 400) {
                 // make LF Exception
-                //throw new ApiException(response.GetStatus());
                 throw new Exception(String.Format("An error has occured: {0}", response.StatusCode));
 
             }
@@ -203,7 +200,6 @@ namespace Livefyre.Core
 
         public bool IsNetworkIssued() {
             List<Topic> topics = data.GetTopics();
-
 
             if (topics == null || topics.Count == 0) {
                 return false;
@@ -256,53 +252,20 @@ namespace Livefyre.Core
         // PRIVATE
             
         private HttpWebResponse InvokeCollectionApi(string method) {
-            // LOOKS LIKE ITS WORKING!
             Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
             string postData = GetPayload();
+            Console.WriteLine(postData);
+
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
-            // ascii or utf8?
-            // byte[] postBytes = Encoding.ASCII.GetBytes(postData);
 
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            //WebRequest request = WebRequest.Create(uri);
             request.ContentType = "application/json";
-            request.ContentLength = postBytes.Length;
             request.Method = "POST";
             request.Accept = "application/json";
-            // USER AGENT MAY BE NECESSARY!
-            // request.UserAgent = "Mozilla/4.0";
                 
-            // inject Post Data
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(postBytes, 0, postBytes.Length);
-
-            Console.WriteLine(request.RequestUri);
-            Console.WriteLine("\n");
-
-            Console.WriteLine(request.Method);
-
-            int i = 0;
-            int l = request.Headers.Count;
-
-
-            foreach (var hdr in request.Headers)
-            {
-                Console.WriteLine(hdr.ToString());
-            }
-
-            Console.WriteLine("\n");
-
-            for (; i < l; i += 1)
-            {
-                string[] something = request.Headers.GetValues(i);
-
-                foreach (var some in something) {
-                    Console.WriteLine(some.ToString());
-                }
-            }
-
-
 
             requestStream.Close();
 
@@ -324,11 +287,12 @@ namespace Livefyre.Core
         private string GetPayload() {
             Dictionary<string, string> payload = new Dictionary<string, string>();
 
+            // strings to config or static Class
             // sync=1 makes sense here
             payload.Add("sync", "1");
             payload.Add("articleId", data.GetArticleId());
             payload.Add("checksum", BuildChecksum());
-            payload.Add("articleId", BuildCollectionMetaToken());
+            payload.Add("collectionMeta", BuildCollectionMetaToken());
             
             return JsonConvert.SerializeObject(payload);
         }

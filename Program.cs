@@ -17,15 +17,21 @@ namespace ExecuteLivefyreLib
 {
     class Program
     {
+
+
         static void Main(string[] args)
         {
-            // Options/Config
-            string networkName = "mwebb-integration.fyre.co";
+            string stamp = DateTime.UtcNow.ToBinary().ToString();
 
 
             // PARSE ARGS? LOOK FOR SHELL VARS?
 
-            
+
+
+            // Options/Config
+            string networkName = "mwebb-integration.fyre.co";
+
+
             // SECURE ME!
             // BAD FOR REPOS!
             string networkKey = "Mr7p8Pfx1rR7cC2bgLTIeyO+nBQ=";
@@ -57,23 +63,23 @@ namespace ExecuteLivefyreLib
                 
             string userSyncURL = "http://www.groovyverse.com/user/{id}";
             
-            string blogTitle = "My First Blog";
-            string blogID = "UNIQUE-ID-59487632945749";
+            string blogTitle = "My First Blog " + stamp;
+            string blogID = "UNIQUE-ID-" + stamp;
             string blogURL = "http://www.groovyverse.com/blog";
-            string blogTag1 = "tag1";
+            string blogTag1 = "tag1" + stamp;
             string blogTag2 = "tag2, superb, awesome";
 
-            string commentsTitle = "My First Comment";
-            string commentsID = "UNIQUE-ID-497397r98efhisudhf95y";
+            string commentsTitle = "My First Comment " + stamp;
+            string commentsID = "UNIQUE-ID-" + stamp;
             string commentsURL = "http://www.groovyverse.com/comments";
             string commentsExtensionsJSON = "{\"something\":\"extra\"}";
 
-            string chatTitle = "My First Chat";
-            string chatID = "UNIQUE-ID-805732495873FHSKLFJSDF";
+            string chatTitle = "My First Chat " + stamp;
+            string chatID = "UNIQUE-ID-" + stamp;
             string chatURL = "http://www.groovyverse.com/chat";
 
-            string sideNotesTitle = "My First Sidenotes";
-            string sideNotesID = "UNIQUE-ID-FJKHASKDJFHASLHRR9587934875KGHJ";
+            string sideNotesTitle = "My First Sidenotes " + stamp;
+            string sideNotesID = "UNIQUE-ID-" + stamp;
             string sideNotesURL = "http://www.groovyverse.com/sidenotes";
 
 
