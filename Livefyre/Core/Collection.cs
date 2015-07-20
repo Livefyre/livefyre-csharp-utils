@@ -52,18 +52,16 @@ namespace Livefyre.Core
         public Collection CreateOrUpdate() {
             HttpWebResponse response = InvokeCollectionApi("create");
 
-
-            return null;
-            /*
+            //return null;
+            
             Stream responseStream = response.GetResponseStream();
             StreamReader responseReader = new StreamReader(responseStream);
             string responseString = responseReader.ReadToEnd(); 
             responseReader.Close();
             responseStream.Close();
-            */
-            /*
-            string responseString = InvokeCollectionApi("create");
-            */
+            
+
+
             /*
             if ((int)response.StatusCode == 200) {
 
@@ -253,11 +251,9 @@ namespace Livefyre.Core
             
         private HttpWebResponse InvokeCollectionApi(string method) {
             Uri uri = new Uri(String.Format("{0}/api/v3.0/site/{1}/collection/{2}/", Domain.quill(this), site.GetData().GetId(), method));
+
             string postData = GetPayload();
-            Console.WriteLine(postData);
-
             byte[] postBytes = Encoding.UTF8.GetBytes(postData);
-
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             request.ContentType = "application/json";
@@ -266,14 +262,15 @@ namespace Livefyre.Core
                 
             Stream requestStream = request.GetRequestStream();
             requestStream.Write(postBytes, 0, postBytes.Length);
-
             requestStream.Close();
 
             try
             {
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Close();
-                return response;
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    response.Close();
+                    return response;
+                }
 
             }
             catch (Exception e)
